@@ -1,0 +1,90 @@
+/* Variables */
+/*
+ *  Input styles
+ *
+ *  Styles and animations for input elements
+ *
+ *  <pre><code>
+      <div class="form-inputs">
+        <div class="form-input">
+          <input
+            type="email"
+            placeholder="Email"
+            class="input-field-global input-field"
+            name="email"
+          />
+          <span class="focus-border"></span>
+        </div>
+        <div class="form-input">
+          <input type="password" placeholder="Password" class="input-field-global input-field" />
+          <span class="focus-border"></span>
+        </div>
+      </div>
+ *  </code></pre>
+ *
+ *  @author     Vainius Vilkelis 
+ *
+*/
+.form-inputs {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-inputs {
+  margin-bottom: 24px;
+}
+
+.form-input {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+/* Input style general */
+.input-field {
+  border: 0;
+  padding: 4px 0 0 4px;
+  border-bottom: 1px solid #ccc;
+  background-color: transparent;
+  width: 100%;
+}
+
+.input-field::placeholder {
+  color: #a5a5a5;
+}
+
+/* Error styles */
+.input-field:invalid ~ .focus-border {
+  background-color: #ff5233;
+  width: 100%;
+  transition: 0.4s;
+}
+
+.input-field:invalid {
+  box-shadow: none;
+  box-shadow: inset 0 0 1px 0 #ff5233;
+}
+
+/* Focus style */
+.input-field:focus {
+  outline: none;
+}
+
+/* Input bottom border style and animation */
+.input-field ~ .focus-border {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #3399ff;
+  transition: 0.4s;
+}
+
+.input-field:focus ~ .focus-border {
+  width: 100%;
+  transition: 0.4s;
+}
+
+/*# sourceMappingURL=input-styles.css.map */

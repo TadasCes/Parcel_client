@@ -1,0 +1,54 @@
+/* Variables */
+/*
+ *  Global styles
+ *
+ *  Global styles for whole project. Predefines colors,
+ *  text styles, commonly used classes and rules.
+ *
+ *  <pre><code>
+ *      <div class="the markup this css file expects">
+ *          You'll be ever so happy you included this part
+ *          in about three months, when you come back to this
+ *          project, having completely forgotten it's
+ *          structure and purpose.
+ *      </div>
+ *  </code></pre>
+ *
+ *  @author     Vainius Vilkelis 
+ *
+*/
+/* Color classes */
+.primary-color {
+  background-color: #3c4ff6;
+  color: white;
+}
+
+.secondary-color {
+  background-color: #e0e4ff;
+  color: #3a3a3a;
+}
+
+.accent-color {
+  background-color: #7ba4f7;
+  color: white;
+}
+
+a:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
+a:hover.primary-color {
+  color: white;
+}
+
+.input-button {
+  display: block;
+  margin-bottom: 8px;
+  padding: 8px;
+  width: 200px;
+  border-radius: 20px;
+  border: none;
+}
+
+/*# sourceMappingURL=global.css.map */
