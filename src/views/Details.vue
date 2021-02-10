@@ -1,3 +1,67 @@
+<script lang="ts">
+import { useStore } from "vuex";
+import { onMounted, ref } from "vue";
+import moment from "moment";
+export default {
+  props: {
+    id: {
+      type: String,
+      default: ""
+    }
+  },
+  setup(props: any) {
+    const store = useStore();
+    // const user = computed(() => store.state.loggedUser);
+    console.log(props.id);
+    const cityStart = ref("");
+    const cityEnd = ref("");
+    const day = ref("");
+    const timeStart = ref("");
+    const timeEnd = ref("");
+    const firstName = ref("");
+    const lastName = ref("");
+    const rating = ref("");
+    const countDelivered = ref("");
+    const post: any = ref({});
+
+    function getAPost() {
+      post.value = store.getters["posts/getAPost"](props.id);
+      const dayFormated = moment(post.value.timeStart).format("YYYY-MM-DD");
+      const timeStartFormated = moment(post.value.timeStart).format("HH:mm");
+      const timeEndFormated = moment(post.value.timeEnd).format("HH:mm");
+      cityStart.value = post.value.cityStart;
+      cityEnd.value = post.value.cityEnd;
+      day.value = dayFormated;
+      timeStart.value = timeStartFormated;
+      timeEnd.value = timeEndFormated;
+      firstName.value = post.value.author.firstName;
+      lastName.value = post.value.author.lastName;
+      rating.value = post.value.author.rating;
+      countDelivered.value = post.value.author.countDelivered;
+
+      console.log(post.value);
+    }
+
+    onMounted(() => {
+      getAPost();
+    });
+
+    return {
+      cityStart,
+      cityEnd,
+      day,
+      timeStart,
+      timeEnd,
+      firstName,
+      lastName,
+      rating,
+      countDelivered,
+      post
+    };
+  }
+};
+</script>
+
 <template>
   <div id="edit-post" class="">
     <router-link to="/home" tag="button" class="input-button secondary-color">
@@ -84,67 +148,3 @@
   }
 }
 </style>
-
-<script lang="ts">
-import City from "../components/destination/City.vue";
-import { useStore, Getter, mapGetters } from "vuex";
-import { computed, onMounted, ref } from "vue";
-import { createPost, updatePost } from "../services/post.api.service";
-import router from "@/router";
-import moment from "moment";
-export default {
-  props: {
-    id: String
-  },
-  setup(props: any) {
-    const store = useStore();
-    const user = computed(() => store.state.loggedUser);
-    console.log(props.id);
-    const cityStart = ref("");
-    const cityEnd = ref("");
-    const day = ref("");
-    const timeStart = ref("");
-    const timeEnd = ref("");
-    const firstName = ref("");
-    const lastName = ref("");
-    const rating = ref("");
-    const countDelivered = ref("");
-    const post: any = ref({});
-
-    function getAPost() {
-      post.value = store.getters["posts/getAPost"](props.id);
-      const dayFormated = moment(post.value.timeStart).format("YYYY-MM-DD");
-      const timeStartFormated = moment(post.value.timeStart).format("HH:mm");
-      const timeEndFormated = moment(post.value.timeEnd).format("HH:mm");
-      cityStart.value = post.value.cityStart;
-      cityEnd.value = post.value.cityEnd;
-      day.value = dayFormated;
-      timeStart.value = timeStartFormated;
-      timeEnd.value = timeEndFormated;
-      firstName.value = post.value.author.firstName;
-      lastName.value = post.value.author.lastName;
-      rating.value = post.value.author.rating;
-      countDelivered.value = post.value.author.countDelivered;
-
-      console.log(post.value);
-    }
-
-    onMounted(() => {
-      getAPost();
-    });
-
-    return {
-      cityStart,
-      cityEnd,
-      day,
-      timeStart,
-      timeEnd,
-      firstName,
-      lastName,
-      rating,
-      countDelivered,
-      post
-    };
-  }
-};
-</script>

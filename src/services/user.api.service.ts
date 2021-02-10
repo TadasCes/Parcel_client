@@ -13,13 +13,13 @@ export async function createUser(body: any) {
 export async function login(body: any) {
   return await axios
     .post("http://localhost:5000/login", body)
-    .then((response) => {
+    .then(response => {
       localStorage.setItem("jwt", JSON.stringify(response.data.token));
       store.commit("SET_LOGGED_USER", response.data.user);
       localStorage.setItem("user", JSON.stringify(response.data.user));
       router.push("/home");
     })
-    .catch((error) => {
+    .catch(error => {
       if (error.response.data.message) {
         console.log(error.response.data.message);
       } else {

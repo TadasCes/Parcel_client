@@ -9,7 +9,7 @@
           <input
             type="email"
             placeholder="Email"
-            class="input-field-global input-field"
+            class="input-field"
             name="email"
           />
           <span class="focus-border"></span>
@@ -31,11 +31,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-}
-
-.form-inputs {
-  margin-bottom: 24px;
 }
 
 .form-input {
@@ -53,7 +48,7 @@
 }
 
 .input-field::placeholder {
-  color: rgb(165, 165, 165);
+  color: rgb(29, 29, 29);
 }
 
 /* Error styles */
@@ -87,4 +82,3 @@
   width: 100%;
   transition: 0.4s;
 }
-

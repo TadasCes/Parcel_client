@@ -1,19 +1,4 @@
-<template>
-  <div id="nav">
-    <div class="nav-upper">
-      <router-link to="/home">Home</router-link>
-      <router-link to="/home">Messages</router-link>
-      <router-link to="/home">Profile</router-link>
-    </div>
-    <div class="nav-lower">
-      <router-link to="/home">Settings</router-link>
-      <router-link to="/" @click="logoutUser">Exit</router-link>
-    </div>
-  </div>
-</template>
-
 <script lang="ts">
-import Vue from "vue";
 import { logout } from "../services/user.api.service";
 export default {
   setup() {
@@ -25,30 +10,59 @@ export default {
 };
 </script>
 
+<template>
+  <div id="nav">
+    <div class="container">
+      <router-link id="logo" to="/home"></router-link>
+      <div class="nav">
+        <router-link to="/home">
+          <span class="material-icons">search</span>
+          Siųsti
+        </router-link>
+        <router-link to="/home">
+          <span class="material-icons">time_to_leave</span>
+          Keliauti
+        </router-link>
+        <router-link to="/home">
+          Registruotis
+        </router-link>
+        <router-link to="/" @click="logoutUser">
+          Prisijungti
+        </router-link>
+      </div>
+    </div>
+  </div>
+</template>
+
 <style lang="scss">
 @import "../assets/styles/variables";
 
 #nav {
-  background-color: $primary-color;
-  width: 100%;
-  padding-top: 30px;
+  padding: 15px;
   overflow-x: hidden;
-  display: flex;
-  justify-content: space-between;
 
-  &.nav-lower {
-    display: block;
+  #logo {
+    height: 50px;
+    width: 150px;
+    background: rgb(208, 238, 219);
   }
 
   a {
+    color: $secondary-color;
     font-weight: bold;
-    color: #2c3e50;
     overflow: hidden;
-    padding-left: 10px;
+    margin-right: 16px;
+    display: flex;
+    align-items: center;
 
-    &.router-link-exact-active {
-      color: $accent-color;
+    span {
+      margin-right: 4px;
     }
+  }
+
+  .container {
+    display: flex;
+    justify-content: space-between;
   }
 }
 </style>

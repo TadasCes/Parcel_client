@@ -6,13 +6,21 @@ import CreatePost from "../views/CreatePost.vue";
 import EditPost from "../views/EditPost.vue";
 import Admin from "../views/Admin.vue";
 import Details from "../views/Details.vue";
+import Landing from "../views/Landing.vue";
 import store from "../store/index";
-import { computed, ComputedRef, Ref } from "vue";
-import IUser from "@/interfaces/IUser";
+import { computed } from "vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
+    name: "Landing",
+    component: Landing,
+    meta: {
+      guest: true
+    }
+  },
+  {
+    path: "/login",
     name: "Login",
     component: Login,
     meta: {
@@ -35,7 +43,7 @@ const routes: Array<RouteRecordRaw> = [
       requiresAuth: true
     },
     beforeEnter: (to, from, next) => {
-      const user: ComputedRef<IUser> = computed(() => store.state.loggedUser);
+      const user = computed(() => store.state.loggedUser);
       console.log(user.value);
       if (user.value.isAdmin) {
         next();
@@ -87,7 +95,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some((record) => record.meta.requiresAuth)) {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
     if (localStorage.getItem("jwt") == null) {
       next({
         path: "/",

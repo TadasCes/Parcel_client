@@ -1,5 +1,4 @@
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
 import moment from "moment";
 import { useStore } from "vuex";
 import { computed, ref } from "vue";
@@ -7,7 +6,11 @@ import router from "@/router";
 
 export default {
   props: {
-    post: Object
+    post: {
+      type: Object,
+      required: true,
+      default: () => ({})
+    }
   },
   setup(props: any) {
     const store = useStore();
@@ -26,8 +29,12 @@ export default {
       }
     }
 
-    const timeStart = moment(moment(props.post.timeStart).format()).format("ddd: HH:mm");
-    const timeEnd = moment(moment(props.post.timeEnd).format()).format("ddd: HH:mm");
+    const timeStart = moment(moment(props.post.timeStart).format()).format(
+      "ddd: HH:mm"
+    );
+    const timeEnd = moment(moment(props.post.timeEnd).format()).format(
+      "ddd: HH:mm"
+    );
 
     return {
       timeStart,
@@ -54,8 +61,18 @@ export default {
           <h6>{{ post.author.countDelivered }} delivered</h6>
         </div>
         <div class="options ">
-          <button class="btn btn-sm btn-info" v-if="showOptions" @click="goToEdit">Edit</button>
-          <button class="btn btn-sm btn-danger" v-if="showOptions" @click="deletePost">
+          <button
+            v-if="showOptions"
+            class="btn btn-sm btn-info"
+            @click="goToEdit"
+          >
+            Edit
+          </button>
+          <button
+            v-if="showOptions"
+            class="btn btn-sm btn-danger"
+            @click="deletePost"
+          >
             Delete
           </button>
         </div>
@@ -68,9 +85,10 @@ export default {
 @import "../assets/styles/variables";
 
 .post {
-  height: 15vh;
+  height: 30%;
   background: #fff;
   margin-bottom: 20px;
+
   box-shadow: 3px 5px 5px rgb(206, 206, 206);
   border-radius: 12px;
 

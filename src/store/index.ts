@@ -1,6 +1,4 @@
-import axios from "axios";
 import { createLogger, createStore } from "vuex";
-import * as api from "../services/post.api.service";
 import { fetchAllPosts, deletePost } from "../services/post.api.service";
 import IUser from "../interfaces/IUser";
 
@@ -27,6 +25,7 @@ const posts = {
   state: {
     posts: []
   },
+
   mutations: {
     SET_POSTS(state: any, posts: any) {
       state.posts = posts;
@@ -52,7 +51,7 @@ const posts = {
 export default createStore({
   plugins: [createLogger()],
   state: {
-    loggedUser: {} as IUser
+    loggedUser: <IUser>{}
   },
   mutations: {
     SET_LOGGED_USER(state, user: IUser) {

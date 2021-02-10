@@ -9,20 +9,20 @@
       <div class="form-inputs">
         <div class="form-input">
           <input
+            v-model="email"
             type="email"
             placeholder="Email"
             class="input-field-global input-field"
             name="email"
-            v-model="email"
           />
           <span class="focus-border"></span>
         </div>
         <div class="form-input">
           <input
+            v-model="password"
             type="password"
             placeholder="Password"
             class="input-field-global input-field"
-            v-model="password"
           />
           <span class="focus-border"></span>
         </div>
@@ -31,10 +31,13 @@
         <input
           type="submit"
           value="Sign In"
-          @click.prevent="loginUser"
           class="input-button primary-color"
+          @click.prevent="loginUser"
         />
-        <router-link to="/register" tag="button" class="input-button secondary-color"
+        <router-link
+          to="/register"
+          tag="button"
+          class="input-button secondary-color"
           >Sign Up</router-link
         >
         <span class="forgot-password">Forgot password?</span>
@@ -42,6 +45,24 @@
     </form>
   </div>
 </template>
+
+<script lang="ts">
+import { ref } from "vue";
+import { login } from "../services/user.api.service";
+
+export default {
+  setup() {
+    const email = ref("");
+    const password = ref("");
+
+    function loginUser() {
+      login({ email: email.value, password: password.value });
+    }
+
+    return { email, password, loginUser };
+  }
+};
+</script>
 
 <style scoped>
 @import "../assets/styles/global.css";
@@ -69,22 +90,3 @@ h2 {
   color: #ccc;
 }
 </style>
-
-<script lang="ts">
-import { Options, Vue } from "vue-class-component";
-import { ref } from "vue";
-import { login } from "../services/user.api.service";
-
-export default {
-  setup() {
-    const email = ref("");
-    const password = ref("");
-
-    function loginUser() {
-      login({ email: email.value, password: password.value });
-    }
-
-    return { email, password, loginUser };
-  }
-};
-</script>

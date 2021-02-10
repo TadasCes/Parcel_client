@@ -1,9 +1,9 @@
 <template>
   <select
+    id="filter_city"
     name="miestas"
     class="form-control"
     title="Miestas"
-    id="filter_city"
     :value="city"
     @change="$emit('update:city', $event.target.value)"
   >
@@ -76,10 +76,12 @@
 </template>
 
 <script lang="ts">
-import Vue, { ref } from "vue";
 export default {
   props: {
-    city: String
+    city: {
+      type: String,
+      default: ""
+    }
   },
   emits: ["update:city"]
 };

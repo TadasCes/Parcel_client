@@ -12,11 +12,11 @@
           <div class="col-lg-3 col-md-5">
             <div class="form-input ">
               <input
+                v-model="firstName"
                 type="text"
                 placeholder="First Name"
                 class="input-field-global input-field"
                 name="First Name"
-                v-model="firstName"
               />
               <span class="focus-border"></span>
             </div>
@@ -24,11 +24,11 @@
           <div class="col-lg-3 col-md-5">
             <div class="form-input">
               <input
+                v-model="lastName"
                 type="text"
                 placeholder="Last Name"
                 class="input-field-global input-field "
                 name="Last name"
-                v-model="lastName"
               />
               <span class="focus-border"></span>
             </div>
@@ -41,11 +41,11 @@
           <div class="col-lg-6 col-md-10">
             <div class="form-input  ">
               <input
+                v-model="email"
                 type="email"
                 placeholder="Email"
                 class="input-field "
                 name="email"
-                v-model="email"
               />
               <span class="focus-border"></span>
             </div>
@@ -58,11 +58,11 @@
           <div class="col-lg-3 col-md-5">
             <div class="form-input">
               <input
+                v-model="password"
                 type="password"
                 placeholder="Password"
                 class="input-field-global input-field"
                 name="Password"
-                v-model="password"
               />
               <span class="focus-border"></span>
             </div>
@@ -97,29 +97,7 @@
   </div>
 </template>
 
-<style scoped>
-@import "../assets/styles/global.css";
-@import "../assets/styles/input-styles.css";
-
-#register-page {
-  padding: 100px;
-}
-
-h2 {
-  margin-bottom: 60px;
-}
-
-.register {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin: 0 auto;
-}
-</style>
-
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
 import { ref } from "vue";
 import { createUser } from "../services/user.api.service";
 
@@ -144,3 +122,24 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+@import "../assets/styles/global.css";
+@import "../assets/styles/input-styles.css";
+
+#register-page {
+  padding: 100px;
+}
+
+h2 {
+  margin-bottom: 60px;
+}
+
+.register {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+</style>

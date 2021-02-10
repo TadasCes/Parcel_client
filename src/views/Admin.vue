@@ -1,10 +1,7 @@
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
 import Menu from "@/components/Menu.vue"; // @ is an alias to /src
-import SearchBar from "@/components/SearchBar.vue"; // @ is an alias to /src
 import Post from "@/components/Post.vue"; // @ is an alias to /src
-import { computed, onMounted, ref, watch } from "vue";
-import store from "../store/index";
+import { computed } from "vue";
 import { useStore } from "vuex";
 
 export default {
