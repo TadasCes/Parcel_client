@@ -1,13 +1,30 @@
+<script lang="ts">
+export default {
+  props: {
+    city: {
+      type: String,
+      default: "",
+      required: true
+    },
+    title: {
+      type: String,
+      default: "as"
+    }
+  },
+  emits: ["update:city"]
+};
+</script>
+
 <template>
   <select
     id="filter_city"
     name="miestas"
-    class="form-control"
-    title="Miestas"
+    class="input-field input-select"
+    :title="title"
     :value="city"
     @change="$emit('update:city', $event.target.value)"
   >
-    <option value="">Pasirinkite</option>
+    <option value="" selected disabled>{{ title }} </option>
     <optgroup label="Dažniausi maršrutai">
       <option value="Vilnius">Vilnius</option>
       <option value="Kaunas">Kaunas</option>
@@ -74,15 +91,3 @@
     </optgroup>
   </select>
 </template>
-
-<script lang="ts">
-export default {
-  props: {
-    city: {
-      type: String,
-      default: ""
-    }
-  },
-  emits: ["update:city"]
-};
-</script>

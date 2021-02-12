@@ -10,11 +10,12 @@ export default {
     Menu,
     Post
   },
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   setup() {
     const { state } = useStore();
     const posts = computed(() => state.posts.posts);
 
-    function goToDetails(id: string) {
+    function goToDetails(id: string): void {
       router.push({ name: "Details", params: { id } });
     }
 

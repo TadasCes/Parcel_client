@@ -24,7 +24,7 @@
 }
 
 .secondary-color {
-  background-color: #e0e4ff;
+  background-color: #6e6d6d;
   color: #3a3a3a;
 }
 
@@ -42,13 +42,31 @@ a:hover.primary-color {
   color: white;
 }
 
+.form-buttons {
+  display: flex;
+  flex-direction: column;
+}
+
 .input-button {
-  display: block;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
   padding: 8px;
-  width: 200px;
-  border-radius: 20px;
+  width: 150px;
+  border-radius: 15px;
   border: none;
+  box-shadow: 1px 1px 2px #5a5a5a;
+}
+.input-button:hover {
+  box-shadow: 1px 2px 5px #5a5a5a;
+}
+
+.input-select {
+  font-weight: bold;
+  color: #303030;
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, gray 50%), linear-gradient(135deg, gray 50%, transparent 50%);
+  background-position: calc(100% - 10px) calc(1em + (-2.5px)), calc(100% - 5px) calc(1em + (-2.5px));
+  background-size: 5px 5px, 5px 5px, 1px;
+  background-repeat: no-repeat;
 }
 
 /*# sourceMappingURL=global.css.map */

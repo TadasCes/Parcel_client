@@ -1,4 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/interface-name-prefix
 export default interface IPost {
+  _id: string;
   cityStart: string;
   cityFinish: string;
   timeStart: Date;

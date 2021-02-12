@@ -1,0 +1,13 @@
+{
+  "defaultSeverity": "error",
+  "extends": ["tslint-config-standard"],
+  "jsRules": {},
+  "rules": {
+    "quotemark": [true, "double", "jsx-double"],
+    "semicolon": [true, "always"],
+    "space-before-function-paren": [false],
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "indent": 0
+  },
+  "rulesDirectory": []
+}

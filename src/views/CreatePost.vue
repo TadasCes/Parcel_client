@@ -1,5 +1,5 @@
 <script lang="ts">
-import City from "../components/formComponents/destination/City.vue";
+import City from "../components/formComponents/City.vue";
 import { useStore } from "vuex";
 import { computed, ref } from "vue";
 import { createPost } from "../services/post.api.service";
@@ -18,7 +18,7 @@ export default {
     const timeStart = ref(Date);
     const timeEnd = ref("");
 
-    function createNewPost() {
+    function createNewPost(): void {
       const newPost = {
         cityStart: cityStart.value,
         cityEnd: cityEnd.value,
@@ -57,12 +57,14 @@ export default {
       <div class="form-inputs container">
         <div class="row w-50">
           <div class="col-lg-6 col-md-12">
-            <label for="from">Is kur keliaujate?</label>
-            <City name="from" @update:city="cityStart = $event"></City>
+            <City
+              name="from"
+              title="Iš kur?"
+              @update:city="cityStart = $event"
+            />
           </div>
           <div class="col-lg-6 col-md-12">
-            <label for="to">I kur keliaujate?</label>
-            <City name="to" @update:city="cityEnd = $event"></City>
+            <City name="to" title="Į kur?" @update:city="cityEnd = $event" />
           </div>
         </div>
         <div class="row time-section">

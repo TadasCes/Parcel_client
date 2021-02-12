@@ -2,7 +2,7 @@
   <div id="register-page" class="">
     <div class="row">
       <div class="col-12">
-        <h2>Register</h2>
+        <h1>Register</h1>
       </div>
     </div>
     <form class="register ">
@@ -89,7 +89,7 @@
           @click.prevent="submitNewUser"
         />
 
-        <router-link to="/" tag="button" class="input-button secondary-color">
+        <router-link to="/login" tag="button" class="input-button ">
           Sign In instead
         </router-link>
       </div>
@@ -128,11 +128,15 @@ export default {
 @import "../assets/styles/input-styles.css";
 
 #register-page {
-  padding: 100px;
+  padding: 80px;
 }
 
-h2 {
+h1 {
   margin-bottom: 60px;
+}
+
+.form-inputs {
+  margin-bottom: 40px;
 }
 
 .register {

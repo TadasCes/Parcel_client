@@ -10,7 +10,7 @@
           <input
             type="email"
             placeholder="Email"
-            class="input-field-global input-field"
+            class="input-field"
             name="email"
           />
           <span class="focus-border"></span>
@@ -32,10 +32,6 @@
   align-items: center;
 }
 
-.form-inputs {
-  margin-bottom: 24px;
-}
-
 .form-input {
   position: relative;
   margin-bottom: 24px;
@@ -45,13 +41,13 @@
 .input-field {
   border: 0;
   padding: 4px 0 0 4px;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #ccc !important;
   background-color: transparent;
   width: 100%;
 }
 
 .input-field::placeholder {
-  color: #a5a5a5;
+  color: #1d1d1d;
 }
 
 /* Error styles */

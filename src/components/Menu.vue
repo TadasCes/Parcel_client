@@ -15,7 +15,7 @@ export default {
     <div class="container">
       <router-link id="logo" to="/home"></router-link>
       <div class="nav">
-        <router-link to="/home">
+        <router-link to="/">
           <span class="material-icons">search</span>
           Siųsti
         </router-link>

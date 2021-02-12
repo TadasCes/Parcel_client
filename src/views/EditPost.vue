@@ -1,5 +1,5 @@
 <script lang="ts">
-import City from "../components/formComponents/destination/City.vue";
+import City from "../components/formComponents/City.vue";
 import { useStore } from "vuex";
 import { computed, onMounted, ref } from "vue";
 import { updatePost } from "../services/post.api.service";
@@ -15,7 +15,8 @@ export default {
       default: ""
     }
   },
-  setup(props: any) {
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  setup(props: { id: string }) {
     const store = useStore();
     const user = computed(() => store.state.loggedUser);
 
@@ -25,7 +26,7 @@ export default {
     const timeStart = ref("");
     const timeEnd = ref("");
 
-    function getAPost() {
+    function getAPost(): void {
       const post = store.getters["posts/getAPost"](props.id);
       const dayFormated = moment(post.timeStart).format("YYYY-MM-DD");
       const timeStartFormated = moment(post.timeStart).format("HH:mm");
@@ -37,7 +38,7 @@ export default {
       timeEnd.value = timeEndFormated;
     }
 
-    function updateAPost() {
+    function updateAPost(): void {
       const editedPost = {
         cityStart: cityStart.value,
         cityEnd: cityEnd.value,
@@ -77,11 +78,11 @@ export default {
         <div class="row w-50">
           <div class="col-lg-6 col-md-12">
             <label for="from">Is kur keliaujate?</label>
-            <City v-model="cityStart" name="from"></City>
+            <City name="cityStart" @update:city="cityStart = $event" />
           </div>
           <div class="col-lg-6 col-md-12">
             <label for="to">I kur keliaujate?</label>
-            <City v-model="cityEnd" name="to"></City>
+            <City v-model="cityEnd" name="to" @update:city="cityEnd = $event" />
           </div>
         </div>
         <div class="row time-section">

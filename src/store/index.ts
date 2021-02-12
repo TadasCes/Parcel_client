@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { createLogger, createStore } from "vuex";
 import { fetchAllPosts, deletePost } from "../services/post.api.service";
-import IUser from "../interfaces/IUser";
+import IUser from "@/interfaces/IUser";
+import IPost from "@/interfaces/IPost";
 
 // const users = {
 //   namespaced: true,
@@ -23,11 +26,11 @@ import IUser from "../interfaces/IUser";
 const posts = {
   namespaced: true,
   state: {
-    posts: []
+    posts: [] as IPost[]
   },
 
   mutations: {
-    SET_POSTS(state: any, posts: any) {
+    SET_POSTS(state: any, posts: IPost[]) {
       state.posts = posts;
     }
   },
@@ -42,8 +45,8 @@ const posts = {
     }
   },
   getters: {
-    getAPost: (state: any) => (id: string) => {
-      return state.posts.find((post: any) => post._id === id);
+    getAPost: (state: { posts: IPost[] }) => (id: string) => {
+      return state.posts.find((post: IPost) => post._id === id);
     }
   }
 };
@@ -51,7 +54,7 @@ const posts = {
 export default createStore({
   plugins: [createLogger()],
   state: {
-    loggedUser: <IUser>{}
+    loggedUser: {} as IUser
   },
   mutations: {
     SET_LOGGED_USER(state, user: IUser) {
