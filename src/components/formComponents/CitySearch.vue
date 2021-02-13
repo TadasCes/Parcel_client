@@ -3,13 +3,27 @@
 import locations from "../../data/locations.json";
 import { computed, Ref, ref, watch } from "vue";
 export default {
-  setup() {
+  props: {
+    city: {
+      type: String,
+      default: "",
+      required: true
+    }
+  },
+  emits: ["update:city"],
+  setup(props: any, { emit }: any) {
     const allLocations = computed(() => locations);
     let filteredLocations: any = ref([]);
-    const searchInput = ref("");
+
+    const inputValue = ref("");
+
+    const inputSearch = ref("");
     const searchResult: Ref<Array<string>> = ref([]);
+
+    const inputResult = ref("");
     const showResults = ref(false);
 
+    // Adds filtered locations to new array
     function addToSearchResults(filtered: any) {
       searchResult.value.length = 0;
       filtered.forEach((location: { name: string }) => {
@@ -17,37 +31,48 @@ export default {
       });
     }
 
-    function filterArray(searchText: string) {
+    // Searches for locations
+    function filterMainArray(searchText: string) {
       filteredLocations = allLocations.value.filter(locations =>
         locations.name
           .toLowerCase()
           .includes(searchText.toString().toLowerCase())
       );
-      if (filteredLocations.length > 0) {
-        addToSearchResults(filteredLocations);
-      }
+      if (filteredLocations.length > 0) addToSearchResults(filteredLocations);
     }
 
     function selectResult(value: string) {
-      searchInput.value = value;
+      inputResult.value = value;
+      inputValue.value = inputResult.value;
+      showResults.value = false;
+      searchResult.value.length = 0;
+      document.getElementById("searchBar")?.blur();
+      emit("update:city", inputResult.value);
     }
 
-    watch(searchInput, (searchInput: string) => {
-      if (searchInput.length >= 3) {
-        filterArray(searchInput);
-        console.log(searchResult);
+    function startSearch() {
+      if (inputResult.value === "") {
+        inputValue.value = inputSearch.value;
+      }
+      showResults.value = true;
+    }
+
+    watch(inputValue, (inputSearch: string) => {
+      if (inputSearch.length >= 3) {
+        filterMainArray(inputSearch);
       } else {
         searchResult.value.length = 0;
       }
     });
 
-    console.log(allLocations.value);
     return {
-      searchInput,
-      filterArray,
+      inputValue,
+      inputSearch,
+      filterMainArray,
       searchResult,
       selectResult,
-      showResults
+      showResults,
+      startSearch
     };
   }
 };
@@ -56,22 +81,25 @@ export default {
 <template>
   <div id="city-search">
     <input
-      v-model="searchInput"
+      v-model="inputValue"
       type="text"
-      placeholder="Location search"
-      @change="filterArray"
-      @focus="showResults = true"
+      placeholder="Įveskite miestą"
+      id="searchBar"
+      class="input-field"
+      @change="filterMainArray"
+      @focus="startSearch"
       @blur="showResults = false"
     />
+
     <div
-      v-if="searchResult.length > 0 && showResults == true"
+      v-if="inputValue.length > 0 && showResults == true"
       class="search-result"
     >
       <div
         v-for="result in searchResult"
         :key="result"
         class="search-result-row"
-        @click="selectResult"
+        @mousedown.prevent="selectResult(result)"
       >
         {{ result }}
       </div>
@@ -83,14 +111,14 @@ export default {
 @import "../../assets/styles/variables.scss";
 
 #city-search {
-  width: 220px;
+  width: 180px;
 
   input {
     width: 100%;
   }
 
   .search-result {
-    position: fixed;
+    position: absolute;
     width: inherit;
 
     .search-result-row {

@@ -1,31 +1,75 @@
 <script lang="ts">
 import Menu from "@/components/Menu.vue";
-import City from "@/components/formComponents/City.vue";
 import CitySearch from "@/components/formComponents/CitySearch.vue";
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 export default {
   components: {
     Menu,
-    City,
     CitySearch
   },
   setup() {
     const cityStart = ref("");
     const cityEnd = ref("");
-    const date = ref(Date);
+    const date = ref("");
     const size = ref(0);
+
+    const formValidity = reactive({
+      cityStart: true,
+      cityEnd: true,
+      date: true,
+      size: true
+    });
+
+    function validateForm(formData: any): boolean {
+      if (formData.cityStart === "") {
+        formValidity.cityStart = false;
+        console.log("Pasirinkite pradzia");
+      } else {
+        formValidity.cityStart = true;
+      }
+      if (formData.cityEnd === "") {
+        formValidity.cityEnd = false;
+        console.log("Pasirinkite pabaiga");
+      } else {
+        formValidity.cityEnd = true;
+      }
+      if (formData.date === "") {
+        formValidity.date = false;
+        console.log("Pasirinkite data");
+      } else {
+        formValidity.cityEnd = true;
+      }
+      if (formData.size === 0) {
+        formValidity.size = false;
+        console.log("Pasirinkite dydi");
+      } else {
+        formValidity.cityEnd = true;
+      }
+      return true;
+    }
 
     function searchPost(): void {
       const formData = {
         cityStart: cityStart.value,
         cityEnd: cityEnd.value,
-        data: date.value,
+        date: date.value,
         size: size.value
       };
-      console.log(formData);
+
+      if (validateForm(formData)) {
+        console.log(formData);
+      }
     }
 
-    return { cityStart, cityEnd, date, size, searchPost };
+    return {
+      cityStart,
+      cityEnd,
+      date,
+      size,
+      searchPost,
+      validateForm,
+      formValidity
+    };
   }
 };
 </script>
@@ -39,54 +83,57 @@ export default {
         <form class="search-box">
           <div class="search-field">
             <span class="material-icons">north</span>
-            <div class="form-input">
-              <!-- <City
-                name="cityStart"
-                title="Iš kur?"
-                @update:city="cityStart = $event"
-              /> -->
-              <CitySearch />
-              <span class="focus-border"></span>
+            <div class="form-input cityStartInput">
+              <CitySearch @update:city="cityStart = $event" />
             </div>
           </div>
           <div class="search-field">
             <span class="material-icons">south</span>
             <div class="form-input">
-              <City
-                name="cityEnd"
-                title="Į kur?"
-                @update:city="cityEnd = $event"
-              />
-              <span class="focus-border"></span>
+              <CitySearch @update:city="cityEnd = $event" />
             </div>
           </div>
           <div class="search-field">
             <span class="material-icons">today</span>
-            <div class="form-input">
+            <div class="form-input ">
               <input
                 v-model="date"
                 class="input-field "
                 type="date"
                 placeholder="Kada?"
+                @click="formValidity.date = true"
               />
-              <span class="focus-border"></span>
+              <span
+                :class="
+                  formValidity.date === false
+                    ? 'focus-border-error'
+                    : 'focus-border'
+                "
+              ></span>
             </div>
           </div>
           <div class="search-field">
             <span class="material-icons">aspect_ratio</span>
-            <div class="form-input size-select">
+            <div class="form-input size-select ">
               <select
                 v-model="size"
                 name="size"
                 class="input-field input-select input-size"
                 title="Siuntos dydis"
+                @click="formValidity.date = true"
               >
                 <option selected disabled :value="0">Siuntos dydis</option>
-                <option :value="1">Mažas</option>
-                <option :value="2">Vidutinis</option>
-                <option :value="3">Didelis</option>
+                <option :value="1">Maža</option>
+                <option :value="2">Vidutinė</option>
+                <option :value="3">Didelė</option>
               </select>
-              <span class="focus-border"></span>
+              <span
+                :class="
+                  formValidity.date === false
+                    ? 'focus-border-error'
+                    : 'focus-border'
+                "
+              ></span>
             </div>
           </div>
         </form>
