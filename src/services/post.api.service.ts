@@ -1,3 +1,4 @@
+import IPost from "@/interfaces/IPost";
 import axios from "axios";
 import moment from "moment";
 import store from "../store/index";
@@ -11,13 +12,22 @@ function formatAPost(post: any) {
 }
 
 export async function fetchAllPosts() {
-  return await axios.get("http://localhost:5000/posts").then(response => {
+  return axios.get("http://localhost:5000/posts").then(response => {
     return response.data.result;
   });
 }
 
-export async function createPost(post: any) {
-  return await axios
+export async function fetchFilteredPosts(query: any) {
+  return axios
+    .post("http://localhost:5000/posts/filter", query)
+    .then(response => {
+      // console.log(response.data.result);
+      return response.data.result;
+    });
+}
+
+export async function createPost(post: IPost) {
+  return axios
     .post("http://localhost:5000/posts", formatAPost(post))
     .then(response => {
       store.dispatch("posts/getAllPosts");
@@ -31,7 +41,7 @@ export async function createPost(post: any) {
 }
 
 export async function updatePost(update: any, id: string) {
-  return await axios
+  return axios
     .put(`http://localhost:5000/posts/${id}`, formatAPost(update))
     .then(response => {
       store.dispatch("posts/getAllPosts");
@@ -41,9 +51,7 @@ export async function updatePost(update: any, id: string) {
 }
 
 export async function deletePost(id: string) {
-  return await axios
-    .delete(`http://localhost:5000/posts/${id}`)
-    .then(response => {
-      return response.data.result;
-    });
+  return axios.delete(`http://localhost:5000/posts/${id}`).then(response => {
+    return response.data.result;
+  });
 }

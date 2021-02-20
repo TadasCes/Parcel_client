@@ -1,11 +1,12 @@
 <script lang="ts">
-import { logout } from "../services/user.api.service";
+import { isUserLoggedIn, logout } from "../services/user.api.service";
 export default {
   setup() {
     function logoutUser() {
       logout();
     }
-    return { logoutUser };
+
+    return { logoutUser, isUserLoggedIn };
   }
 };
 </script>
@@ -17,17 +18,19 @@ export default {
       <div class="nav">
         <router-link to="/">
           <span class="material-icons">search</span>
-          Siųsti
+          Siųsti siuntą
         </router-link>
-        <router-link to="/home">
-          <span class="material-icons">time_to_leave</span>
-          Keliauti
-        </router-link>
-        <router-link to="/home">
+        <router-link to="/register" v-if="isUserLoggedIn() == false">
           Registruotis
         </router-link>
-        <router-link to="/" @click="logoutUser">
+        <router-link to="/create-post" v-else>
+          Paskelbti kelionę
+        </router-link>
+        <router-link to="/login" v-if="isUserLoggedIn() == false">
           Prisijungti
+        </router-link>
+        <router-link to="/login" v-else @click="logoutUser">
+          Atsijungti
         </router-link>
       </div>
     </div>
@@ -48,7 +51,7 @@ export default {
   }
 
   a {
-    color: $secondary-color;
+    color: $primary-color;
     font-weight: bold;
     overflow: hidden;
     margin-right: 16px;

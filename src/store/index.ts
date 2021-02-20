@@ -1,7 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { createLogger, createStore } from "vuex";
-import { fetchAllPosts, deletePost } from "../services/post.api.service";
+import {
+  fetchAllPosts,
+  deletePost,
+  fetchFilteredPosts
+} from "../services/post.api.service";
 import IUser from "@/interfaces/IUser";
 import IPost from "@/interfaces/IPost";
 
@@ -37,6 +41,10 @@ const posts = {
   actions: {
     async getAllPosts(state: any) {
       const result = await fetchAllPosts();
+      state.commit("SET_POSTS", result);
+    },
+    async getFilteredPosts(state: any, query: any) {
+      const result = await fetchFilteredPosts(query);
       state.commit("SET_POSTS", result);
     },
     async deleteAPost({ dispatch }: any, id: string) {

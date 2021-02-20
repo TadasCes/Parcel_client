@@ -4,6 +4,7 @@ import { useStore } from "vuex";
 import { computed, ref } from "vue";
 import { createPost } from "../services/post.api.service";
 import router from "@/router";
+import IPost from "@/interfaces/IPost";
 export default {
   components: {
     City
@@ -15,11 +16,11 @@ export default {
     const cityStart = ref("");
     const cityEnd = ref("");
     const day = ref("");
-    const timeStart = ref(Date);
+    const timeStart = ref("");
     const timeEnd = ref("");
 
     function createNewPost(): void {
-      const newPost = {
+      const newPost: IPost = {
         cityStart: cityStart.value,
         cityEnd: cityEnd.value,
         day: day.value,

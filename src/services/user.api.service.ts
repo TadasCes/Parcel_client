@@ -3,15 +3,14 @@ import store from "@/store";
 import axios from "axios";
 
 export async function createUser(body: any) {
-  return await axios.post("http://localhost:5000/users", body).then(() => {
+  return axios.post("http://localhost:5000/users", body).then(() => {
     console.log("User created successfully!");
     router.push("/");
   });
 }
 
-// test
 export async function login(body: any) {
-  return await axios
+  return axios
     .post("http://localhost:5000/login", body)
     .then(response => {
       localStorage.setItem("jwt", JSON.stringify(response.data.token));
@@ -32,4 +31,8 @@ export async function logout() {
   localStorage.removeItem("user");
   localStorage.removeItem("jwt");
   router.push("/");
+}
+
+export function isUserLoggedIn() {
+  return localStorage.getItem("user") !== null ? true : false;
 }

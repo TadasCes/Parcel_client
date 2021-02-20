@@ -56,10 +56,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/home",
     name: "Home",
-    component: Home,
-    meta: {
-      requiresAuth: true
-    }
+    component: Home
   },
   {
     path: "/create-post",

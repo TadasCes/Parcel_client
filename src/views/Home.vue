@@ -1,6 +1,7 @@
 <script lang="ts">
-import Menu from "@/components/Menu.vue"; // @ is an alias to /src
-import Post from "@/components/Post.vue"; // @ is an alias to /src
+import Menu from "@/components/Menu.vue";
+import Post from "@/components/Post.vue";
+import SearchBar from "@/components/SearchBar.vue";
 import { computed } from "vue";
 import { useStore } from "vuex";
 import router from "@/router";
@@ -8,13 +9,14 @@ import router from "@/router";
 export default {
   components: {
     Menu,
-    Post
+    Post,
+    SearchBar
   },
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   setup() {
     const { state } = useStore();
     const posts = computed(() => state.posts.posts);
-
+    console.log(posts.value);
     function goToDetails(id: string): void {
       router.push({ name: "Details", params: { id } });
     }
@@ -26,24 +28,39 @@ export default {
 
 <template>
   <div class="home">
-    <Menu></Menu>
+    <div class="search-section">
+      <Menu></Menu>
+      <SearchBar />
+    </div>
     <div class="container">
-      <router-link to="/create-post">
-        <button class="btn btn-primary">Create a new post</button>
-      </router-link>
-      <Post
-        v-for="post in posts"
-        :key="post._id"
-        :post="post"
-        @click="goToDetails(post._id)"
-      ></Post>
+      <Post v-for="post in posts" :key="post._id" :post="post"></Post>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .container {
-  width: 70%;
+  width: 50%;
   padding: 20px 20px 10px 20px;
+}
+
+.search-section {
+  position: fixed;
+  width: 100%;
+  background-color: white;
+  z-index: 100;
+  box-shadow: 1px 5px 10px rgb(185, 185, 185);
+}
+
+@media screen and (max-width: 900px) {
+  .container {
+    width: 75%;
+  }
+}
+
+@media screen and (max-width: 580px) {
+  .container {
+    width: 100%;
+  }
 }
 </style>

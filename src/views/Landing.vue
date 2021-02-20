@@ -1,75 +1,9 @@
 <script lang="ts">
 import Menu from "@/components/Menu.vue";
-import CitySearch from "@/components/formComponents/CitySearch.vue";
-import { reactive, ref } from "vue";
+
 export default {
   components: {
-    Menu,
-    CitySearch
-  },
-  setup() {
-    const cityStart = ref("");
-    const cityEnd = ref("");
-    const date = ref("");
-    const size = ref(0);
-
-    const formValidity = reactive({
-      cityStart: true,
-      cityEnd: true,
-      date: true,
-      size: true
-    });
-
-    function validateForm(formData: any): boolean {
-      if (formData.cityStart === "") {
-        formValidity.cityStart = false;
-        console.log("Pasirinkite pradzia");
-      } else {
-        formValidity.cityStart = true;
-      }
-      if (formData.cityEnd === "") {
-        formValidity.cityEnd = false;
-        console.log("Pasirinkite pabaiga");
-      } else {
-        formValidity.cityEnd = true;
-      }
-      if (formData.date === "") {
-        formValidity.date = false;
-        console.log("Pasirinkite data");
-      } else {
-        formValidity.cityEnd = true;
-      }
-      if (formData.size === 0) {
-        formValidity.size = false;
-        console.log("Pasirinkite dydi");
-      } else {
-        formValidity.cityEnd = true;
-      }
-      return true;
-    }
-
-    function searchPost(): void {
-      const formData = {
-        cityStart: cityStart.value,
-        cityEnd: cityEnd.value,
-        date: date.value,
-        size: size.value
-      };
-
-      if (validateForm(formData)) {
-        console.log(formData);
-      }
-    }
-
-    return {
-      cityStart,
-      cityEnd,
-      date,
-      size,
-      searchPost,
-      validateForm,
-      formValidity
-    };
+    Menu
   }
 };
 </script>
@@ -78,67 +12,24 @@ export default {
   <div>
     <Menu />
     <main class="main-content">
-      <h1 class="section-header">Siunčiate siuntą?</h1>
-      <div class="section-search">
-        <form class="search-box">
-          <div class="search-field">
-            <span class="material-icons">north</span>
-            <div class="form-input cityStartInput">
-              <CitySearch @update:city="cityStart = $event" />
-            </div>
-          </div>
-          <div class="search-field">
-            <span class="material-icons">south</span>
-            <div class="form-input">
-              <CitySearch @update:city="cityEnd = $event" />
-            </div>
-          </div>
-          <div class="search-field">
-            <span class="material-icons">today</span>
-            <div class="form-input ">
-              <input
-                v-model="date"
-                class="input-field "
-                type="date"
-                placeholder="Kada?"
-                @click="formValidity.date = true"
-              />
-              <span
-                :class="
-                  formValidity.date === false
-                    ? 'focus-border-error'
-                    : 'focus-border'
-                "
-              ></span>
-            </div>
-          </div>
-          <div class="search-field">
-            <span class="material-icons">aspect_ratio</span>
-            <div class="form-input size-select ">
-              <select
-                v-model="size"
-                name="size"
-                class="input-field input-select input-size"
-                title="Siuntos dydis"
-                @click="formValidity.date = true"
-              >
-                <option selected disabled :value="0">Siuntos dydis</option>
-                <option :value="1">Maža</option>
-                <option :value="2">Vidutinė</option>
-                <option :value="3">Didelė</option>
-              </select>
-              <span
-                :class="
-                  formValidity.date === false
-                    ? 'focus-border-error'
-                    : 'focus-border'
-                "
-              ></span>
-            </div>
-          </div>
-        </form>
+      <div class="section-header">
+        <h1>Persiųskite siuntą lengviau</h1>
+        <h6>Perduokite siuntą keliaujantiems žmonemss</h6>
       </div>
-      <button class="input-button" @click.prevent="searchPost">Ieškoti</button>
+      <div class="section-options">
+        <button class="input-button">
+          <span class="material-icons align-middle">search</span>
+          <router-link to="/home">
+            Siųsti siuntą
+          </router-link>
+        </button>
+        <button class="input-button">
+          <span class="material-icons align-middle">directions_car</span>
+          <router-link to="/register">
+            Siūlyti pervežimą
+          </router-link>
+        </button>
+      </div>
     </main>
   </div>
 </template>
@@ -151,54 +42,22 @@ export default {
   height: 100vh;
 }
 
+.section-options {
+  display: flex;
+  justify-content: center;
+}
+
+.input-button {
+  margin: 16px;
+  margin-top: 60px;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
 .section-header {
   margin-top: 80px;
-}
-
-.section-search {
-  margin-top: 40px;
-  .search-box {
-    width: 900px;
-    height: 75px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border: 1px solid rgb(211, 211, 211);
-    border-radius: 50px;
-    padding: 20px;
-    padding-left: 50px;
-  }
-
-  .search-field {
-    padding-right: 12px;
-    display: flex;
-    align-items: center;
-    margin-right: 12px;
-
-    input {
-      font-weight: bold;
-      border: 0;
-      width: 100%;
-    }
-
-    .input-field::placeholder {
-      color: $input-color-light;
-    }
-
-    .size-select {
-      width: 140px;
-    }
-  }
-
-  .form-input {
-    margin-bottom: 0;
-  }
-}
-
-main {
-  button {
-    margin-top: 40px;
-  }
 }
 </style>

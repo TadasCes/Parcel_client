@@ -8,6 +8,16 @@ export default {
       type: String,
       default: "",
       required: true
+    },
+    title: {
+      type: String,
+      default: "",
+      required: true
+    },
+    isValid: {
+      type: Boolean,
+      default: false,
+      required: true
     }
   },
   emits: ["update:city"],
@@ -57,6 +67,8 @@ export default {
       showResults.value = true;
     }
 
+    console.log(props.isValid);
+
     watch(inputValue, (inputSearch: string) => {
       if (inputSearch.length >= 3) {
         filterMainArray(inputSearch);
@@ -83,14 +95,13 @@ export default {
     <input
       v-model="inputValue"
       type="text"
-      placeholder="Įveskite miestą"
-      id="searchBar"
+      :placeholder="title"
       class="input-field"
       @change="filterMainArray"
       @focus="startSearch"
       @blur="showResults = false"
     />
-
+    <span class="focus-border"></span>
     <div
       v-if="inputValue.length > 0 && showResults == true"
       class="search-result"
