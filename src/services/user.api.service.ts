@@ -33,6 +33,6 @@ export async function logout() {
   router.push("/");
 }
 
-export function isUserLoggedIn() {
+export function isAuthenticated() {
   return localStorage.getItem("user") !== null ? true : false;
 }

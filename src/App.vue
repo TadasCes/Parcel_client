@@ -1,10 +1,11 @@
 <template>
-  <router-view />
+  <div id="app">
+    <router-view />
+  </div>
 </template>
 
 <script lang="ts">
 import { useStore } from "vuex";
-
 export default {
   name: "App",
   setup() {

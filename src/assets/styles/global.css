@@ -18,29 +18,14 @@
  *  @author     Vainius Vilkelis 
  *
 */
-/* Color classes */
-.primary-color {
-  background-color: #3c4ff6;
-  color: white;
-}
-
-.secondary-color {
-  background-color: #ecefff;
-  color: #3a3a3a;
-}
-
-.accent-color {
-  background-color: #7ba4f7;
-  color: white;
+a {
+  color: whitesmoke;
+  text-decoration: none !important;
 }
 
 a:hover {
-  text-decoration: none;
-  color: inherit;
-}
-
-a:hover.primary-color {
-  color: white;
+  color: initial;
+  text-decoration: none !important;
 }
 
 .form-buttons {
@@ -54,6 +39,7 @@ a:hover.primary-color {
   border-radius: 15px;
   border: none;
   box-shadow: 1px 1px 2px #5a5a5a;
+  background-color: #ffb220;
 }
 .input-button:hover {
   box-shadow: 1px 2px 5px #5a5a5a;

@@ -2,12 +2,16 @@
 import { useStore } from "vuex";
 import { onMounted, ref } from "vue";
 import moment from "moment";
+import Navigation from "../components/Navigation.vue";
 export default {
   props: {
     id: {
       type: String,
       default: ""
     }
+  },
+  components: {
+    Navigation
   },
   setup(props: any) {
     const store = useStore();
@@ -64,53 +68,58 @@ export default {
 
 <template>
   <div id="edit-post" class="">
-    <router-link to="/home" tag="button" class="input-button secondary-color">
-      Back
-    </router-link>
-    <h2>Post details</h2>
+    <Navigation />
     <div class="container">
-      <div class="row">
-        <div class="col-6 content">
-          <h1>Maršrutas</h1>
-          <div>
-            <h5>
-              Pradžia: <strong>{{ cityStart }}</strong>
-            </h5>
-            <h5>
-              Pabaiga: <strong>{{ cityEnd }}</strong>
-            </h5>
-          </div>
-        </div>
-        <div class="col-6 content">
-          <h1>Vairuotojas</h1>
-          <div>
-            <h5>
-              Vardas: <strong>{{ firstName }} {{ lastName }}</strong>
-            </h5>
-            <h5>
-              Įvertiniams: <strong>{{ rating }}</strong>
-            </h5>
-            <h5>
-              Atlikta kelionių: <strong>{{ countDelivered }}</strong>
-            </h5>
-          </div>
-        </div>
+      <router-link to="/home" tag="button" class="input-button">
+        Back
+      </router-link>
+      <div>
+        <h2>Post details</h2>
       </div>
-      <div class="row">
-        <div class="col-6 content">
-          <h1>Laikas</h1>
-          <div>
-            <h5>
-              Pradžia: <strong>{{ timeStart }}</strong>
-            </h5>
-            <h5>
-              Pabaiga: <strong>{{ timeEnd }}</strong>
-            </h5>
+      <div class="container">
+        <div class="row">
+          <div class="col-6 content">
+            <h1>Maršrutas</h1>
+            <div>
+              <h5>
+                Pradžia: <strong>{{ cityStart }}</strong>
+              </h5>
+              <h5>
+                Pabaiga: <strong>{{ cityEnd }}</strong>
+              </h5>
+            </div>
+          </div>
+          <div class="col-6 content">
+            <h1>Vairuotojas</h1>
+            <div>
+              <h5>
+                Vardas: <strong>{{ firstName }} {{ lastName }}</strong>
+              </h5>
+              <h5>
+                Įvertiniams: <strong>{{ rating }}</strong>
+              </h5>
+              <h5>
+                Atlikta kelionių: <strong>{{ countDelivered }}</strong>
+              </h5>
+            </div>
           </div>
         </div>
-        <div class="col-6 content">
-          <h1>Žemėlapis</h1>
-          <img src="https://via.placeholder.com/300" alt="" />
+        <div class="row">
+          <div class="col-6 content">
+            <h1>Laikas</h1>
+            <div>
+              <h5>
+                Pradžia: <strong>{{ timeStart }}</strong>
+              </h5>
+              <h5>
+                Pabaiga: <strong>{{ timeEnd }}</strong>
+              </h5>
+            </div>
+          </div>
+          <div class="col-6 content">
+            <h1>Žemėlapis</h1>
+            <img src="https://via.placeholder.com/300" alt="" />
+          </div>
         </div>
       </div>
     </div>
@@ -129,6 +138,10 @@ export default {
 
 .row {
   margin-bottom: 36px;
+}
+
+.input-button {
+  float: left;
 }
 
 .form {

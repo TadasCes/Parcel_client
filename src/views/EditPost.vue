@@ -69,7 +69,7 @@ export default {
 
 <template>
   <div id="edit-post" class="">
-    <router-link to="/home" tag="button" class="input-button secondary-color">
+    <router-link to="/home" tag="button" class="input-button">
       Back
     </router-link>
     <h2>Edit post</h2>
@@ -139,6 +139,10 @@ export default {
 
 .row {
   margin-bottom: 36px;
+}
+
+.input-button {
+  float: left;
 }
 
 .form {

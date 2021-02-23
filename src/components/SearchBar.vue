@@ -173,14 +173,11 @@ export default {
 
 .search-box {
   width: 900px;
-  height: 150px;
+  height: 100px;
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border: 1px solid rgb(211, 211, 211);
-  border-radius: 50px;
-  padding: 20px 20px 20px 50px;
   margin-top: 20px;
 }
 

@@ -19,29 +19,13 @@
 
 @use 'variables';
 
-/* Color classes */
-.primary-color {
-  background-color: variables.$primary-color;
-  color: rgb(255, 255, 255);
+a {
+  color: variables.$primary-text-color;
+  text-decoration: none !important;
 }
-
-.secondary-color {
-  background-color: variables.$secondary-color;
-  color: #3a3a3a;
-}
-
-.accent-color {
-  background-color: variables.$accent-color;
-  color: rgb(255, 255, 255);
-}
-
 a:hover {
-  text-decoration: none;
-  color: inherit;
-}
-
-a:hover.primary-color {
-  color: rgb(255, 255, 255);
+  color: initial;
+  text-decoration: none !important;
 }
 
 .form-buttons {
@@ -55,7 +39,7 @@ a:hover.primary-color {
   border-radius: 15px;
   border: none;
   box-shadow: 1px 1px 2px rgb(90, 90, 90);
-
+  background-color: variables.$primary-color;
   &:hover {
     box-shadow: 1px 2px 5px rgb(90, 90, 90);
   }

@@ -124,6 +124,9 @@ export default {
   margin-bottom: 36px;
 }
 
+.input-button {
+  float: left;
+}
 .form {
   display: flex;
   flex-direction: column;

@@ -1,5 +1,5 @@
 <script lang="ts">
-import Menu from "@/components/Menu.vue";
+import Navigation from "@/components/Navigation.vue";
 import Post from "@/components/Post.vue";
 import SearchBar from "@/components/SearchBar.vue";
 import { computed } from "vue";
@@ -8,7 +8,7 @@ import router from "@/router";
 
 export default {
   components: {
-    Menu,
+    Navigation,
     Post,
     SearchBar
   },
@@ -29,7 +29,7 @@ export default {
 <template>
   <div class="home">
     <div class="search-section">
-      <Menu></Menu>
+      <Navigation></Navigation>
       <SearchBar />
     </div>
     <div class="container">
@@ -42,6 +42,8 @@ export default {
 .container {
   width: 50%;
   padding: 20px 20px 10px 20px;
+  top: 250px;
+  position: relative;
 }
 
 .search-section {

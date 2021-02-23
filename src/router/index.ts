@@ -36,27 +36,12 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: "/admin",
-    name: "Admin",
-    component: Admin,
-    meta: {
-      requiresAuth: true
-    },
-    beforeEnter: (to, from, next) => {
-      const user = computed(() => store.state.loggedUser);
-      console.log(user.value);
-      if (user.value.isAdmin) {
-        next();
-      } else {
-        next("/home");
-      }
-      next();
-    }
-  },
-  {
     path: "/home",
     name: "Home",
-    component: Home
+    component: Home,
+    meta: {
+      guest: true
+    }
   },
   {
     path: "/create-post",
@@ -79,10 +64,7 @@ const routes: Array<RouteRecordRaw> = [
     path: "/details/:id",
     name: "Details",
     component: Details,
-    props: true,
-    meta: {
-      requiresAuth: true
-    }
+    props: true
   }
 ];
 

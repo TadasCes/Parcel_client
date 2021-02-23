@@ -1,16 +1,16 @@
 <script lang="ts">
-import Menu from "@/components/Menu.vue";
+import Navigation from "@/components/Navigation.vue";
 
 export default {
   components: {
-    Menu
+    Navigation
   }
 };
 </script>
 
 <template>
   <div>
-    <Menu />
+    <Navigation />
     <main class="main-content">
       <div class="section-header">
         <h1>Persiųskite siuntą lengviau</h1>
