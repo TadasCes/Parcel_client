@@ -1,24 +1,17 @@
 <script lang="ts">
 import City from "../components/formComponents/City.vue";
 import { useStore } from "vuex";
-import { computed, onMounted, ref } from "vue";
-import { updatePost } from "../services/post.api.service";
+import { computed, ref } from "vue";
+import { createPost } from "../services/post.api.service";
 import router from "@/router";
-import moment from "moment";
+import IPost from "@/interfaces/IPost";
 export default {
   components: {
     City
   },
-  props: {
-    id: {
-      type: String,
-      default: ""
-    }
-  },
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  setup(props: { id: string }) {
-    const store = useStore();
-    const user = computed(() => store.state.loggedUser);
+  setup() {
+    const { state } = useStore();
+    const user = computed(() => state.loggedUser);
 
     const cityStart = ref("");
     const cityEnd = ref("");
@@ -26,67 +19,47 @@ export default {
     const timeStart = ref("");
     const timeEnd = ref("");
 
-    function getAPost(): void {
-      const post = store.getters["posts/getAPost"](props.id);
-      const dayFormated = moment(post.timeStart).format("YYYY-MM-DD");
-      const timeStartFormated = moment(post.timeStart).format("HH:mm");
-      const timeEndFormated = moment(post.timeEnd).format("HH:mm");
-      cityStart.value = post.cityStart;
-      cityEnd.value = post.cityEnd;
-      day.value = dayFormated;
-      timeStart.value = timeStartFormated;
-      timeEnd.value = timeEndFormated;
-    }
-
-    function updateAPost(): void {
-      const editedPost = {
+    function createNewPost(): void {
+      const newPost: IPost = {
         cityStart: cityStart.value,
         cityEnd: cityEnd.value,
         day: day.value,
         timeStart: timeStart.value,
         timeEnd: timeEnd.value,
-        author: {
-          id: user.value._id,
-          firstName: user.value.firstName,
-          lastName: user.value.lastName,
-          rating: user.value.rating,
-          countDelivered: user.value.countDelivered
-        }
+        authorId: user.value._id
       };
-      updatePost(editedPost, props.id);
-      console.log(editedPost);
+      createPost(newPost);
+      console.log(newPost);
       router.push("/home");
     }
-
-    onMounted(() => {
-      getAPost();
-    });
-
-    return { cityStart, cityEnd, day, timeStart, timeEnd, updateAPost };
-  }
+    return { cityStart, cityEnd, day, timeStart, timeEnd, createNewPost };
+  },
+  methods: {}
 };
 </script>
 
 <template>
-  <div id="edit-post" class="">
-    <router-link to="/home" tag="button" class="input-button">
+  <div id="create-post" class="">
+    <router-link to="/home" tag="button" class="input-button secondary-color">
       Back
     </router-link>
-    <h2>Edit post</h2>
+    <div class="row">
+      <div class="col-12">
+        <h2>Create a New Post</h2>
+      </div>
+    </div>
     <form class="form">
       <div class="form-inputs container">
         <div class="row w-50">
           <div class="col-lg-6 col-md-12">
-            <label for="from">Is kur keliaujate?</label>
             <City
-              v-model="cityStart"
               name="from"
+              title="Iš kur?"
               @update:city="cityStart = $event"
             />
           </div>
           <div class="col-lg-6 col-md-12">
-            <label for="to">I kur keliaujate?</label>
-            <City v-model="cityEnd" name="to" @update:city="cityEnd = $event" />
+            <City name="to" title="Į kur?" @update:city="cityEnd = $event" />
           </div>
         </div>
         <div class="row time-section">
@@ -129,7 +102,7 @@ export default {
           type="submit"
           value="Paskelbti"
           class="btn btn-primary"
-          @click="updateAPost"
+          @click="createNewPost"
         />
       </div>
     </form>
@@ -148,7 +121,6 @@ export default {
 .input-button {
   float: left;
 }
-
 .form {
   display: flex;
   flex-direction: column;

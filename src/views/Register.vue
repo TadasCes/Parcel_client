@@ -100,6 +100,7 @@
 <script lang="ts">
 import { ref } from "vue";
 import { createUser } from "../services/user.api.service";
+import { validatePassword } from "../utility/authValidation";
 
 export default {
   setup() {
@@ -109,13 +110,17 @@ export default {
     const lastName = ref("");
 
     function submitNewUser() {
-      const user = {
-        email: email.value,
-        password: password.value,
-        firstName: firstName.value,
-        lastName: lastName.value
-      };
-      createUser(user);
+      const isPasswordValid = validatePassword(password.value);
+      if (isPasswordValid === true) {
+        createUser({
+          email: email.value,
+          password: password.value,
+          firstName: firstName.value,
+          lastName: lastName.value
+        });
+      } else {
+        console.log(isPasswordValid);
+      }
     }
 
     return { email, password, firstName, lastName, submitNewUser };

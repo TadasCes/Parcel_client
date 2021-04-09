@@ -19,13 +19,13 @@ export default {
       <div class="section-options">
         <button class="input-button">
           <span class="material-icons align-middle">search</span>
-          <router-link to="/home">
+          <router-link to="/createPostParcel">
             Siųsti siuntą
           </router-link>
         </button>
         <button class="input-button">
           <span class="material-icons align-middle">directions_car</span>
-          <router-link to="/register">
+          <router-link to="/createPostTravel">
             Siūlyti pervežimą
           </router-link>
         </button>

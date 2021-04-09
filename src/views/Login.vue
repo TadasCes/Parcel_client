@@ -1,5 +1,7 @@
 <script lang="ts">
-import { ref } from "vue";
+import { reactive, ref } from "vue";
+import * as searchFormValidation from "../utility/formValidation";
+
 import { login } from "../services/user.api.service";
 
 export default {
@@ -7,11 +9,53 @@ export default {
     const email = ref("");
     const password = ref("");
 
-    function loginUser() {
-      login({ email: email.value, password: password.value });
+    const formValidity = reactive({
+      email: true,
+      password: true
+    });
+
+    const errorPassword = ref("");
+    const errorEmail = ref("");
+
+    function validateForm(): boolean {
+      formValidity.email = searchFormValidation.validateText(email.value);
+      formValidity.password = searchFormValidation.validateText(password.value);
+      if (formValidity.email) {
+        return true;
+      } else {
+        errorEmail.value = "Įveskite tinkamą el. paštą";
+        if (formValidity.password) {
+          return true;
+        } else {
+          errorPassword.value = "Įveskite slaptažodį";
+          return false;
+        }
+      }
     }
 
-    return { email, password, loginUser };
+    function loginUser() {
+      if (validateForm()) {
+        login({ email: email.value, password: password.value }).then(error => {
+          if (error == "Incorrect password.") {
+            formValidity.password = false;
+            errorPassword.value = error;
+          }
+          if (error == "No such user.") {
+            formValidity.email = false;
+            errorEmail.value = error;
+          }
+        });
+      }
+    }
+
+    return {
+      email,
+      password,
+      loginUser,
+      formValidity,
+      errorPassword,
+      errorEmail
+    };
   }
 };
 </script>
@@ -33,7 +77,16 @@ export default {
             class="input-field-global input-field"
             name="email"
           />
-          <span class="focus-border"></span>
+          <span
+            :class="
+              formValidity.email === false
+                ? 'focus-border-error'
+                : 'focus-border'
+            "
+          ></span>
+          <div v-show="formValidity.email == false" class="error-text">
+            * {{ errorEmail }}
+          </div>
         </div>
         <div class="form-input">
           <input
@@ -42,7 +95,16 @@ export default {
             placeholder="Password"
             class="input-field-global input-field"
           />
-          <span class="focus-border"></span>
+          <span
+            :class="
+              formValidity.password === false
+                ? 'focus-border-error'
+                : 'focus-border'
+            "
+          ></span>
+          <div v-show="formValidity.password == false" class="error-text">
+            * {{ errorPassword }}
+          </div>
         </div>
       </div>
       <div class="form-buttons">

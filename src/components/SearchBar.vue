@@ -4,8 +4,8 @@ import router from "@/router";
 import { useStore } from "vuex";
 import CitySearch from "./formComponents/CitySearch.vue";
 import moment from "moment";
-import * as searchFormValidation from "../utility/searchFormValidation";
-// import * as searchFormValidation from "../utility/searchFormValidation";
+import * as formValidation from "../utility/formValidation";
+// import * as formValidation from "../utility/formValidation";
 export default {
   components: {
     CitySearch
@@ -26,14 +26,10 @@ export default {
     });
 
     function validateForm(formData: any): boolean {
-      formValidity.cityStart = searchFormValidation.validateText(
-        formData.cityStart
-      );
-      formValidity.cityEnd = searchFormValidation.validateText(
-        formData.cityEnd
-      );
-      formValidity.date = searchFormValidation.validateDate(formData.date);
-      formValidity.size = searchFormValidation.validateSize(formData.size);
+      formValidity.cityStart = formValidation.validateText(formData.cityStart);
+      formValidity.cityEnd = formValidation.validateText(formData.cityEnd);
+      formValidity.date = formValidation.validateDate(formData.date);
+      formValidity.size = formValidation.validateSize(formData.size);
       if (
         formValidity.cityStart &&
         formValidity.cityEnd &&
@@ -209,15 +205,6 @@ export default {
 
 .form-input {
   margin-bottom: 0;
-}
-
-.error-text {
-  position: absolute;
-  float: left;
-  padding-top: 4px;
-  padding-left: 18px;
-  font-size: 11px;
-  color: $error-color;
 }
 
 button {

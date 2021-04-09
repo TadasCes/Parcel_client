@@ -3,10 +3,15 @@ import store from "@/store";
 import axios from "axios";
 
 export async function createUser(body: any) {
-  return axios.post("http://localhost:5000/users", body).then(() => {
-    console.log("User created successfully!");
-    router.push("/");
-  });
+  return axios
+    .post("http://localhost:5000/users", body)
+    .then(() => {
+      console.log("User created successfully!");
+      router.push("/");
+    })
+    .catch(error => {
+      console.log(error);
+    });
 }
 
 export async function login(body: any) {
@@ -20,7 +25,7 @@ export async function login(body: any) {
     })
     .catch(error => {
       if (error.response.data.message) {
-        console.log(error.response.data.message);
+        return error.response.data.message;
       } else {
         console.log(error);
       }

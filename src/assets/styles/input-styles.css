@@ -95,4 +95,13 @@
   background-color: #3399ff;
 }
 
+.error-text {
+  position: absolute;
+  float: left;
+  padding-top: 4px;
+  padding-left: 18px;
+  font-size: 11px;
+  color: #ff5233;
+}
+
 /*# sourceMappingURL=input-styles.css.map */
