@@ -1,8 +1,10 @@
 <script lang="ts">
 import moment from "moment";
 import { useStore } from "vuex";
-import { computed, ref } from "vue";
+import { computed, onBeforeMount, ref } from "vue";
+import { monthToLT } from "../utility/utils";
 import router from "@/router";
+import IUser from "@/interfaces/IUser";
 
 export default {
   props: {
@@ -21,6 +23,7 @@ export default {
     function deletePost() {
       console.log(props.post._id);
       store.dispatch("posts/deleteAPost", props.post._id);
+      location.reload();
     }
 
     function goToEdit() {
@@ -37,10 +40,15 @@ export default {
       "HH:mm"
     );
     const timeEnd = moment(moment(props.post.timeEnd).format()).format("HH:mm");
-
+    const menuo = monthToLT(
+      moment(moment(props.post.timeStart).format()).format("MMMM")
+    );
+    const diena = moment(moment(props.post.timeStart).format()).format("DD");
+    const day = menuo + " " + diena;
     return {
       timeStart,
       timeEnd,
+      day,
       showOptions,
       deletePost,
       goToEdit,
@@ -53,17 +61,20 @@ export default {
 <template>
   <div class="post">
     <div class="row">
-      <div class="col-lg-11 main" @click="goToDetails">
+      <div class="col-11 main" @click="goToDetails">
         <div class="ride-info">
           <h5 class="grow">{{ post.cityStart }} - {{ post.cityEnd }}</h5>
-          <h6 class="grow">{{ timeStart }} - {{ timeEnd }}</h6>
+          <div class="d-flex">
+            <h6 class="grow">{{ day }}</h6>
+            <h6 class="grow">{{ timeStart }} - {{ timeEnd }}</h6>
+          </div>
         </div>
         <div class="author-info">
           <h6>{{ post.author.firstName }} {{ post.author.lastName }}</h6>
           <h6>{{ post.author.rating }} stars</h6>
         </div>
       </div>
-      <div class="col-lg-1">
+      <div class="col-1">
         <div class="options ">
           <button
             v-if="showOptions"
@@ -91,9 +102,11 @@ export default {
 .post {
   height: 100px;
   background: #fff;
-  margin-bottom: 20px;
-  border: 1px solid rgb(206, 206, 206);
-  box-shadow: 3px 5px 5px rgb(206, 206, 206);
+  margin: 20px auto;
+  box-shadow: 0px 0px 10px rgb(206, 206, 206);
+  // box-shadow: 3px 5px 5px rgb(206, 206, 206);
+  transition: box-shadow 0.3s ease-in-out;
+
   border-radius: 12px;
   padding: 16px 20px;
 
@@ -108,7 +121,13 @@ export default {
   }
 
   &:hover {
-    background-color: $secondary-color;
+    // box-shadow: inset 1px 1px 10px 1px $secondary-color;
+    box-shadow: 0px 0px 5px rgb(109, 109, 109);
+
+    // box-shadow: 3px 5px 5px $secondary-color;
+    transition: box-shadow 0.3s ease-in-out;
+    // border: 2px solid $secondary-color;
+    // background-color: $secondary-color;
     cursor: pointer;
   }
 }

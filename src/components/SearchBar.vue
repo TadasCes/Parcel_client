@@ -72,88 +72,92 @@ export default {
 <template>
   <div class="section-search">
     <form class="search-box">
-      <div>
-        <div class="search-field">
-          <span class="material-icons">north</span>
-          <div class="form-input cityStartInput">
-            <CitySearch
-              title="Iš kur siunčiate?"
-              :is-valid="formValidity.cityStart"
-              @update:city="cityStart = $event"
-            />
+      <div class="container">
+        <div class="row">
+          <div class="form-field col-lg-3 col-md-6 col-sm-6 col-12">
+            <div class="search-field">
+              <span class="material-icons">north</span>
+              <div class="cityStartInput form-input zindex-dropdown">
+                <CitySearch
+                  title="Iš kur siunčiate?"
+                  :is-valid="formValidity.cityStart"
+                  @update:city="cityStart = $event"
+                />
+              </div>
+            </div>
+            <div v-show="formValidity.date == false" class="error-text">
+              * Pasirinkite dieną
+            </div>
           </div>
-        </div>
-        <div v-show="formValidity.date == false" class="error-text">
-          * Pasirinkite dieną
-        </div>
-      </div>
-      <div>
-        <div class="search-field">
-          <span class="material-icons">south</span>
-          <div class="form-input">
-            <CitySearch
-              title="Į kur siunčiate?"
-              :is-valid="formValidity.cityEnd"
-              @update:city="cityEnd = $event"
-              @click="isValid === true"
-            />
+          <div class="form-field col-lg-3 col-md-6 col-sm-6 col-12">
+            <div class="search-field">
+              <span class="material-icons">south</span>
+              <div class="form-input zindex-dropdown">
+                <CitySearch
+                  title="Į kur siunčiate?"
+                  :is-valid="formValidity.cityEnd"
+                  @update:city="cityEnd = $event"
+                  @click="isValid === true"
+                />
+              </div>
+            </div>
+            <div v-show="formValidity.date == false" class="error-text">
+              * Pasirinkite dieną
+            </div>
           </div>
-        </div>
-        <div v-show="formValidity.date == false" class="error-text">
-          * Pasirinkite dieną
-        </div>
-      </div>
-      <div>
-        <div class="search-field">
-          <span class="material-icons">today</span>
-          <div class="form-input ">
-            <input
-              v-model="date"
-              class="input-field "
-              type="date"
-              placeholder="Kada?"
-              @click="formValidity.date = true"
-            />
-            <span
-              :class="
-                formValidity.date === false
-                  ? 'focus-border-error'
-                  : 'focus-border'
-              "
-            ></span>
+          <div class="form-field col-lg-3 col-md-6 col-sm-6 col-12">
+            <div class="search-field">
+              <span class="material-icons">today</span>
+              <div class="form-input">
+                <input
+                  v-model="date"
+                  class="input-field "
+                  type="date"
+                  placeholder="Kada?"
+                  @click="formValidity.date = true"
+                />
+                <span
+                  :class="
+                    formValidity.date === false
+                      ? 'focus-border-error'
+                      : 'focus-border'
+                  "
+                ></span>
+              </div>
+            </div>
+            <div v-show="formValidity.date == false" class="error-text">
+              * Pasirinkite dieną
+            </div>
           </div>
-        </div>
-        <div v-show="formValidity.date == false" class="error-text">
-          * Pasirinkite dieną
-        </div>
-      </div>
-      <div>
-        <div class="search-field">
-          <span class="material-icons">aspect_ratio</span>
-          <div class="form-input size-select " id="select-size">
-            <select
-              v-model="size"
-              name="size"
-              class="input-field input-select input-size"
-              title="Siuntos dydis"
-              @click="formValidity.date = true"
-            >
-              <option selected disabled :value="0">Dydis</option>
-              <option :value="1">Maža</option>
-              <option :value="2">Vidutinė</option>
-              <option :value="3">Didelė</option>
-            </select>
-            <span
-              :class="
-                formValidity.date === false
-                  ? 'focus-border-error'
-                  : 'focus-border'
-              "
-            ></span>
+          <div class="form-field col-lg-3 col-md-6 col-sm-6 col-12">
+            <div class="search-field">
+              <span class="material-icons">aspect_ratio</span>
+              <div class="size-select form-input" id="select-size">
+                <select
+                  v-model="size"
+                  name="size"
+                  class="input-field input-select input-size"
+                  title="Siuntos dydis"
+                  @click="formValidity.date = true"
+                >
+                  <option selected disabled :value="0">Dydis</option>
+                  <option :value="1">Maža</option>
+                  <option :value="2">Vidutinė</option>
+                  <option :value="3">Didelė</option>
+                </select>
+                <span
+                  :class="
+                    formValidity.date === false
+                      ? 'focus-border-error'
+                      : 'focus-border'
+                  "
+                ></span>
+              </div>
+            </div>
+            <div v-show="formValidity.size == false" class="error-text">
+              * Pasirinkite dydį
+            </div>
           </div>
-        </div>
-        <div v-show="formValidity.size == false" class="error-text">
-          * Pasirinkite dieną
         </div>
       </div>
     </form>
@@ -166,22 +170,22 @@ export default {
 <style lang="scss" scoped>
 @import "../assets/styles/input-styles.css";
 @import "../assets/styles/variables.scss";
+.section-search {
+  padding-top: 26px;
+}
 
 .search-box {
   width: 900px;
-  height: 100px;
   margin: 0 auto;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-items: flex-start;
   margin-top: 20px;
 }
 
 .search-field {
   padding-right: 12px;
   display: flex;
-  align-items: center;
-  margin-right: 12px;
+  align-items: flex-start;
 
   input {
     font-weight: bold;
@@ -192,42 +196,44 @@ export default {
   .input-field::placeholder {
     color: $input-color-light;
   }
-
-  .size-select {
-    width: 140px;
-  }
-}
-
-#select-size {
-  width: 100px;
-  float: left;
 }
 
 .form-input {
-  margin-bottom: 0;
+  width: 200px;
+}
+
+.input-size {
+  font-weight: bold;
+}
+
+.form-field {
+  z-index: 0;
 }
 
 button {
   margin-top: 12px;
 }
 
-@media (max-width: $breakpoint-tablet) {
+@media (max-width: $breakpoint-small) {
   .search-box {
-    display: block;
     width: 75%;
-  }
-  .search-field {
-    display: block;
+    height: 100px;
   }
 }
 
-@media (max-width: $breakpoint-phone) {
-  .search-box {
-    display: block;
-    width: 100%;
+@media (max-width: $breakpoint-extra-small) {
+  .section-search {
+    padding-top: 0px;
   }
-  .search-field {
-    display: block;
+
+  .search-box {
+    width: 100%;
+    height: 200px;
+    justify-content: center;
+  }
+
+  .form-input {
+    width: 100%;
   }
 }
 </style>

@@ -29,31 +29,55 @@ export default {
 
         <div
           class="nav-content"
-          :class="collapsed === true ? 'nav-collapsed' : 'nav-normal'"
+          :class="collapsed === true ? 'nav-normal' : 'nav-collapsed'"
         >
-          <router-link to="/">
-            <!-- <span class="material-icons">search</span> -->
-            Siųsti siuntą
-          </router-link>
-          <router-link to="/register" v-if="isAuthenticated() == false">
-            Registruotis
-          </router-link>
-          <router-link to="/create-post" v-else>
-            Paskelbti kelionę
-          </router-link>
-          <router-link to="/login" v-if="isAuthenticated() == false">
-            Prisijungti
-          </router-link>
-          <router-link to="/login" v-else @click="logoutUser">
-            Atsijungti
-          </router-link>
+          <div v-if="isAuthenticated() == false" class="menu-buttons">
+            <router-link to="/register">
+              Registruotis
+            </router-link>
+            <router-link to="/login">
+              Prisijungti
+            </router-link>
+          </div>
+          <div v-else class="menu-buttons">
+            <ul class="side-menu">
+              <li>
+                <router-link to="/home">Naršyti skelbimus</router-link>
+              </li>
+              <li>
+                <router-link to="/create-post">Patalpinti skelbimą</router-link>
+              </li>
+              <li>
+                <router-link to="/user-posts">Jūsų skelbimai</router-link>
+              </li>
+              <li>
+                <router-link to="/login" @click="logoutUser">
+                  Atsijungti
+                </router-link>
+              </li>
+            </ul>
+            <!-- <router-link to="/home">
+              Naršyti skelbimus
+            </router-link>
+            <router-link to="/create-post">
+              Patalpinti skelbimą
+            </router-link>
+            <div class="profile-section">
+              <router-link to="/user-posts">
+                Jūsų skelbimai
+              </router-link>
+              <router-link to="/login" @click="logoutUser">
+                Atsijungti
+              </router-link>
+            </div> -->
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "../assets/styles/variables";
 
 #nav {
@@ -84,7 +108,7 @@ a {
   display: none;
 }
 
-.nav-normal {
+.nav-collapsed {
   display: flex;
   align-content: center;
   float: right;
@@ -93,16 +117,30 @@ a {
   }
 }
 
-@media screen and (max-width: $breakpoint-tablet) {
+.side-menu {
+  display: flex;
+  text-decoration: none;
+  list-style: none;
+  float: right;
+}
+
+.nav-content {
+  padding-top: 15px;
+}
+@media screen and (max-width: $breakpoint-medium) {
+  .side-menu {
+    flex-direction: column;
+  }
   .navbar {
-    width: 100%;
-    display: flex;
+    justify-content: space-between;
   }
   .nav-content a {
     display: none;
   }
-
   .nav-collapsed {
+    display: none;
+  }
+  .nav-normal {
     width: 100%;
     float: right;
     padding-top: 16px;
@@ -127,3 +165,4 @@ a {
   }
 }
 </style>
+class="menu-buttons"

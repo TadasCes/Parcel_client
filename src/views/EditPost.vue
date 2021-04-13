@@ -5,9 +5,12 @@ import { computed, onMounted, ref } from "vue";
 import { updatePost } from "../services/post.api.service";
 import router from "@/router";
 import moment from "moment";
+import Navigation from "../components/Navigation.vue";
+
 export default {
   components: {
-    City
+    City,
+    Navigation
   },
   props: {
     id: {
@@ -69,6 +72,7 @@ export default {
 
 <template>
   <div id="edit-post" class="">
+    <Navigation />
     <router-link to="/home" tag="button" class="input-button">
       Back
     </router-link>

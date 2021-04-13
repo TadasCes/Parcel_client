@@ -108,12 +108,8 @@ export default {
           <div class="col-6 content">
             <h1>Laikas</h1>
             <div>
-              <h5>
-                Pradžia: <strong>{{ timeStart }}</strong>
-              </h5>
-              <h5>
-                Pabaiga: <strong>{{ timeEnd }}</strong>
-              </h5>
+              <h5>Pradžia: {{ day }} {{ timeStart }}</h5>
+              <h5>Pabaiga: {{ day }} {{ timeEnd }}</h5>
             </div>
           </div>
           <div class="col-6 content">

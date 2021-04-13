@@ -2,14 +2,14 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
 import Home from "../views/Home.vue";
-import CreatePost from "../views/CreatePostParcel.vue";
 import EditPost from "../views/EditPost.vue";
-import Admin from "../views/Admin.vue";
 import Details from "../views/Details.vue";
 import Landing from "../views/Landing.vue";
+import CreatePost from "../views/CreatePost.vue";
+import UserPosts from "../views/UserPosts.vue";
 import Chat from "../views/Chat.vue";
 import store from "../store/index";
-import { computed } from "vue";
+import Vue from "vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -71,6 +71,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/chat",
     name: "Chat",
     component: Chat
+  },
+  {
+    path: "/user-posts",
+    name: "UserPosts",
+    component: UserPosts
   }
 ];
 

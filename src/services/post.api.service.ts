@@ -12,16 +12,17 @@ function formatAPost(post: any) {
 }
 
 export async function fetchAllPosts() {
-  return axios.get("http://localhost:5000/posts").then(response => {
-    return response.data.result;
-  });
+  return axios
+    .get(`http://localhost:5000/posts?page=1&limit=10`)
+    .then(response => {
+      return response.data.result;
+    });
 }
 
 export async function fetchFilteredPosts(query: any) {
   return axios
-    .post("http://localhost:5000/posts/filter", query)
+    .post(`http://localhost:5000/posts/filter`, query)
     .then(response => {
-      // console.log(response.data.result);
       return response.data.result;
     });
 }
@@ -32,7 +33,6 @@ export async function createPost(post: IPost) {
     .then(response => {
       store.dispatch("posts/getAllPosts");
       console.log(response.data.message);
-      // router.push("/home");
       return response.data;
     })
     .catch(error => {

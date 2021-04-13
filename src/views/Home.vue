@@ -2,7 +2,7 @@
 import Navigation from "@/components/Navigation.vue";
 import Post from "@/components/Post.vue";
 import SearchBar from "@/components/SearchBar.vue";
-import { computed } from "vue";
+import { computed, onBeforeMount } from "vue";
 import { useStore } from "vuex";
 import router from "@/router";
 
@@ -14,12 +14,16 @@ export default {
   },
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   setup() {
-    const { state } = useStore();
-    const posts = computed(() => state.posts.posts);
+    const store = useStore();
+    const posts = computed(() => store.state.posts.posts);
     console.log(posts.value);
     function goToDetails(id: string): void {
       router.push({ name: "Details", params: { id } });
     }
+
+    onBeforeMount(() => {
+      store.dispatch("posts/getAllPosts");
+    });
 
     return { posts, goToDetails };
   }
@@ -42,7 +46,7 @@ export default {
 .container {
   width: 50%;
   padding: 20px 20px 10px 20px;
-  top: 250px;
+  top: 225px;
   position: relative;
 }
 
@@ -54,14 +58,22 @@ export default {
   box-shadow: 1px 5px 10px rgb(185, 185, 185);
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 1300px) {
   .container {
+    width: 65%;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .container {
+    top: 270px;
     width: 75%;
   }
 }
 
-@media screen and (max-width: 580px) {
+@media screen and (max-width: 700px) {
   .container {
+    top: 340px;
     width: 100%;
   }
 }

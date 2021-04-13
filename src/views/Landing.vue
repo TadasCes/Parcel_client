@@ -17,18 +17,14 @@ export default {
         <h6>Perduokite siuntą keliaujantiems žmonemss</h6>
       </div>
       <div class="section-options">
-        <button class="input-button">
+        <router-link to="/home" tag="button" class="input-button">
           <span class="material-icons align-middle">search</span>
-          <router-link to="/createPostParcel">
-            Siųsti siuntą
-          </router-link>
-        </button>
-        <button class="input-button">
+          Naršyti skelbimus
+        </router-link>
+        <router-link to="/create-post" tag="button" class="input-button">
           <span class="material-icons align-middle">directions_car</span>
-          <router-link to="/createPostTravel">
-            Siūlyti pervežimą
-          </router-link>
-        </button>
+          Patalpinti skelbimą
+        </router-link>
       </div>
     </main>
   </div>

@@ -14,6 +14,18 @@ export async function createUser(body: any) {
     });
 }
 
+export async function getOneUser(id: string) {
+  return axios
+    .get(`http://localhost:5000/users/${id}`)
+    .then(response => {
+      console.log(response);
+      return response.data;
+    })
+    .catch(error => {
+      console.log(error);
+    });
+}
+
 export async function login(body: any) {
   return axios
     .post("http://localhost:5000/login", body)

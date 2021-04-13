@@ -40,12 +40,14 @@ const posts = {
   },
   actions: {
     async getAllPosts(state: any) {
-      const result = await fetchAllPosts();
-      state.commit("SET_POSTS", result);
+      await fetchAllPosts().then(result => {
+        state.commit("SET_POSTS", result);
+      });
     },
     async getFilteredPosts(state: any, query: any) {
-      const result = await fetchFilteredPosts(query);
-      state.commit("SET_POSTS", result);
+      await fetchFilteredPosts(query).then(result => {
+        state.commit("SET_POSTS", result);
+      });
     },
     async deleteAPost({ dispatch }: any, id: string) {
       await deletePost(id);

@@ -122,9 +122,10 @@ export default {
 @import "../../assets/styles/variables.scss";
 
 #city-search {
-  width: 180px;
+  width: 200px;
 
   input {
+    font-weight: bold;
     width: 100%;
   }
 
@@ -139,12 +140,19 @@ export default {
       border-bottom: 1px solid $primary-color;
       text-align: start;
       padding-left: 8px;
+      z-index: 100;
 
       &:hover {
         background: $primary-color;
         color: white;
       }
     }
+  }
+}
+
+@media (max-width: $breakpoint-extra-small) {
+  #city-search {
+    width: 100%;
   }
 }
 </style>

@@ -11,11 +11,17 @@ export function validateText(text: string): boolean {
 export function validateDate(date: string): boolean {
   if (moment(date).isValid()) {
     const dateInput = moment(date, "YYYY-MM-DD").toDate();
-    const now = moment().toDate();
+    const now = moment()
+      .subtract(1, "day")
+      .endOf("day")
+      .toDate();
+    console.log(now);
     if (now > dateInput) {
       return false;
-    } else {
+    } else if (now <= dateInput) {
       return true;
+    } else {
+      return false;
     }
   } else {
     return false;
