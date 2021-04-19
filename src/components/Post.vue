@@ -63,6 +63,8 @@ export default {
     <div class="row">
       <div class="col-11 main" @click="goToDetails">
         <div class="ride-info">
+          <h6 class="verysmall" v-if="post.size > 0">Siunčiu</h6>
+          <h6 class="verysmall" v-else>Keliauju</h6>
           <h5 class="grow">{{ post.cityStart }} - {{ post.cityEnd }}</h5>
           <div class="d-flex">
             <h6 class="grow">{{ day }}</h6>
@@ -120,6 +122,10 @@ export default {
     display: block;
   }
 
+  .verysmall {
+    font-size: 12px;
+  }
+
   &:hover {
     // box-shadow: inset 1px 1px 10px 1px $secondary-color;
     box-shadow: 0px 0px 5px rgb(109, 109, 109);
@@ -155,7 +161,7 @@ export default {
 
 .author-info {
   width: 50%;
-
+  padding-top: 10px;
   display: inline-block;
   flex-direction: column;
   align-self: center;

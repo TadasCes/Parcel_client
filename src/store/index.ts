@@ -30,12 +30,19 @@ import IPost from "@/interfaces/IPost";
 const posts = {
   namespaced: true,
   state: {
-    posts: [] as IPost[]
+    posts: [] as IPost[],
+    postInMemory: {} as IPost
   },
 
   mutations: {
     SET_POSTS(state: any, posts: IPost[]) {
       state.posts = posts;
+    },
+    SAVE_POST(state: any, post: IPost) {
+      state.postInMemory = post;
+    },
+    FORGET(state: any, post: IPost) {
+      state.postInMemory = {};
     }
   },
   actions: {
@@ -49,6 +56,12 @@ const posts = {
         state.commit("SET_POSTS", result);
       });
     },
+    async savePostInMemory(state: any, query: any) {
+      state.commit("SAVE_POST", query);
+    },
+    async removeFromMemory(state: any, query: any) {
+      state.commit("FORGET", query);
+    },
     async deleteAPost({ dispatch }: any, id: string) {
       await deletePost(id);
       dispatch("getAllPosts");
@@ -57,6 +70,10 @@ const posts = {
   getters: {
     getAPost: (state: { posts: IPost[] }) => (id: string) => {
       return state.posts.find((post: IPost) => post._id === id);
+    },
+    getAPostInMemory: (state: { postInMemory: IPost }) => {
+      console.log(state.postInMemory);
+      return state.postInMemory;
     }
   }
 };

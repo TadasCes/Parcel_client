@@ -55,6 +55,10 @@
 <script lang="ts">
 import { computed, ref } from "vue";
 import City from "../components/formComponents/City.vue";
+import IPost from "@/interfaces/IPost";
+import { useStore } from "vuex";
+import { createPost } from "@/services/post.api.service";
+import router from "@/router";
 
 export default {
   components: {
@@ -66,11 +70,36 @@ export default {
     const day = ref("");
     const size = ref(0);
 
+    const { state } = useStore();
+    const user = computed(() => state.loggedUser);
+
+    function createNewPost(): void {
+      const newPost: IPost = {
+        cityStart: cityStart.value,
+        cityEnd: cityEnd.value,
+        day: day.value,
+        timeStart: "",
+        timeEnd: "",
+        author: {
+          id: user.value._id,
+          firstName: user.value.firstName,
+          lastName: user.value.lastName,
+          rating: user.value.rating,
+          phone: user.value.phone,
+          countDelivered: user.value.countDelivered
+        }
+      };
+      createPost(newPost);
+      console.log(newPost);
+      router.push("/home");
+    }
+
     return {
       cityStart,
       cityEnd,
       day,
-      size
+      size,
+      createNewPost
     };
   }
 };

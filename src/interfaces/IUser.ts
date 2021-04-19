@@ -8,6 +8,7 @@ export default interface IUser {
   countTrips: number;
   countDelivered: number;
   countSent: number;
+  phone: string;
   posts: [];
   isAdmin: boolean;
 }

@@ -8,6 +8,7 @@ import Landing from "../views/Landing.vue";
 import CreatePost from "../views/CreatePost.vue";
 import UserPosts from "../views/UserPosts.vue";
 import Chat from "../views/Chat.vue";
+import Maps from "../views/Maps.vue";
 import store from "../store/index";
 import Vue from "vue";
 

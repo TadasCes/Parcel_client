@@ -16,6 +16,7 @@ export default {
   },
   setup() {
     const { state } = useStore();
+
     const user = computed(() => state.loggedUser);
 
     const cityStart = ref("");
@@ -36,32 +37,12 @@ export default {
       template.value = "travel";
     }
 
-    function createNewPost(): void {
-      const newPost: IPost = {
-        cityStart: cityStart.value,
-        cityEnd: cityEnd.value,
-        day: day.value,
-        timeStart: timeStart.value,
-        timeEnd: timeEnd.value,
-        author: {
-          id: user.value._id,
-          firstName: user.value.firstName,
-          lastName: user.value.lastName,
-          rating: user.value.rating,
-          countDelivered: user.value.countDelivered
-        }
-      };
-      createPost(newPost);
-      console.log(newPost);
-      router.push("/home");
-    }
     return {
       cityStart,
       cityEnd,
       day,
       timeStart,
       timeEnd,
-      createNewPost,
       loadParcel,
       loadTravel,
       show,

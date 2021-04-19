@@ -6,11 +6,13 @@ export default interface IPost {
   day: string;
   timeStart: string;
   timeEnd: string;
+  size?: number;
   author: {
     id: string;
     firstName: string;
     lastName: string;
     rating: number;
+    phone: string;
     countDelivered: number;
   };
 }

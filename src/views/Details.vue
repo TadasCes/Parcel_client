@@ -1,8 +1,10 @@
 <script lang="ts">
 import { useStore } from "vuex";
-import { onMounted, ref } from "vue";
+import { computed, onBeforeMount } from "vue";
+import Map from "../components/Map.vue";
 import moment from "moment";
 import Navigation from "../components/Navigation.vue";
+import IPost from "@/interfaces/IPost";
 export default {
   props: {
     id: {
@@ -15,52 +17,26 @@ export default {
   },
   setup(props: any) {
     const store = useStore();
-    // const user = computed(() => store.state.loggedUser);
-    console.log(props.id);
-    const cityStart = ref("");
-    const cityEnd = ref("");
-    const day = ref("");
-    const timeStart = ref("");
-    const timeEnd = ref("");
-    const firstName = ref("");
-    const lastName = ref("");
-    const rating = ref("");
-    const countDelivered = ref("");
-    const post: any = ref({});
+    let post: IPost;
 
     function getAPost() {
-      post.value = store.getters["posts/getAPost"](props.id);
-      const dayFormated = moment(post.value.timeStart).format("YYYY-MM-DD");
-      const timeStartFormated = moment(post.value.timeStart).format("HH:mm");
-      const timeEndFormated = moment(post.value.timeEnd).format("HH:mm");
-      cityStart.value = post.value.cityStart;
-      cityEnd.value = post.value.cityEnd;
-      day.value = dayFormated;
-      timeStart.value = timeStartFormated;
-      timeEnd.value = timeEndFormated;
-      firstName.value = post.value.author.firstName;
-      lastName.value = post.value.author.lastName;
-      rating.value = post.value.author.rating;
-      countDelivered.value = post.value.author.countDelivered;
-
-      console.log(post.value);
+      post = store.getters["posts/getAPost"](props.id);
+      const dayFormated = moment(post.timeStart).format("YYYY-MM-DD");
+      const timeStartFormated = moment(post.timeStart).format("HH:mm");
+      const timeEndFormated = moment(post.timeEnd).format("HH:mm");
+      post.day = dayFormated;
+      post.timeStart = timeStartFormated;
+      post.timeEnd = timeEndFormated;
+      store.dispatch("posts/savePostInMemory", post);
+      console.log(store.getters["posts/getAPostInMemory"]);
     }
 
-    onMounted(() => {
+    onBeforeMount(() => {
       getAPost();
     });
 
     return {
-      cityStart,
-      cityEnd,
-      day,
-      timeStart,
-      timeEnd,
-      firstName,
-      lastName,
-      rating,
-      countDelivered,
-      post
+      post: computed(() => post)
     };
   }
 };
@@ -82,10 +58,10 @@ export default {
             <h1>Maršrutas</h1>
             <div>
               <h5>
-                Pradžia: <strong>{{ cityStart }}</strong>
+                Pradžia: <strong>{{ post.cityStart }}</strong>
               </h5>
               <h5>
-                Pabaiga: <strong>{{ cityEnd }}</strong>
+                Pabaiga: <strong>{{ post.cityEnd }}</strong>
               </h5>
             </div>
           </div>
@@ -93,13 +69,18 @@ export default {
             <h1>Vairuotojas</h1>
             <div>
               <h5>
-                Vardas: <strong>{{ firstName }} {{ lastName }}</strong>
+                Vardas:
+                <strong
+                  >{{ post.author.firstName }}
+                  {{ post.author.lastName }}</strong
+                >
               </h5>
               <h5>
-                Įvertiniams: <strong>{{ rating }}</strong>
+                Įvertiniams: <strong>{{ post.author.rating }}</strong>
               </h5>
               <h5>
-                Atlikta kelionių: <strong>{{ countDelivered }}</strong>
+                Atlikta kelionių:
+                <strong>{{ post.author.countDelivered }}</strong>
               </h5>
             </div>
           </div>
@@ -108,13 +89,9 @@ export default {
           <div class="col-6 content">
             <h1>Laikas</h1>
             <div>
-              <h5>Pradžia: {{ day }} {{ timeStart }}</h5>
-              <h5>Pabaiga: {{ day }} {{ timeEnd }}</h5>
+              <h5>Pradžia: {{ post.day }} {{ post.timeStart }}</h5>
+              <h5>Pabaiga: {{ post.day }} {{ post.timeEnd }}</h5>
             </div>
-          </div>
-          <div class="col-6 content">
-            <h1>Žemėlapis</h1>
-            <img src="https://via.placeholder.com/300" alt="" />
           </div>
         </div>
       </div>
@@ -157,3 +134,6 @@ export default {
   }
 }
 </style>
+
+function onBeforeMounted(arg0: () => void) { throw new Error('Function not
+implemented.'); }

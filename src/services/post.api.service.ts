@@ -12,11 +12,9 @@ function formatAPost(post: any) {
 }
 
 export async function fetchAllPosts() {
-  return axios
-    .get(`http://localhost:5000/posts?page=1&limit=10`)
-    .then(response => {
-      return response.data.result;
-    });
+  return axios.get(`http://localhost:5000/posts`).then(response => {
+    return response.data.result;
+  });
 }
 
 export async function fetchFilteredPosts(query: any) {
