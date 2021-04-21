@@ -15,6 +15,8 @@ export default {
     const cityEnd = ref("");
     const day = ref("");
     const size = ref(0);
+    const timeStart = ref("");
+    const timeEnd = ref("");
 
     const { state } = useStore();
     const user = computed(() => state.loggedUser);
@@ -24,8 +26,8 @@ export default {
         cityStart: cityStart.value,
         cityEnd: cityEnd.value,
         day: day.value,
-        timeStart: "",
-        timeEnd: "",
+        timeStart: timeStart.value,
+        timeEnd: timeEnd.value,
         size: size.value,
         author: {
           id: user.value._id,
@@ -46,6 +48,8 @@ export default {
       cityEnd,
       day,
       size,
+      timeStart,
+      timeEnd,
       createNewPost
     };
   }
@@ -54,11 +58,7 @@ export default {
 
 <template>
   <form class="form">
-    <div class="row">
-      <div class="col-12">
-        <h2>Siunčiu siuntą</h2>
-      </div>
-    </div>
+    <h2>Siunčiu siuntą</h2>
     <div class="form-inputs container">
       <div class="row w-50">
         <div class="col-12">
@@ -90,6 +90,28 @@ export default {
             <span class="focus-border"></span>
           </div>
         </div>
+        <div class="form-input col-12">
+          <label for="to">Irasykite isvykimo laika</label>
+          <input
+            v-model="timeStart"
+            type="time"
+            placeholder="Time start"
+            class="input-field-global input-field"
+            name="Start"
+          />
+          <span class="focus-border"></span>
+        </div>
+        <div class="form-input col-12">
+          <label for="to">Irasykite atvykimo laika</label>
+          <input
+            v-model="timeEnd"
+            type="time"
+            placeholder="Time end"
+            class="input-field-global input-field "
+            name="End"
+          />
+          <span class="focus-border"></span>
+        </div>
         <div class="form-field col-12">
           <div class="search-field">
             <label for="size">Pasirinkite siuntos dydį</label>
@@ -112,26 +134,36 @@ export default {
         </div>
       </div>
 
-      <div></div>
-      <input
-        type="submit"
-        value="Paskelbti"
-        class="btn btn-primary"
-        @click="createNewPost"
-      />
-      <router-link to="/" tag="button" class="input-button secondary-color">
-        Back
-      </router-link>
+      <div class="d-flex">
+        <input
+          type="submit"
+          value="Paskelbti"
+          class="input-button mr-3"
+          @click="createNewPost"
+        />
+        <router-link
+          to="/home"
+          tag="button"
+          class="input-button input-button-secondary mr-3"
+        >
+          Atgal
+        </router-link>
+      </div>
     </div>
   </form>
 </template>
 
 <style lang="scss" scoped>
+h2 {
+  padding-bottom: 60px;
+  padding-top: 30px;
+}
+
 form {
   padding-top: 20px;
 }
 .col-12 {
-  margin-bottom: 60px;
+  margin-bottom: 50px;
 }
 label {
   float: left;

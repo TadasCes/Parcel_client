@@ -61,10 +61,12 @@ export default {
 <template>
   <div class="post">
     <div class="row">
+      <div class="col-12">
+        <h6 class="post-type " v-if="post.size > 0">Siunčiu</h6>
+        <h6 class="post-type " v-else>Keliauju</h6>
+      </div>
       <div class="col-11 main" @click="goToDetails">
         <div class="ride-info">
-          <h6 class="verysmall" v-if="post.size > 0">Siunčiu</h6>
-          <h6 class="verysmall" v-else>Keliauju</h6>
           <h5 class="grow">{{ post.cityStart }} - {{ post.cityEnd }}</h5>
           <div class="d-flex">
             <h6 class="grow">{{ day }}</h6>
@@ -102,7 +104,7 @@ export default {
 @import "../assets/styles/variables";
 
 .post {
-  height: 100px;
+  height: 150px;
   background: #fff;
   margin: 20px auto;
   box-shadow: 0px 0px 10px rgb(206, 206, 206);
@@ -118,12 +120,13 @@ export default {
     z-index: 1;
   }
 
-  span {
-    display: block;
+  .post-type {
+    font-size: 20px;
+    float: left;
   }
 
-  .verysmall {
-    font-size: 12px;
+  span {
+    display: block;
   }
 
   &:hover {
@@ -158,7 +161,6 @@ export default {
     margin: 0 0 4px 32px;
   }
 }
-
 .author-info {
   width: 50%;
   padding-top: 10px;

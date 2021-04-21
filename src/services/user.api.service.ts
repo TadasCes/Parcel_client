@@ -7,7 +7,7 @@ export async function createUser(body: any) {
     .post("http://localhost:5000/users", body)
     .then(() => {
       console.log("User created successfully!");
-      router.push("/");
+      router.push("/login");
     })
     .catch(error => {
       console.log(error);
@@ -19,6 +19,8 @@ export async function getOneUser(id: string) {
     .get(`http://localhost:5000/users/${id}`)
     .then(response => {
       console.log(response);
+      router.push("/login");
+
       return response.data;
     })
     .catch(error => {

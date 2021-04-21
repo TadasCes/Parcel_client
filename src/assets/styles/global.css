@@ -39,10 +39,16 @@ a:hover {
   border-radius: 15px;
   border: none;
   box-shadow: 1px 1px 2px #5a5a5a;
-  background-color: #ffb220;
+  background-color: #ffbd41;
+  color: #303030;
 }
 .input-button:hover {
   box-shadow: 1px 2px 5px #5a5a5a;
+}
+
+.input-button-secondary {
+  background-color: #ffe4b3;
+  color: #303030;
 }
 
 .bigger {

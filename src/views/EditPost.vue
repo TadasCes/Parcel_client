@@ -28,17 +28,25 @@ export default {
     const day = ref("");
     const timeStart = ref("");
     const timeEnd = ref("");
+    const size = ref(0);
+    const start = ref("");
+    const end = ref("");
 
     function getAPost(): void {
       const post = store.getters["posts/getAPost"](props.id);
+      console.log(post);
       const dayFormated = moment(post.timeStart).format("YYYY-MM-DD");
       const timeStartFormated = moment(post.timeStart).format("HH:mm");
       const timeEndFormated = moment(post.timeEnd).format("HH:mm");
+      console.log(timeEndFormated);
       cityStart.value = post.cityStart;
       cityEnd.value = post.cityEnd;
       day.value = dayFormated;
       timeStart.value = timeStartFormated;
       timeEnd.value = timeEndFormated;
+      size.value = post.size;
+      start.value = post.cityStart;
+      end.value = post.cityEnd;
     }
 
     function updateAPost(): void {
@@ -65,7 +73,17 @@ export default {
       getAPost();
     });
 
-    return { cityStart, cityEnd, day, timeStart, timeEnd, updateAPost };
+    return {
+      cityStart,
+      cityEnd,
+      start,
+      end,
+      day,
+      timeStart,
+      timeEnd,
+      size,
+      updateAPost
+    };
   }
 };
 </script>
@@ -73,29 +91,24 @@ export default {
 <template>
   <div id="edit-post" class="">
     <Navigation />
-    <router-link to="/home" tag="button" class="input-button">
-      Back
-    </router-link>
-    <h2>Edit post</h2>
+    <h2>Koreguoti įrašą</h2>
     <form class="form">
       <div class="form-inputs container">
         <div class="row w-50">
-          <div class="col-lg-6 col-md-12">
+          <div class="col-12">
             <label for="from">Is kur keliaujate?</label>
             <City
-              v-model="cityStart"
+              :title="start"
               name="from"
               @update:city="cityStart = $event"
             />
           </div>
-          <div class="col-lg-6 col-md-12">
+          <div class="col-12">
             <label for="to">I kur keliaujate?</label>
-            <City v-model="cityEnd" name="to" @update:city="cityEnd = $event" />
+            <City :title="end" name="to" @update:city="cityEnd = $event" />
           </div>
-        </div>
-        <div class="row time-section">
-          <label for="to">Pasirinkite data</label>
-          <div class="form-input ">
+          <div class="form-input col-12 ">
+            <label for="to">Pasirinkite data</label>
             <input
               v-model="day"
               type="date"
@@ -105,7 +118,7 @@ export default {
             />
             <span class="focus-border"></span>
           </div>
-          <div class="form-input ">
+          <div class="form-input col-12 ">
             <label for="to">Irasykite isvykimo laika</label>
             <input
               v-model="timeStart"
@@ -116,7 +129,7 @@ export default {
             />
             <span class="focus-border"></span>
           </div>
-          <div class="form-input">
+          <div class="form-input col-12">
             <label for="to">Irasykite atvykimo laika</label>
             <input
               v-model="timeEnd"
@@ -127,30 +140,64 @@ export default {
             />
             <span class="focus-border"></span>
           </div>
-        </div>
+          <div v-if="size > 0" class="col-12">
+            <div class="search-field">
+              <label for="size">Pasirinkite siuntos dydį</label>
 
-        <input
-          type="submit"
-          value="Paskelbti"
-          class="btn btn-primary"
-          @click="updateAPost"
-        />
+              <!-- <span class="material-icons">aspect_ratio</span> -->
+              <div class="form-input " id="select-size">
+                <select
+                  v-model="size"
+                  name="size"
+                  class="input-field input-select input-size"
+                  title="Siuntos dydis"
+                >
+                  <option selected disabled :value="0">Dydis</option>
+                  <option :value="1">Maža</option>
+                  <option :value="2">Vidutinė</option>
+                  <option :value="3">Didelė</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex">
+          <input
+            type="submit"
+            value="Paskelbti"
+            class="input-button mr-3"
+            @click="updateAPost"
+          />
+          <router-link
+            to="/home"
+            tag="button"
+            class="input-button input-button-secondary mr-3"
+          >
+            Atgal
+          </router-link>
+        </div>
       </div>
     </form>
   </div>
 </template>
 
 <style lang="scss" scoped>
-#create-post {
-  padding-top: 60px;
+@import "../assets/styles/global.css";
+@import "../assets/styles/input-styles.css";
+
+.col-12 {
+  margin-bottom: 40px;
 }
 
-.row {
-  margin-bottom: 36px;
+h2 {
+  padding-bottom: 60px;
+  padding-top: 30px;
 }
 
-.input-button {
+label {
   float: left;
+  font-weight: bold;
+  font-size: 20px;
 }
 
 .form {
@@ -159,14 +206,5 @@ export default {
   justify-content: center;
   align-items: center;
   margin: 0 auto;
-}
-
-.time-section {
-  display: flex;
-  flex-direction: column;
-
-  .form-input {
-    margin-bottom: 44px;
-  }
 }
 </style>

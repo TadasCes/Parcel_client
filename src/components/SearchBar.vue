@@ -17,6 +17,7 @@ export default {
     const cityEnd = ref("");
     const date = ref("");
     const size = ref(0);
+    const type = ref(0);
 
     const formValidity = reactive({
       cityStart: true,
@@ -61,6 +62,7 @@ export default {
       cityEnd,
       date,
       size,
+      type,
       searchPost,
       validateForm,
       formValidity
@@ -129,21 +131,21 @@ export default {
               * Pasirinkite dieną
             </div>
           </div>
+
           <div class="form-field col-lg-3 col-md-6 col-sm-6 col-12">
             <div class="search-field">
-              <span class="material-icons">aspect_ratio</span>
+              <span class="material-icons">help_outline</span>
               <div class="size-select form-input" id="select-size">
                 <select
-                  v-model="size"
+                  v-model="type"
                   name="size"
                   class="input-field input-select input-size"
-                  title="Siuntos dydis"
+                  title="Siuntos tipas"
                   @click="formValidity.date = true"
                 >
-                  <option selected disabled :value="0">Dydis</option>
-                  <option :value="1">Maža</option>
-                  <option :value="2">Vidutinė</option>
-                  <option :value="3">Didelė</option>
+                  <option selected disabled :value="0">Tipas</option>
+                  <option :value="1">Siunta</option>
+                  <option :value="2">Kelionė</option>
                 </select>
                 <span
                   :class="
@@ -155,7 +157,40 @@ export default {
               </div>
             </div>
             <div v-show="formValidity.size == false" class="error-text">
-              * Pasirinkite dydį
+              * Pasirinkite tipą
+            </div>
+          </div>
+          <div class="row pl-3">
+            <div v-if="type == 1">
+              <div class="form-field col-lg-6 col-md-10 col-12 select-size">
+                <div class="search-field">
+                  <span class="material-icons">aspect_ratio</span>
+                  <div class="size-select form-input" id="select-size">
+                    <select
+                      v-model="size"
+                      name="size"
+                      class="input-field input-select input-size"
+                      title="Siuntos dydis"
+                      @click="formValidity.date = true"
+                    >
+                      <option selected disabled :value="0">Dydis</option>
+                      <option :value="1">Maža</option>
+                      <option :value="2">Vidutinė</option>
+                      <option :value="3">Didelė</option>
+                    </select>
+                    <span
+                      :class="
+                        formValidity.date === false
+                          ? 'focus-border-error'
+                          : 'focus-border'
+                      "
+                    ></span>
+                  </div>
+                </div>
+                <div v-show="formValidity.size == false" class="error-text">
+                  * Pasirinkite dydį
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -202,6 +237,13 @@ export default {
   width: 200px;
 }
 
+.size-select {
+  width: 250px;
+}
+.select-size {
+  margin-top: 25px;
+}
+
 .input-size {
   font-weight: bold;
 }
@@ -217,7 +259,7 @@ button {
 @media (max-width: $breakpoint-small) {
   .search-box {
     width: 75%;
-    height: 100px;
+    height: 150px;
   }
 }
 
@@ -228,7 +270,7 @@ button {
 
   .search-box {
     width: 100%;
-    height: 200px;
+    height: 250px;
     justify-content: center;
   }
 

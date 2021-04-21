@@ -66,7 +66,7 @@ h1 {
 }
 
 .post {
-  height: 100px;
+  height: 150px;
   background: #fff;
   margin: 20px auto;
   box-shadow: 0px 0px 10px rgb(206, 206, 206);

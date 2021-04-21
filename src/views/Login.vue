@@ -64,16 +64,16 @@ export default {
   <div id="login-page" class="container">
     <div class="row">
       <div class="col-12">
-        <h1>Login</h1>
+        <h1>Prisijungti</h1>
       </div>
     </div>
     <form class="login">
       <div class="form-inputs">
-        <div class="form-input">
+        <div class="form-input mb-4">
           <input
             v-model="email"
             type="email"
-            placeholder="Email"
+            placeholder="El. paštas"
             class="input-field-global input-field"
             name="email"
           />
@@ -92,7 +92,7 @@ export default {
           <input
             v-model="password"
             type="password"
-            placeholder="Password"
+            placeholder="Slaptažodis"
             class="input-field-global input-field"
           />
           <span
@@ -110,14 +110,17 @@ export default {
       <div class="form-buttons">
         <input
           type="submit"
-          value="Sign In"
-          class="input-button primary-color"
+          value="Prisijungti"
+          class="input-button "
           @click.prevent="loginUser"
         />
-        <router-link to="/register" tag="button" class="input-button"
-          >Sign Up</router-link
+        <router-link
+          to="/register"
+          tag="button"
+          class="input-button input-button-secondary"
+          >Registruotis</router-link
         >
-        <span class="forgot-password">Forgot password?</span>
+        <span class="forgot-password">Pamiršote slaptažodį?</span>
       </div>
     </form>
   </div>
@@ -145,7 +148,7 @@ h1 {
 }
 
 .form-inputs {
-  margin-bottom: 28px;
+  margin-bottom: 40px;
 }
 
 .forgot-password {

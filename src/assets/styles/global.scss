@@ -40,10 +40,18 @@ a:hover {
   border: none;
   box-shadow: 1px 1px 2px rgb(90, 90, 90);
   background-color: variables.$primary-color;
+  color: variables.$input-color-light;
+
   &:hover {
     box-shadow: 1px 2px 5px rgb(90, 90, 90);
   }
 }
+
+.input-button-secondary {
+  background-color: variables.$secondary-color;
+  color: variables.$input-color-light;
+}
+
 .bigger {
   width: 175px;
   height: 50px;

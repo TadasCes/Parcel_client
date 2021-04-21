@@ -8,7 +8,7 @@ export default {
     },
     title: {
       type: String,
-      default: "as"
+      default: ""
     }
   },
   emits: ["update:city"]
