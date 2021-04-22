@@ -65,7 +65,7 @@ export default {
         }
       };
       updatePost(editedPost, props.id);
-      console.log(editedPost);
+      alert("Įrašas atnaujintas!");
       router.push("/home");
     }
 
@@ -96,7 +96,7 @@ export default {
       <div class="form-inputs container">
         <div class="row w-50">
           <div class="col-12">
-            <label for="from">Is kur keliaujate?</label>
+            <label for="from">Keliauju iš:</label>
             <City
               :title="start"
               name="from"
@@ -104,11 +104,11 @@ export default {
             />
           </div>
           <div class="col-12">
-            <label for="to">I kur keliaujate?</label>
+            <label for="to">Keliauju į:</label>
             <City :title="end" name="to" @update:city="cityEnd = $event" />
           </div>
           <div class="form-input col-12 ">
-            <label for="to">Pasirinkite data</label>
+            <label for="to">Kelionės diena:</label>
             <input
               v-model="day"
               type="date"
@@ -119,7 +119,7 @@ export default {
             <span class="focus-border"></span>
           </div>
           <div class="form-input col-12 ">
-            <label for="to">Irasykite isvykimo laika</label>
+            <label for="to">Planuoju išvykti:</label>
             <input
               v-model="timeStart"
               type="time"
@@ -130,7 +130,7 @@ export default {
             <span class="focus-border"></span>
           </div>
           <div class="form-input col-12">
-            <label for="to">Irasykite atvykimo laika</label>
+            <label for="to">Planuoju atvykti:</label>
             <input
               v-model="timeEnd"
               type="time"
@@ -142,7 +142,7 @@ export default {
           </div>
           <div v-if="size > 0" class="col-12">
             <div class="search-field">
-              <label for="size">Pasirinkite siuntos dydį</label>
+              <label for="size">Galiu gabenti tokio dydžio siuntą:</label>
 
               <!-- <span class="material-icons">aspect_ratio</span> -->
               <div class="form-input " id="select-size">

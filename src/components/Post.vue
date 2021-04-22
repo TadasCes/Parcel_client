@@ -24,6 +24,7 @@ export default {
       console.log(props.post._id);
       store.dispatch("posts/deleteAPost", props.post._id);
       location.reload();
+      alert("Įrašas ištrintas!");
     }
 
     function goToEdit() {
@@ -62,7 +63,7 @@ export default {
   <div class="post">
     <div class="row">
       <div class="col-12">
-        <h6 class="post-type " v-if="post.size > 0">Siunčiu</h6>
+        <h6 class="post-type " v-if="post.type == 1">Siunčiu</h6>
         <h6 class="post-type " v-else>Keliauju</h6>
       </div>
       <div class="col-11 main" @click="goToDetails">

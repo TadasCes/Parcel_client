@@ -23,6 +23,7 @@ export default {
 
     function createNewPost(): void {
       const newPost: IPost = {
+        type: 1,
         cityStart: cityStart.value,
         cityEnd: cityEnd.value,
         day: day.value,
@@ -40,6 +41,7 @@ export default {
       };
       createPost(newPost);
       console.log(newPost);
+      alert("Skelbimas sukurtas!");
       router.push("/home");
     }
 
@@ -78,7 +80,7 @@ export default {
           />
         </div>
         <div class="time-section col-12">
-          <label for="day">Pasirinkite data</label>
+          <label for="day">Pasirinkite dieną:</label>
           <div class="form-input ">
             <input
               v-model="day"
@@ -91,18 +93,7 @@ export default {
           </div>
         </div>
         <div class="form-input col-12">
-          <label for="to">Irasykite isvykimo laika</label>
-          <input
-            v-model="timeStart"
-            type="time"
-            placeholder="Time start"
-            class="input-field-global input-field"
-            name="Start"
-          />
-          <span class="focus-border"></span>
-        </div>
-        <div class="form-input col-12">
-          <label for="to">Irasykite atvykimo laika</label>
+          <label for="to">Kada norėtumėte, kad siunta būtų pristatyta?</label>
           <input
             v-model="timeEnd"
             type="time"
@@ -114,7 +105,7 @@ export default {
         </div>
         <div class="form-field col-12">
           <div class="search-field">
-            <label for="size">Pasirinkite siuntos dydį</label>
+            <label for="size">Kokio dydžio siuntą siunčiate?</label>
 
             <!-- <span class="material-icons">aspect_ratio</span> -->
             <div class="size-select form-input" id="select-size">

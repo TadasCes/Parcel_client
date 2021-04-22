@@ -20,7 +20,7 @@
           />
         </div>
         <div class="time-section col-12">
-          <label for="day">Pasirinkite data</label>
+          <label for="day">Pasirinkite dieną</label>
           <div class="form-input ">
             <input
               v-model="day"
@@ -33,7 +33,7 @@
           </div>
         </div>
         <div class="form-input col-12">
-          <label for="to">Irasykite isvykimo laika</label>
+          <label for="to">Pasirinkite išvykimo laiką</label>
           <input
             v-model="timeStart"
             type="time"
@@ -44,7 +44,7 @@
           <span class="focus-border"></span>
         </div>
         <div class="form-input col-12">
-          <label for="to">Irasykite atvykimo laika</label>
+          <label for="to">Pasirinkite atvykimo laiką</label>
           <input
             v-model="timeEnd"
             type="time"
@@ -53,6 +53,26 @@
             name="End"
           />
           <span class="focus-border"></span>
+        </div>
+        <div class="form-field col-12">
+          <div class="search-field">
+            <label for="size">Kokio dydžio siuntą galite gabenti?</label>
+
+            <!-- <span class="material-icons">aspect_ratio</span> -->
+            <div class="size-select form-input" id="select-size">
+              <select
+                v-model="size"
+                name="size"
+                class="input-field input-select input-size"
+                title="Siuntos dydis"
+              >
+                <option selected disabled :value="0">Dydis</option>
+                <option :value="1">Maža</option>
+                <option :value="2">Vidutinė</option>
+                <option :value="3">Didelė</option>
+              </select>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -100,6 +120,7 @@ export default {
 
     function createNewPost(): void {
       const newPost: IPost = {
+        type: 2,
         cityStart: cityStart.value,
         cityEnd: cityEnd.value,
         day: day.value,
@@ -116,6 +137,7 @@ export default {
       };
       createPost(newPost);
       console.log(newPost);
+      alert("Skelbimas sukurtas!");
       router.push("/home");
     }
 
