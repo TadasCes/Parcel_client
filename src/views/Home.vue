@@ -17,6 +17,7 @@ export default {
     const store = useStore();
     const posts = computed(() => store.state.posts.posts);
     console.log(posts.value);
+
     function goToDetails(id: string): void {
       router.push({ name: "Details", params: { id } });
     }
@@ -37,7 +38,12 @@ export default {
       <SearchBar />
     </div>
     <div class="container">
-      <Post v-for="post in posts" :key="post._id" :post="post"></Post>
+      <div v-if="posts.length > 0">
+        <Post v-for="post in posts" :key="post._id" :post="post"></Post>
+      </div>
+      <div v-else>
+        <h3>Apgailėstaujame, atitnkančių įrašų nėra</h3>
+      </div>
     </div>
   </div>
 </template>
@@ -46,12 +52,9 @@ export default {
 .container {
   width: 50%;
   padding: 20px 20px 10px 20px;
-  top: 225px;
-  position: relative;
 }
 
 .search-section {
-  position: fixed;
   width: 100%;
   background-color: white;
   z-index: 100;
@@ -66,14 +69,12 @@ export default {
 
 @media screen and (max-width: 1000px) {
   .container {
-    top: 270px;
     width: 75%;
   }
 }
 
 @media screen and (max-width: 700px) {
   .container {
-    top: 340px;
     width: 100%;
   }
 }

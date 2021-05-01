@@ -122,7 +122,7 @@ export default {
 @import "../../assets/styles/variables.scss";
 
 #city-search {
-  width: 200px;
+  width: 175px;
 
   input {
     font-weight: bold;

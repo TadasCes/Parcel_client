@@ -7,6 +7,7 @@ export default interface IPost {
   day: string;
   timeStart: string;
   timeEnd: string;
+  comment: string;
   size?: number;
   author: {
     id: string;

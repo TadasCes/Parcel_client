@@ -22,9 +22,11 @@ export default {
 
     function deletePost() {
       console.log(props.post._id);
-      store.dispatch("posts/deleteAPost", props.post._id);
-      location.reload();
-      alert("Įrašas ištrintas!");
+      if (confirm("Ar tikrai norite ištrinti įrašą?")) {
+        store.dispatch("posts/deleteAPost", props.post._id);
+        location.reload();
+        alert("Įrašas ištrintas!");
+      }
     }
 
     function goToEdit() {
@@ -46,6 +48,7 @@ export default {
     );
     const diena = moment(moment(props.post.timeStart).format()).format("DD");
     const day = menuo + " " + diena;
+
     return {
       timeStart,
       timeEnd,
@@ -76,7 +79,7 @@ export default {
         </div>
         <div class="author-info">
           <h6>{{ post.author.firstName }} {{ post.author.lastName }}</h6>
-          <h6>{{ post.author.rating }} stars</h6>
+          <h6>Įvertinimas: {{ post.author.rating }}</h6>
         </div>
       </div>
       <div class="col-1">

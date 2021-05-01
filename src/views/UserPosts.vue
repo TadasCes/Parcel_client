@@ -6,6 +6,7 @@ import { computed, onBeforeMount, Ref, ref } from "vue";
 import { useStore } from "vuex";
 import router from "@/router";
 import IPost from "@/interfaces/IPost";
+import moment from "moment";
 
 export default {
   components: {
@@ -16,7 +17,8 @@ export default {
   setup() {
     const store = useStore();
     const posts = computed(() => store.state.posts.posts);
-    const userPosts: Ref<IPost[]> = ref([]);
+    const activePosts: Ref<IPost[]> = ref([]);
+    const archivedPosts: Ref<IPost[]> = ref([]);
     const user = computed(() => store.state.loggedUser);
 
     function goToDetails(id: string): void {
@@ -26,7 +28,14 @@ export default {
     function filterUserPosts() {
       posts.value.forEach((post: IPost) => {
         if (post.author.id == user.value._id) {
-          userPosts.value.push(post);
+          console.log(post);
+          const postDate = post.timeEnd.substring(0, 10);
+          const nowDate = moment().format("YYYY-MM-DD");
+          if (postDate > nowDate) {
+            activePosts.value.push(post);
+          } else {
+            archivedPosts.value.push(post);
+          }
         }
       });
     }
@@ -37,7 +46,7 @@ export default {
       });
     });
 
-    return { userPosts, goToDetails };
+    return { activePosts, archivedPosts, goToDetails };
   }
 };
 </script>
@@ -45,10 +54,25 @@ export default {
 <template>
   <div class="user-posts">
     <Navigation />
-    <h1>Jūsų skelbimai</h1>
-    <div class="container">
-      <Post v-for="post in userPosts" :key="post._id" :post="post"></Post>
+    <div>
+      <h1>Aktyvūs skelbimai</h1>
+      <div class="container">
+        <Post v-for="post in activePosts" :key="post._id" :post="post"></Post>
+      </div>
     </div>
+    <div>
+      <h1>Archyvuoti skelbimai</h1>
+      <div class="container">
+        <Post v-for="post in archivedPosts" :key="post._id" :post="post"></Post>
+      </div>
+    </div>
+    <router-link
+      to="/profile"
+      tag="button"
+      class="input-button input-button-secondary mr-3"
+    >
+      Atgal
+    </router-link>
   </div>
 </template>
 

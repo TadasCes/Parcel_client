@@ -10,5 +10,9 @@ export default interface IUser {
   countSent: number;
   phone: string;
   posts: [];
+  review: [{
+    comment?: string;
+    rating: number
+  }];
   isAdmin: boolean;
 }

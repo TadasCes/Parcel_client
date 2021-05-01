@@ -7,7 +7,15 @@
     "semicolon": [true, "always"],
     "space-before-function-paren": [false],
     "@typescript-eslint/explicit-function-return-type": "off",
-    "indent": 0
+    "indent": 0,
+    "properties": "never",
+    "ignoreDestructuring": true,
+    "registeredComponentsOnly": true,
+    "ignoreImports": false,
+    "vue/component-name-in-template-casing": ["error", "kebab-case", {
+      "registeredComponentsOnly": true,
+      "ignores": []
+    }]
   },
   "rulesDirectory": []
 }

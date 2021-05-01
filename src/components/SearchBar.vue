@@ -4,11 +4,16 @@ import router from "@/router";
 import { useStore } from "vuex";
 import CitySearch from "./formComponents/CitySearch.vue";
 import moment from "moment";
+import { VTooltip } from "v-tooltip";
 import * as formValidation from "../utility/formValidation";
 // import * as formValidation from "../utility/formValidation";
+
 export default {
   components: {
     CitySearch
+  },
+  directive: {
+    VTooltip
   },
   setup() {
     const store = useStore();
@@ -23,19 +28,21 @@ export default {
       cityStart: true,
       cityEnd: true,
       date: true,
-      size: true
+      size: true,
+      type: true
     });
 
     function validateForm(formData: any): boolean {
       formValidity.cityStart = formValidation.validateText(formData.cityStart);
       formValidity.cityEnd = formValidation.validateText(formData.cityEnd);
       formValidity.date = formValidation.validateDate(formData.date);
+      formValidity.type = formValidation.validateSize(formData.type);
       formValidity.size = formValidation.validateSize(formData.size);
       if (
         formValidity.cityStart &&
         formValidity.cityEnd &&
         formValidity.date &&
-        formValidity.size
+        formValidity.type
       ) {
         return true;
       } else {
@@ -43,14 +50,23 @@ export default {
       }
     }
 
+    function clearErrors() {
+      formValidity.cityStart = true;
+      formValidity.cityEnd = true;
+      formValidity.date = true;
+      formValidity.type = true;
+      formValidity.size = true;
+    }
+
     function searchPost() {
       const formData = {
         cityStart: cityStart.value,
         cityEnd: cityEnd.value,
         date: date.value,
+        type: type.value,
         size: size.value
       };
-
+      console.log(validateForm(formData));
       if (validateForm(formData)) {
         store.dispatch("posts/getFilteredPosts", formData);
         router.push("/home");
@@ -65,7 +81,8 @@ export default {
       type,
       searchPost,
       validateForm,
-      formValidity
+      formValidity,
+      clearErrors
     };
   }
 };
@@ -84,11 +101,12 @@ export default {
                   title="Iš kur siunčiate?"
                   :is-valid="formValidity.cityStart"
                   @update:city="cityStart = $event"
+                  @click="clearErrors()"
                 />
               </div>
             </div>
-            <div v-show="formValidity.date == false" class="error-text">
-              * Pasirinkite dieną
+            <div v-show="formValidity.cityStart == false" class="error-text">
+              * Pasirinkite miestą
             </div>
           </div>
           <div class="form-field col-lg-3 col-md-6 col-sm-6 col-12">
@@ -99,12 +117,12 @@ export default {
                   title="Į kur siunčiate?"
                   :is-valid="formValidity.cityEnd"
                   @update:city="cityEnd = $event"
-                  @click="isValid === true"
+                  @click="clearErrors()"
                 />
               </div>
             </div>
-            <div v-show="formValidity.date == false" class="error-text">
-              * Pasirinkite dieną
+            <div v-show="formValidity.cityEnd == false" class="error-text">
+              * Pasirinkite miestą
             </div>
           </div>
           <div class="form-field col-lg-3 col-md-6 col-sm-6 col-12">
@@ -116,7 +134,7 @@ export default {
                   class="input-field "
                   type="date"
                   placeholder="Kada?"
-                  @click="formValidity.date = true"
+                  @click="clearErrors()"
                 />
                 <span
                   :class="
@@ -141,7 +159,7 @@ export default {
                   name="size"
                   class="input-field input-select input-size"
                   title="Siuntos tipas"
-                  @click="formValidity.date = true"
+                  @click="clearErrors()"
                 >
                   <option selected disabled :value="0">Tipas</option>
                   <option :value="1">Siunta</option>
@@ -149,14 +167,14 @@ export default {
                 </select>
                 <span
                   :class="
-                    formValidity.date === false
+                    formValidity.type === false
                       ? 'focus-border-error'
                       : 'focus-border'
                   "
                 ></span>
               </div>
             </div>
-            <div v-show="formValidity.size == false" class="error-text">
+            <div v-show="formValidity.type == false" class="error-text">
               * Pasirinkite tipą
             </div>
           </div>
@@ -171,16 +189,17 @@ export default {
                       name="size"
                       class="input-field input-select input-size"
                       title="Siuntos dydis"
-                      @click="formValidity.date = true"
+                      @click="clearErrors()"
                     >
                       <option selected disabled :value="0">Dydis</option>
-                      <option :value="1">Maža</option>
-                      <option :value="2">Vidutinė</option>
-                      <option :value="3">Didelė</option>
+                      <option :value="1">Maža: ~9x38x64cm</option>
+                      <option :value="2">Vidutinė: ~19x38x64cm </option>
+                      <option :value="3">Didelė: ~39x38x64cm </option>
                     </select>
+
                     <span
                       :class="
-                        formValidity.date === false
+                        formValidity.size === false
                           ? 'focus-border-error'
                           : 'focus-border'
                       "
@@ -215,13 +234,13 @@ export default {
   display: flex;
   align-items: flex-start;
   margin-top: 20px;
+  padding-bottom: 30px;
 }
 
 .search-field {
   padding-right: 12px;
   display: flex;
   align-items: flex-start;
-
   input {
     font-weight: bold;
     border: 0;
@@ -234,11 +253,11 @@ export default {
 }
 
 .form-input {
-  width: 200px;
+  width: 175px;
 }
 
 .size-select {
-  width: 250px;
+  width: 450px;
 }
 .select-size {
   margin-top: 25px;

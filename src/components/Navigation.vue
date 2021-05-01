@@ -48,7 +48,7 @@ export default {
                 <router-link to="/create-post">Patalpinti skelbimą</router-link>
               </li>
               <li>
-                <router-link to="/user-posts">Jūsų skelbimai</router-link>
+                <router-link to="/profile">Profilis</router-link>
               </li>
               <li>
                 <router-link to="/login" @click="logoutUser">

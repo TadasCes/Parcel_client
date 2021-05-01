@@ -60,8 +60,7 @@ export default {
           id: user.value._id,
           firstName: user.value.firstName,
           lastName: user.value.lastName,
-          rating: user.value.rating,
-          countDelivered: user.value.countDelivered
+          rating: user.value.rating
         }
       };
       updatePost(editedPost, props.id);

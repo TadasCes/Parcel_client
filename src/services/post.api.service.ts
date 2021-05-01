@@ -18,9 +18,11 @@ export async function fetchAllPosts() {
 }
 
 export async function fetchFilteredPosts(query: any) {
+  console.log("ateina");
   return axios
     .post(`http://localhost:5000/posts/filter`, query)
     .then(response => {
+      console.log(response);
       return response.data.result;
     });
 }

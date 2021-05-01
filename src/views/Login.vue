@@ -2,7 +2,7 @@
 import { reactive, ref } from "vue";
 import * as searchFormValidation from "../utility/formValidation";
 
-import { login } from "../services/user.api.service";
+import { login, googleLogin } from "../services/user.api.service";
 
 export default {
   setup() {
@@ -54,7 +54,8 @@ export default {
       loginUser,
       formValidity,
       errorPassword,
-      errorEmail
+      errorEmail,
+      googleLogin
     };
   }
 };
@@ -120,6 +121,12 @@ export default {
           class="input-button input-button-secondary"
           >Registruotis</router-link
         >
+        <button
+          class="input-button input-button-secondary"
+          @click.prevent="googleLogin()"
+        >
+          Prisijungti su Google
+        </button>
         <span class="forgot-password">Pamiršote slaptažodį?</span>
       </div>
     </form>

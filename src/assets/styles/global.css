@@ -28,6 +28,10 @@ a:hover {
   text-decoration: none !important;
 }
 
+.top-header {
+  margin-top: 40px;
+}
+
 .form-buttons {
   display: flex;
   flex-direction: column;
@@ -41,6 +45,7 @@ a:hover {
   box-shadow: 1px 1px 2px #5a5a5a;
   background-color: #ffbd41;
   color: #303030;
+  outline: 0 !important;
 }
 .input-button:hover {
   box-shadow: 1px 2px 5px #5a5a5a;

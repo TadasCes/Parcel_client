@@ -7,6 +7,13 @@ export function validateText(text: string): boolean {
     return true;
   }
 }
+export function validatePhone(text: string): boolean {
+  if (text.length < 4 || text.length > 13) {
+    return false;
+  } else {
+    return true;
+  }
+}
 
 export function validateDate(date: string): boolean {
   if (moment(date).isValid()) {

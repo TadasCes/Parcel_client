@@ -82,7 +82,7 @@
               <input
                 v-model="phone"
                 type="phone"
-                placeholder="Telefono nr."
+                placeholder="Telefono nr. +370..."
                 class="input-field "
                 name="phone"
               />
@@ -202,7 +202,7 @@ export default {
         firstName.value
       );
       formValidity.lastName = searchFormValidation.validateText(lastName.value);
-      // formValidity.phone = searchFormValidation.validateText(phone.value);
+      formValidity.phone = searchFormValidation.validatePhone(phone.value);
       const isPasswordValid = validatePassword(password.value);
       if (isPasswordValid === true) {
         formValidity.password = true;
@@ -224,7 +224,8 @@ export default {
           email: email.value,
           password: password.value,
           firstName: firstName.value,
-          lastName: lastName.value
+          lastName: lastName.value,
+          phone: phone.value
         });
         alert("Vartotojas sekmingai sukurtas!");
       }

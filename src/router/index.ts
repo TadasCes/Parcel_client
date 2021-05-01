@@ -8,7 +8,9 @@ import Landing from "../views/Landing.vue";
 import CreatePost from "../views/CreatePost.vue";
 import UserPosts from "../views/UserPosts.vue";
 import Chat from "../views/Chat.vue";
-import Maps from "../views/Maps.vue";
+import Review from "../views/Review.vue";
+import Profile from "../views/Profile.vue";
+import EditProfile from "../views/EditProfile.vue";
 import store from "../store/index";
 import Vue from "vue";
 
@@ -69,14 +71,25 @@ const routes: Array<RouteRecordRaw> = [
     props: true
   },
   {
-    path: "/chat",
-    name: "Chat",
-    component: Chat
+    path: "/profile",
+    name: "Profile",
+    component: Profile
+  },
+  {
+    path: "/edit-profile",
+    name: "EditProfile",
+    component: EditProfile
   },
   {
     path: "/user-posts",
     name: "UserPosts",
     component: UserPosts
+  },
+  {
+    path: "/review/:authorId",
+    name: "Review",
+    component: Review,
+    props: true
   }
 ];
 
