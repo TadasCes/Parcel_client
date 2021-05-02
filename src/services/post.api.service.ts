@@ -12,7 +12,7 @@ function formatAPost(post: any) {
 }
 
 export async function fetchAllPosts() {
-  return axios.get(`http://localhost:5000/posts`).then(response => {
+  return axios.get(`http://localhost:5000/api/posts`).then(response => {
     return response.data.result;
   });
 }
@@ -20,7 +20,7 @@ export async function fetchAllPosts() {
 export async function fetchFilteredPosts(query: any) {
   console.log("ateina");
   return axios
-    .post(`http://localhost:5000/posts/filter`, query)
+    .post(`http://localhost:5000/api/posts/filter`, query)
     .then(response => {
       console.log(response);
       return response.data.result;
@@ -29,7 +29,7 @@ export async function fetchFilteredPosts(query: any) {
 
 export async function createPost(post: IPost) {
   return axios
-    .post("http://localhost:5000/posts", formatAPost(post))
+    .post("http://localhost:5000/api/posts", formatAPost(post))
     .then(response => {
       store.dispatch("posts/getAllPosts");
       console.log(response.data.message);
@@ -42,7 +42,7 @@ export async function createPost(post: IPost) {
 
 export async function updatePost(update: any, id: string) {
   return axios
-    .put(`http://localhost:5000/posts/${id}`, formatAPost(update))
+    .put(`http://localhost:5000/api/posts/${id}`, formatAPost(update))
     .then(response => {
       store.dispatch("posts/getAllPosts");
 
@@ -51,7 +51,9 @@ export async function updatePost(update: any, id: string) {
 }
 
 export async function deletePost(id: string) {
-  return axios.delete(`http://localhost:5000/posts/${id}`).then(response => {
-    return response.data.result;
-  });
+  return axios
+    .delete(`http://localhost:5000/api/posts/${id}`)
+    .then(response => {
+      return response.data.result;
+    });
 }

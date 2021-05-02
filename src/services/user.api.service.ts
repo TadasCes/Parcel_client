@@ -5,7 +5,7 @@ import axios from "axios";
 
 export async function createUser(body: any) {
   return axios
-    .post("http://localhost:5000/users", body)
+    .post("http://localhost:5000/api/users", body)
     .then(() => {
       console.log("User created successfully!");
       router.push("/login");
@@ -17,7 +17,7 @@ export async function createUser(body: any) {
 
 export async function getOneUser(id: string) {
   return axios
-    .get(`http://localhost:5000/users/${id}`)
+    .get(`http://localhost:5000/api/users/${id}`)
     .then(response => {
       console.log(response);
 
@@ -30,12 +30,18 @@ export async function getOneUser(id: string) {
 
 export async function leaveReview(review: any, id: string) {
   return axios
-    .put(`http://localhost:5000/users/${id}/review`, review)
+    .put(`http://localhost:5000/api/users/${id}/review`, review)
     .then(() => {
       store.dispatch("posts/getAllUsers");
 
       return "Review added";
     });
+}
+
+function setLoggedUser(response: any) {
+  console.log(response);
+  localStorage.setItem("user", JSON.stringify(response.data.user));
+  store.commit("SET_LOGGED_USER", response.data.user);
 }
 
 export async function logout() {
@@ -46,14 +52,30 @@ export async function logout() {
 
 export async function updateUser(update: any, id: string) {
   return axios
-    .put(`http://localhost:5000/users/${id}`, update)
+    .put(`http://localhost:5000/api/users/${id}`, update)
     .then(response => {
       logout();
       return response.data.result;
     });
 }
+export async function increaseTrip(id: string) {
+  return axios
+    .put(`http://localhost:5000/api/users/${id}/trip`)
+    .then(response => {
+      setLoggedUser(response);
+      return response.data.result;
+    });
+}
+export async function increaseSent(id: string) {
+  return axios
+    .put(`http://localhost:5000/api/users/${id}/sent`)
+    .then(response => {
+      setLoggedUser(response);
+      return response.data.result;
+    });
+}
 export async function deleteUser(id: string) {
-  return axios.delete(`http://localhost:5000/users/${id}`).then(() => {
+  return axios.delete(`http://localhost:5000/api/users/${id}`).then(() => {
     alert("Jūsų paskyra pašalinta.");
     logout();
     router.push("/");
@@ -62,7 +84,7 @@ export async function deleteUser(id: string) {
 
 export async function sendContactData(post: any, email: string) {
   return axios
-    .post(`http://localhost:5000/posts/send-contact`, {
+    .post(`http://localhost:5000/api/posts/send-contact`, {
       post: post,
       email: email
     })
@@ -78,11 +100,11 @@ export async function sendContactData(post: any, email: string) {
 
 export async function login(body: any) {
   return axios
-    .post("http://localhost:5000/login", body)
+    .post("http://localhost:5000/api/login", body)
     .then(response => {
+      setLoggedUser(response);
       localStorage.setItem("jwt", JSON.stringify(response.data.token));
       store.commit("SET_LOGGED_USER", response.data.user);
-      localStorage.setItem("user", JSON.stringify(response.data.user));
       router.push("/home");
     })
     .catch(error => {
@@ -96,13 +118,13 @@ export async function login(body: any) {
 
 export async function googleLogin() {
   return axios
-    .get("http://localhost:5000/auth/google", {
-      headers: { "Access-Control-Allow-Headers": "Content-Type, Authorization" }
+    .get("http://localhost:5000/api/auth/google", {
+      headers: { "Access-Control-Allow-Headers": "*" }
     })
     .then(response => {
-      localStorage.setItem("jwt", JSON.stringify(response.data.token));
-      store.commit("SET_LOGGED_USER", response.data.user);
-      localStorage.setItem("user", JSON.stringify(response.data.user));
+      // localStorage.setItem("jwt", JSON.stringify(response.data.token));
+      // store.commit("SET_LOGGED_USER", response.data.user);
+      // localStorage.setItem("user", JSON.stringify(response.data.user));
       router.push("/home");
     })
     .catch(error => {

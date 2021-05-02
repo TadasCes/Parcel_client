@@ -19,7 +19,6 @@ export default {
     const user = computed(() => store.state.loggedUser);
     const showOptions = ref(false);
     if (props.post.author.id === user.value._id) showOptions.value = true;
-
     function deletePost() {
       console.log(props.post._id);
       if (confirm("Ar tikrai norite ištrinti įrašą?")) {
@@ -28,7 +27,6 @@ export default {
         alert("Įrašas ištrintas!");
       }
     }
-
     function goToEdit() {
       if (showOptions.value) {
         router.push({ name: "EditPost", params: { id: props.post._id } });
@@ -173,7 +171,7 @@ export default {
   align-self: center;
   text-align: end;
   padding-right: 0px;
-
+  margin-bottom: 20px;
   h5,
   h6 {
     margin: 0 12px 0 0;

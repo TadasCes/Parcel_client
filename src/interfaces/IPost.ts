@@ -15,6 +15,7 @@ export default interface IPost {
     lastName: string;
     rating: number;
     phone: string;
-    countDelivered: number;
+    tripCount: number;
+    sentCount: number;
   };
 }

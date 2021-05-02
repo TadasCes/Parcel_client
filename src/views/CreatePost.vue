@@ -26,15 +26,17 @@ export default {
     const show = ref(true);
     const template = ref("");
     const comment = ref("");
-
+    const type = ref(0);
     function loadParcel() {
       show.value = false;
       template.value = "parcel";
+      type.value = 1;
     }
 
     function loadTravel() {
       show.value = false;
       template.value = "travel";
+      type.value = 2;
     }
 
     function createNewPost(): void {
@@ -46,8 +48,9 @@ export default {
         timeEnd.value != "" &&
         size.value != 0
       ) {
+        console.log(user.value);
         const newPost: IPost = {
-          type: 2,
+          type: type.value,
           cityStart: cityStart.value,
           cityEnd: cityEnd.value,
           day: day.value,
@@ -60,7 +63,8 @@ export default {
             lastName: user.value.lastName,
             rating: user.value.rating,
             phone: user.value.phone,
-            countDelivered: user.value.countDelivered
+            tripCount: user.value.tripCount,
+            sentCount: user.value.sentCount
           }
         };
         createPost(newPost);

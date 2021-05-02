@@ -16,7 +16,6 @@ export default {
   setup() {
     const store = useStore();
     const posts = computed(() => store.state.posts.posts);
-    console.log(posts.value);
 
     function goToDetails(id: string): void {
       router.push({ name: "Details", params: { id } });
@@ -42,7 +41,7 @@ export default {
         <Post v-for="post in posts" :key="post._id" :post="post"></Post>
       </div>
       <div v-else>
-        <h3>Apgailėstaujame, atitnkančių įrašų nėra</h3>
+        <h3>Įrašų nėra</h3>
       </div>
     </div>
   </div>

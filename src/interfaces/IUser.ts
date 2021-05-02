@@ -5,9 +5,8 @@ export default interface IUser {
   lastName: string;
   registeredDate: string;
   rating: number;
-  countTrips: number;
-  countDelivered: number;
-  countSent: number;
+  tripCount: number;
+  sentCount: number;
   phone: string;
   posts: [];
   review: [{

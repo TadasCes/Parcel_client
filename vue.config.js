@@ -1,5 +1,12 @@
+const path = require("path");
+
 module.exports = {
+  outputDir: path.resolve(__dirname, '../Parcel-server/public'),
   devServer: {
-    proxy: "http://localhost:5000/"
+    proxy: {
+      "/api": {
+        target: "http://localhost:5000"
+      }
+    }
   }
 };

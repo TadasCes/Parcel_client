@@ -22,7 +22,7 @@ export default {
   setup(props: any) {
     const store = useStore();
     const user = computed(() => store.state.loggedUser);
-
+    console.log(user.value);
     function deleteProfile() {
       if (confirm("Ar tikrai norite pašalinti šią paskyrą?")) {
         if (
@@ -35,7 +35,7 @@ export default {
       }
     }
 
-    return { logout, deleteProfile };
+    return { logout, deleteProfile, user };
   }
 };
 </script>
@@ -44,21 +44,31 @@ export default {
   <div id="edit-post" class="">
     <Navigation />
     <div class="container">
-      <div>
-        <h2 class="top-header">Nustatymai</h2>
+      <div class="row">
+        <div class="col-6">
+          <h2 class="top-header">Jūsų statistika</h2>
+          <h4>Pervežta siuntų: {{ user.tripCount }}</h4>
+          <h4>Išsiųsta siuntų: {{ user.sentCount }}</h4>
+        </div>
+        <div class="col-6">
+          <div>
+            <h2 class="top-header">Veiksmai</h2>
+          </div>
+          <div class="container">
+            <router-link class="input-button" type="button" to="/edit-profile"
+              >Redaguoti profilį</router-link
+            >
+            <router-link class="input-button" type="button" to="/user-posts"
+              >Jūsų skelbimai</router-link
+            >
+            <button class="input-button" @click="deleteProfile">
+              Ištrinti paskyrą
+            </button>
+            <button class="input-button" @click="logout()">Atsijungti</button>
+          </div>
+        </div>
       </div>
-      <div class="container">
-        <router-link class="input-button" type="button" to="/edit-profile"
-          >Redaguoti profilį</router-link
-        >
-        <router-link class="input-button" type="button" to="/user-posts"
-          >Jūsų skelbimai</router-link
-        >
-        <button class="input-button" @click="deleteProfile">
-          Ištrinti paskyrą
-        </button>
-        <button class="input-button" @click="logout()">Atsijungti</button>
-      </div>
+      <div></div>
     </div>
   </div>
 </template>

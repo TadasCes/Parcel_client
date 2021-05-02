@@ -5,7 +5,12 @@ import Map from "../components/Map.vue";
 import moment from "moment";
 import Navigation from "../components/Navigation.vue";
 import IPost from "@/interfaces/IPost";
-import { isAuthenticated, sendContactData } from "../services/user.api.service";
+import {
+  increaseTrip,
+  isAuthenticated,
+  sendContactData,
+  increaseSent
+} from "../services/user.api.service";
 import router from "@/router";
 
 export default {
@@ -25,15 +30,16 @@ export default {
     const isAuth = isAuthenticated();
     const isAuthorLoggedNow = ref(false);
     const reviewCount = ref(0);
-    const now = moment.now();
+    const now = moment().toDate();
+    const type = ref(0);
 
     function isEndTimeHasPassed() {
-      console.log(post.day + post.timeEnd);
-      console.log(now);
-      // if (post.timeEnd < now) {
-      //   console.log("Kelione pasibaige");
-      // }
+      const myDate = moment(post.day, "YYYY-MM-DD").toDate();
+      const isPassed = moment(now).isAfter(myDate);
+      console.log(moment(now).isAfter(myDate));
+      return isPassed;
     }
+
     function getAPost() {
       post = store.getters["posts/getAPost"](props.id);
       const dayFormated = moment(post.timeStart).format("YYYY-MM-DD");
@@ -46,6 +52,8 @@ export default {
       if (post.author.id === user.value._id) {
         isAuthorLoggedNow.value = true;
       }
+      type.value = post.type;
+      console.log(post);
       isEndTimeHasPassed();
     }
 
@@ -67,6 +75,9 @@ export default {
             "Kontaktinius vartotojo duomenis atsiųsime paštu. \n Ar sutinkate?"
           )
         ) {
+          alert(
+            "Kontaktinius duomenys išsiųsti. Pasitikrinkite elektroninį paštą."
+          );
           sendContactData(post, user.value.email);
         }
       } else {
@@ -80,6 +91,25 @@ export default {
       }
     }
 
+    function deletePost() {
+      console.log(post._id);
+      store.dispatch("posts/deleteAPost", post._id);
+      router.push("/home");
+    }
+
+    function tripEnded() {
+      console.log(user.value._id);
+      increaseTrip(user.value._id);
+      alert("Kelionė sėkmingai užbaigta!");
+      // deletePost();
+    }
+
+    function parcelDelivered() {
+      increaseSent(user.value._id);
+      alert("Siunta sėkmingai nusiųsta!");
+      // deletePost();
+    }
+
     onBeforeMount(() => {
       getAPost();
     });
@@ -90,7 +120,12 @@ export default {
       leaveAReview,
       reviewCount,
       isAuth,
-      isAuthorLoggedNow
+      deletePost,
+      isAuthorLoggedNow,
+      isEndTimeHasPassed,
+      tripEnded,
+      parcelDelivered,
+      type
     };
   }
 };
@@ -120,8 +155,11 @@ export default {
             </div>
           </div>
           <div class="col-6 content">
-            <h3>Įrašo autorius</h3>
-            <div>
+            <div v-if="isAuthorLoggedNow == true">
+              <h3>Pasirinkimai</h3>
+            </div>
+            <div v-if="isAuthorLoggedNow == false">
+              <h3>Įrašo autorius</h3>
               <h5>
                 Vardas:
                 {{ post.author.firstName }}
@@ -133,12 +171,35 @@ export default {
               <div v-else>
                 <h5>Įvertinimas: {{ post.author.rating }}</h5>
               </div>
+              <h6>Pervežta siuntų: {{ post.author.tripCount }}</h6>
+              <h6>Išsiųsta siuntų: {{ post.author.sentCount }}</h6>
+            </div>
+            <div>
               <div v-if="isAuthorLoggedNow == false">
                 <div v-if="isAuth == true">
                   <button class="input-button" @click="leaveAReview()">
                     Palikti atsiliepimą
                   </button>
                 </div>
+              </div>
+              <div v-if="isAuthorLoggedNow == true">
+                <div v-if="type == 1">
+                  <div v-if="isEndTimeHasPassed() == true">
+                    <button class="input-button" @click="parcelDelivered()">
+                      Siunta nusiųsta
+                    </button>
+                  </div>
+                </div>
+                <div v-if="type == 2">
+                  <div v-if="isEndTimeHasPassed() == true">
+                    <button class="input-button" @click="tripEnded()">
+                      Kelionė baigta
+                    </button>
+                  </div>
+                </div>
+                <button class="input-button" @click="deletePost()">
+                  Pašalinti įrašą
+                </button>
               </div>
             </div>
           </div>
