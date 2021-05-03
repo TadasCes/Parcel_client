@@ -19,6 +19,7 @@ export default {
     const user = computed(() => store.state.loggedUser);
     const showOptions = ref(false);
     if (props.post.author.id === user.value._id) showOptions.value = true;
+
     function deletePost() {
       console.log(props.post._id);
       if (confirm("Ar tikrai norite ištrinti įrašą?")) {
@@ -34,7 +35,11 @@ export default {
     }
 
     function goToDetails(): void {
-      router.push({ name: "Details", params: { id: props.post._id } });
+      localStorage.setItem("postInMemory", JSON.stringify(props.post));
+      router.push({
+        name: "Details",
+        params: { id: props.post._id, postProp: JSON.stringify(props.post) }
+      });
     }
 
     const timeStart = moment(moment(props.post.timeStart).format()).format(

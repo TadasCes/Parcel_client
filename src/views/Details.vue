@@ -18,6 +18,10 @@ export default {
     id: {
       type: String,
       default: ""
+    },
+    postProp: {
+      type: Object,
+      required: true
     }
   },
   components: {
@@ -26,36 +30,36 @@ export default {
   setup(props: any) {
     const store = useStore();
     const user = computed(() => store.state.loggedUser);
-    let post: IPost;
+    let post: any = {};
+    const postInMemory: any = localStorage.getItem("postInMemory");
+    console.log(JSON.parse(postInMemory));
+    if (postInMemory == null) {
+      post = JSON.parse(props.postProp);
+    } else if (postInMemory != null) {
+      post = JSON.parse(postInMemory);
+    }
+
     const isAuth = isAuthenticated();
     const isAuthorLoggedNow = ref(false);
     const reviewCount = ref(0);
     const now = moment().toDate();
     const type = ref(0);
+    const dayFormated = moment(post.timeStart).format("YYYY-MM-DD");
+    const timeStartFormated = moment(post.timeStart).format("HH:mm");
+    const timeEndFormated = moment(post.timeEnd).format("HH:mm");
 
+    if (post.author.id === user.value._id) {
+      isAuthorLoggedNow.value = true;
+    }
+
+    // console.log(router.currentRoute.value);
     function isEndTimeHasPassed() {
       const myDate = moment(post.day, "YYYY-MM-DD").toDate();
       const isPassed = moment(now).isAfter(myDate);
       console.log(moment(now).isAfter(myDate));
       return isPassed;
     }
-
-    function getAPost() {
-      post = store.getters["posts/getAPost"](props.id);
-      const dayFormated = moment(post.timeStart).format("YYYY-MM-DD");
-      const timeStartFormated = moment(post.timeStart).format("HH:mm");
-      const timeEndFormated = moment(post.timeEnd).format("HH:mm");
-      post.day = dayFormated;
-      post.timeStart = timeStartFormated;
-      post.timeEnd = timeEndFormated;
-      store.dispatch("posts/savePostInMemory", post);
-      if (post.author.id === user.value._id) {
-        isAuthorLoggedNow.value = true;
-      }
-      type.value = post.type;
-      console.log(post);
-      isEndTimeHasPassed();
-    }
+    isEndTimeHasPassed();
 
     function leaveAReview() {
       const authorId = post.author.id;
@@ -110,22 +114,21 @@ export default {
       // deletePost();
     }
 
-    onBeforeMount(() => {
-      getAPost();
-    });
-
     return {
-      post: computed(() => post),
       contactAuthor,
       leaveAReview,
+      dayFormated,
       reviewCount,
+      timeStartFormated,
+      timeEndFormated,
       isAuth,
       deletePost,
       isAuthorLoggedNow,
       isEndTimeHasPassed,
       tripEnded,
       parcelDelivered,
-      type
+      type,
+      post
     };
   }
 };
@@ -208,8 +211,8 @@ export default {
           <div class="col-6 content">
             <h3>Laikas</h3>
             <div>
-              <h5>Pradžia: {{ post.day }} {{ post.timeStart }}</h5>
-              <h5>Pabaiga: {{ post.day }} {{ post.timeEnd }}</h5>
+              <h5>Pradžia: {{ dayFormated }} {{ timeStartFormated }}</h5>
+              <h5>Pabaiga: {{ dayFormated }} {{ timeEndFormated }}</h5>
             </div>
           </div>
         </div>

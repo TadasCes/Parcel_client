@@ -11,7 +11,6 @@ import {
   leaveReview
 } from "../services/user.api.service";
 import IUser from "@/interfaces/IUser";
-import StarRating from "vue-star-rating";
 import Rating from "../components/Rating.vue";
 import router from "@/router";
 
@@ -35,7 +34,7 @@ export default {
     }
   },
   components: {
-    StarRating,
+    Rating,
     Navigation
   },
   setup(props: any) {
@@ -49,6 +48,7 @@ export default {
     const now = moment().toDate();
 
     function leaveAReview() {
+      console.log(rating.value);
       const review = {
         targetId: props.authorId,
         authorId: user.value._id,
@@ -56,7 +56,13 @@ export default {
         rating: rating.value,
         date: now
       };
-      console.log(review);
+      leaveReview(review, props.authorId);
+      alert("Įvertinimas išsaugotas!");
+      router.push("/home");
+    }
+
+    function onRatingUpdate(value) {
+      rating.value = value;
     }
 
     function goBackToPost() {
@@ -67,10 +73,14 @@ export default {
       firstNameValue,
       lastNameValue,
       leaveAReview,
-      goBackToPost
+      goBackToPost,
+      rating,
+      onRatingUpdate,
+      comment
     };
   }
 };
+//          @update:rating="rating = $event"
 </script>
 
 <template>
@@ -84,9 +94,20 @@ export default {
     <div class="container review-box">
       <div>
         <h4 class="ivertinimas">Įvertinimas:</h4>
-        <StarRating></StarRating>
+        <Rating
+          :grade="5"
+          :maxStars="5"
+          :hasCounter="true"
+          @update="onRatingUpdate($event)"
+        />
         <h4 class="komentaras">Komentaras:</h4>
-        <textarea name="" id="" cols="55" rows="10"></textarea>
+        <textarea
+          name=""
+          id=""
+          cols="55"
+          rows="10"
+          v-model="comment"
+        ></textarea>
       </div>
       <div class="d-flex mt-4">
         <input

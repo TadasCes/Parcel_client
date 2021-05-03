@@ -48,6 +48,7 @@
     "vue-awesome": "^4.1.0",
     "vue-class-component": "^8.0.0-0",
     "vue-cookies": "^1.7.4",
+    "vue-dynamic-star-rating": "^1.0.8",
     "vue-phone-number-input": "^1.1.10",
     "vue-router": "^4.0.0-0",
     "vue-star-rating": "^2.1.0",

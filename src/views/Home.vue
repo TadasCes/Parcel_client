@@ -2,7 +2,13 @@
 import Navigation from "@/components/Navigation.vue";
 import Post from "@/components/Post.vue";
 import SearchBar from "@/components/SearchBar.vue";
-import { computed, onBeforeMount } from "vue";
+import {
+  computed,
+  onBeforeMount,
+  onDeactivated,
+  onMounted,
+  onUnmounted
+} from "vue";
 import { useStore } from "vuex";
 import router from "@/router";
 
@@ -17,15 +23,17 @@ export default {
     const store = useStore();
     const posts = computed(() => store.state.posts.posts);
 
-    function goToDetails(id: string): void {
-      router.push({ name: "Details", params: { id } });
-    }
-
     onBeforeMount(() => {
       store.dispatch("posts/getAllPosts");
+      console.log(posts.value[2]);
+      localStorage.removeItem("postInMemory");
     });
 
-    return { posts, goToDetails };
+    onUnmounted(() => {
+      console.log("deactivated");
+    });
+
+    return { posts };
   }
 };
 </script>

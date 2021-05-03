@@ -33,7 +33,6 @@ export async function leaveReview(review: any, id: string) {
     .put(`http://localhost:5000/api/users/${id}/review`, review)
     .then(() => {
       store.dispatch("posts/getAllUsers");
-
       return "Review added";
     });
 }
