@@ -17,6 +17,14 @@ export async function fetchAllPosts() {
   });
 }
 
+export async function getPostAuthor(authorId: string) {
+  return axios
+    .get(`http://localhost:5000/api/users/${authorId}`)
+    .then(response => {
+      return response.data;
+    });
+}
+
 export async function fetchFilteredPosts(query: any) {
   console.log("ateina");
   return axios

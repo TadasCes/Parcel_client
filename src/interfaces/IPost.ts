@@ -9,13 +9,5 @@ export default interface IPost {
   timeEnd: string;
   comment: string;
   size?: number;
-  author: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    rating: number;
-    phone: string;
-    tripCount: number;
-    sentCount: number;
-  };
+  authorId: string
 }

@@ -27,7 +27,7 @@ export default {
 
     function filterUserPosts() {
       posts.value.forEach((post: IPost) => {
-        if (post.author.id == user.value._id) {
+        if (post.authorId == user.value._id) {
           const postDate = post.timeEnd.substring(0, 10);
           const nowDate = moment().format("YYYY-MM-DD");
           if (postDate > nowDate) {

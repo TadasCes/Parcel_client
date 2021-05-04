@@ -1,15 +1,16 @@
 <script lang="ts">
 import moment from "moment";
 import { useStore } from "vuex";
-import { computed, onBeforeMount, ref } from "vue";
+import { computed, onBeforeMount, onMounted, ref } from "vue";
 import { monthToLT } from "../utility/utils";
 import router from "@/router";
 import IUser from "@/interfaces/IUser";
 import { getPostAuthor } from "@/services/post.api.service";
+import { getOneUser } from "@/services/user.api.service";
 
 export default {
   props: {
-    post: {
+    review: {
       type: Object,
       required: true,
       default: () => ({})
@@ -19,63 +20,55 @@ export default {
     const store = useStore();
     const user = computed(() => store.state.loggedUser);
     const showOptions = ref(false);
-    const doneLoading = ref(false);
+    const isLoading = ref(true);
     let author: IUser;
-    if (props.post.authorId === user.value._id) showOptions.value = true;
+    // if (props.post.authorId === user.value._id) showOptions.value = true;
+    // console.log(props.review);
+    // function deletePost() {
+    //   console.log(props.post._id);
+    //   if (confirm("Ar tikrai norite ištrinti įrašą?")) {
+    //     store.dispatch("posts/deleteAPost", props.post._id);
+    //     location.reload();
+    //     alert("Įrašas ištrintas!");
+    //   }
+    // }
+    // function goToEdit() {
+    //   if (showOptions.value) {
+    //     router.push({ name: "EditPost", params: { id: props.post._id } });
+    //   }
+    // }
 
-    function deletePost() {
-      console.log(props.post._id);
-      if (confirm("Ar tikrai norite ištrinti įrašą?")) {
-        store.dispatch("posts/deleteAPost", props.post._id);
-        location.reload();
-        alert("Įrašas ištrintas!");
-      }
-    }
-    function goToEdit() {
-      if (showOptions.value) {
-        router.push({ name: "EditPost", params: { id: props.post._id } });
-      }
-    }
+    // function goToDetails(): void {
+    //   localStorage.setItem("postInMemory", JSON.stringify(props.post));
+    //   router.push({
+    //     name: "Details",
+    //     params: {
+    //       id: props.post._id,
+    //       postProp: JSON.stringify(props.post)
+    //     }
+    //   });
+    // }
 
-    function goToDetails(): void {
-      localStorage.setItem("postInMemory", JSON.stringify(props.post));
-      router.push({
-        name: "Details",
-        params: {
-          id: props.post._id,
-          postProp: JSON.stringify(props.post),
-          authorProp: JSON.stringify(author)
-        }
-      });
-    }
-
-    const timeStart = moment(moment(props.post.timeStart).format()).format(
-      "HH:mm"
-    );
-    const timeEnd = moment(moment(props.post.timeEnd).format()).format("HH:mm");
-    const menuo = monthToLT(
-      moment(moment(props.post.timeStart).format()).format("MMMM")
-    );
-    const diena = moment(moment(props.post.timeStart).format()).format("DD");
-    const day = menuo + " " + diena;
+    // const timeStart = moment(moment(props.post.timeStart).format()).format(
+    //   "HH:mm"
+    // );
+    // const timeEnd = moment(moment(props.post.timeEnd).format()).format("HH:mm");
+    // const menuo = monthToLT(
+    //   moment(moment(props.post.timeStart).format()).format("MMMM")
+    // );
+    // const diena = moment(moment(props.post.timeStart).format()).format("DD");
+    // const day = menuo + " " + diena;
 
     onBeforeMount(async () => {
-      await getPostAuthor(props.post.authorId).then(result => {
-        author = result.result;
-        doneLoading.value = true;
+      await getOneUser(props.review.authorId).then(result => {
+        author = result;
+        isLoading.value = false;
       });
     });
 
     return {
-      timeStart,
-      timeEnd,
-      day,
-      showOptions,
-      deletePost,
-      goToEdit,
-      goToDetails,
-      author: computed(() => author),
-      doneLoading
+      isLoading,
+      author: computed(() => author)
     };
   }
 };
@@ -83,25 +76,16 @@ export default {
 
 <template>
   <div class="post">
-    <div v-if="doneLoading == true" class="row">
-      <div class="col-12">
-        <h6 class="post-type " v-if="post.type == 1">Siunčiu</h6>
-        <h6 class="post-type " v-else>Keliauju</h6>
+    <div v-if="isLoading == false" class="row">
+      <div class="ride-info">
+        <h5 class="grow">{{ author.firstName }} {{ author.lastName }}</h5>
+        <h5 class="grow">{{ review.date }}</h5>
       </div>
-      <div class="col-11 main" @click="goToDetails">
-        <div class="ride-info">
-          <h5 class="grow">{{ post.cityStart }} - {{ post.cityEnd }}</h5>
-          <div class="d-flex">
-            <h6 class="grow">{{ day }}</h6>
-            <h6 class="grow">{{ timeStart }} - {{ timeEnd }}</h6>
-          </div>
-        </div>
-        <div class="author-info">
-          <h6>{{ author.firstName }} {{ author.lastName }}</h6>
-          <h6>Įvertinimas: {{ author.rating }}</h6>
-        </div>
+      <div class="author-info">
+        <h6>Įvertinimas: {{ review.rating }}</h6>
+        <h6>{{ review.comment }}</h6>
       </div>
-      <div class="col-1">
+      <!-- <div class="col-1">
         <div class="options ">
           <button
             v-if="showOptions"
@@ -118,7 +102,7 @@ export default {
             <span class="material-icons">delete</span>
           </button>
         </div>
-      </div>
+      </div> -->
     </div>
     <div v-else>
       <h2>...</h2>

@@ -20,7 +20,11 @@ export default {
       default: ""
     },
     postProp: {
-      type: Object,
+      type: String,
+      required: true
+    },
+    authorProp: {
+      type: String,
       required: true
     }
   },
@@ -31,6 +35,9 @@ export default {
     const store = useStore();
     const user = computed(() => store.state.loggedUser);
     let post: any = {};
+    let author: any = {};
+    author = JSON.parse(props.authorProp);
+
     const postInMemory: any = localStorage.getItem("postInMemory");
     console.log(JSON.parse(postInMemory));
     if (postInMemory == null) {
@@ -48,7 +55,7 @@ export default {
     const timeStartFormated = moment(post.timeStart).format("HH:mm");
     const timeEndFormated = moment(post.timeEnd).format("HH:mm");
 
-    if (post.author.id === user.value._id) {
+    if (author.id === user.value._id) {
       isAuthorLoggedNow.value = true;
     }
 
@@ -62,9 +69,9 @@ export default {
     isEndTimeHasPassed();
 
     function leaveAReview() {
-      const authorId = post.author.id;
-      const firstName = post.author.firstName;
-      const lastName = post.author.lastName;
+      const authorId = author.id;
+      const firstName = author.firstName;
+      const lastName = author.lastName;
       const postId: any = post._id;
       router.push({
         name: "Review",
@@ -114,6 +121,16 @@ export default {
       // deletePost();
     }
 
+    function readReviews() {
+      router.push({
+        name: "UserReviews",
+        params: {
+          id: post.authorId,
+          userName: author.firstName + " " + author.lastName
+        }
+      });
+    }
+
     return {
       contactAuthor,
       leaveAReview,
@@ -128,7 +145,9 @@ export default {
       tripEnded,
       parcelDelivered,
       type,
-      post
+      post,
+      readReviews,
+      author
     };
   }
 };
@@ -165,21 +184,24 @@ export default {
               <h3>Įrašo autorius</h3>
               <h5>
                 Vardas:
-                {{ post.author.firstName }}
-                {{ post.author.lastName }}
+                {{ author.firstName }}
+                {{ author.lastName }}
               </h5>
-              <div v-if="post.author.rating == 0">
+              <div v-if="author.rating == 0">
                 <h5>Nėra įvertinimų</h5>
               </div>
               <div v-else>
-                <h5>Įvertinimas: {{ post.author.rating }}</h5>
+                <h5>Įvertinimas: {{ author.rating }}</h5>
               </div>
-              <h6>Pervežta siuntų: {{ post.author.tripCount }}</h6>
-              <h6>Išsiųsta siuntų: {{ post.author.sentCount }}</h6>
+              <h6>Pervežta siuntų: {{ author.tripCount }}</h6>
+              <h6>Išsiųsta siuntų: {{ author.sentCount }}</h6>
             </div>
             <div>
               <div v-if="isAuthorLoggedNow == false">
-                <div v-if="isAuth == true">
+                <div v-if="isAuth == true" class="form">
+                  <button class="input-button" @click="readReviews()">
+                    Peržiūrėti atsiliepimus
+                  </button>
                   <button class="input-button" @click="leaveAReview()">
                     Palikti atsiliepimą
                   </button>

@@ -57,15 +57,7 @@ export default {
           timeStart: timeStart.value,
           timeEnd: timeEnd.value,
           comment: comment.value,
-          author: {
-            id: user.value._id,
-            firstName: user.value.firstName,
-            lastName: user.value.lastName,
-            rating: user.value.rating,
-            phone: user.value.phone,
-            tripCount: user.value.tripCount,
-            sentCount: user.value.sentCount
-          }
+          authorId: user.value._id
         };
         createPost(newPost);
         console.log(newPost);

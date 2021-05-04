@@ -2,34 +2,46 @@
 import Navigation from "@/components/Navigation.vue";
 import Post from "@/components/Post.vue";
 import SearchBar from "@/components/SearchBar.vue";
+import ReviewPost from "@/components/ReviewPost.vue";
 import {
   computed,
   onBeforeMount,
   onDeactivated,
   onMounted,
-  onUnmounted
+  onUnmounted,
+  ref
 } from "vue";
 import { useStore } from "vuex";
 import router from "@/router";
+import { getAllUserReviews } from "@/services/user.api.service";
 
 export default {
   components: {
     Navigation,
-    Post,
-    SearchBar
+    ReviewPost
+  },
+  props: {
+    id: {
+      type: String,
+      required: true
+    },
+    userName: {
+      type: String,
+      required: true
+    }
   },
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  setup() {
-    const store = useStore();
-    const posts = computed(() => store.state.posts.posts);
-
-    onBeforeMount(() => {
-      store.dispatch("posts/getAllPosts");
-      console.log(posts.value[2]);
-      localStorage.removeItem("postInMemory");
+  setup(props: any) {
+    const reviewList = ref([]);
+    const isLoading = ref(true);
+    onBeforeMount(async () => {
+      await getAllUserReviews(props.id).then(result => {
+        reviewList.value = result.data.result;
+        isLoading.value = false;
+      });
     });
 
-    return { posts };
+    return { isLoading, reviewList };
   }
 };
 </script>
@@ -38,15 +50,14 @@ export default {
   <div class="home">
     <div class="search-section">
       <Navigation></Navigation>
-      <SearchBar />
     </div>
-    <div class="container">
-      <div v-if="posts.length > 0">
-        <Post v-for="post in posts" :key="post._id" :post="post"></Post>
-      </div>
-      <div v-else>
-        <h3>Įrašų nėra</h3>
-      </div>
+    <div class="container" v-if="isLoading == false">
+      <h1>Atsiliepimai apie {{ userName }}</h1>
+      <ReviewPost
+        v-for="review in reviewList"
+        :key="review._id"
+        :review="review"
+      ></ReviewPost>
     </div>
   </div>
 </template>

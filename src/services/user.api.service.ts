@@ -19,8 +19,6 @@ export async function getOneUser(id: string) {
   return axios
     .get(`http://localhost:5000/api/users/${id}`)
     .then(response => {
-      console.log(response);
-
       return response.data.result;
     })
     .catch(error => {
@@ -34,6 +32,13 @@ export async function leaveReview(review: any, id: string) {
     .then(() => {
       store.dispatch("posts/getAllUsers");
       return "Review added";
+    });
+}
+export async function getAllUserReviews(id: string) {
+  return axios
+    .get(`http://localhost:5000/api/reviews/${id}/all-reviews`)
+    .then(response => {
+      return response;
     });
 }
 

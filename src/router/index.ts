@@ -11,6 +11,7 @@ import Chat from "../views/Chat.vue";
 import Review from "../views/Review.vue";
 import Profile from "../views/Profile.vue";
 import EditProfile from "../views/EditProfile.vue";
+import UserReviews from "../views/UserReviews.vue";
 import store from "../store/index";
 import Vue from "vue";
 
@@ -84,6 +85,12 @@ const routes: Array<RouteRecordRaw> = [
     path: "/user-posts",
     name: "UserPosts",
     component: UserPosts
+  },
+  {
+    path: "/user-reviews/:id",
+    name: "UserReviews",
+    component: UserReviews,
+    props: true
   },
   {
     path: "/review/:authorId",
