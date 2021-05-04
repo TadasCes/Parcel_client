@@ -21,11 +21,11 @@ export default {
     },
     postProp: {
       type: String,
-      required: true
+      required: false
     },
     authorProp: {
       type: String,
-      required: true
+      required: false
     }
   },
   components: {
@@ -36,19 +36,22 @@ export default {
     const user = computed(() => store.state.loggedUser);
     let post: any = {};
     let author: any = {};
-    author = JSON.parse(props.authorProp);
 
     const postInMemory: any = localStorage.getItem("postInMemory");
-    console.log(JSON.parse(postInMemory));
+    const postAuthorInMemory: any = localStorage.getItem("postAuthorInMemory");
+
     if (postInMemory == null) {
+      author = JSON.parse(props.authorProp);
       post = JSON.parse(props.postProp);
     } else if (postInMemory != null) {
       post = JSON.parse(postInMemory);
+      author = JSON.parse(postAuthorInMemory);
     }
+
+    const reviewCount = author.reviews.length;
 
     const isAuth = isAuthenticated();
     const isAuthorLoggedNow = ref(false);
-    const reviewCount = ref(0);
     const now = moment().toDate();
     const type = ref(0);
     const dayFormated = moment(post.timeStart).format("YYYY-MM-DD");
@@ -125,6 +128,7 @@ export default {
       router.push({
         name: "UserReviews",
         params: {
+          postId: post._id,
           id: post.authorId,
           userName: author.firstName + " " + author.lastName
         }
@@ -157,104 +161,107 @@ export default {
   <div id="edit-post" class="">
     <Navigation />
     <div class="container">
-      <div v-if="isAuthorLoggedNow === true">
-        <h2 class="top-header">Jūsų skelbimo detalės</h2>
-      </div>
-      <div v-else>
-        <h2 class="top-header">Skelbimo detalės</h2>
-      </div>
-      <div class="container">
+      <router-link class="back-link" to="/home">
+        <i class="fas fa-arrow-left"></i>
+        <span>Grįžti</span>
+      </router-link>
+      <div>
+        <div v-if="isAuthorLoggedNow === true">
+          <h2 class="top-header">Jūsų skelbimo detalės</h2>
+        </div>
+        <div v-else>
+          <h2 class="top-header">Skelbimo detalės</h2>
+        </div>
         <div class="row">
-          <div class="col-6 content">
-            <h3>Planuojamas maršrutas</h3>
-            <div>
-              <h5>
-                Pradžia: <strong>{{ post.cityStart }}</strong>
-              </h5>
-              <h5>
-                Pabaiga: <strong>{{ post.cityEnd }}</strong>
-              </h5>
+          <div class="col-7 item-padding">
+            <div class="content ">
+              <h3>Planuojamas maršrutas</h3>
+              <div>
+                <h5>
+                  Pradžia: <strong>{{ post.cityStart }}</strong>
+                </h5>
+                <h5>
+                  Pabaiga: <strong>{{ post.cityEnd }}</strong>
+                </h5>
+              </div>
+            </div>
+            <div class="content">
+              <h3>Laikas</h3>
+              <div>
+                <h5>Pradžia: {{ dayFormated }} {{ timeStartFormated }}</h5>
+                <h5>Pabaiga: {{ dayFormated }} {{ timeEndFormated }}</h5>
+              </div>
             </div>
           </div>
-          <div class="col-6 content">
-            <div v-if="isAuthorLoggedNow == true">
-              <h3>Pasirinkimai</h3>
-            </div>
-            <div v-if="isAuthorLoggedNow == false">
-              <h3>Įrašo autorius</h3>
-              <h5>
-                Vardas:
-                {{ author.firstName }}
-                {{ author.lastName }}
-              </h5>
-              <div v-if="author.rating == 0">
-                <h5>Nėra įvertinimų</h5>
-              </div>
-              <div v-else>
-                <h5>Įvertinimas: {{ author.rating }}</h5>
-              </div>
-              <h6>Pervežta siuntų: {{ author.tripCount }}</h6>
-              <h6>Išsiųsta siuntų: {{ author.sentCount }}</h6>
-            </div>
-            <div>
+          <div class="col-1"></div>
+          <div class="col-4 item-padding">
+            <div class=" content ">
               <div v-if="isAuthorLoggedNow == false">
-                <div v-if="isAuth == true" class="form">
-                  <button class="input-button" @click="readReviews()">
-                    Peržiūrėti atsiliepimus
-                  </button>
-                  <button class="input-button" @click="leaveAReview()">
-                    Palikti atsiliepimą
-                  </button>
-                </div>
-              </div>
-              <div v-if="isAuthorLoggedNow == true">
                 <div v-if="type == 1">
-                  <div v-if="isEndTimeHasPassed() == true">
-                    <button class="input-button" @click="parcelDelivered()">
-                      Siunta nusiųsta
+                  <p class="korteles-header">Siunčia</p>
+                </div>
+                <div v-else>
+                  <p class="korteles-header">Keliauja</p>
+                </div>
+                <h5 class="name">
+                  {{ author.firstName }}
+                  {{ author.lastName }}
+                </h5>
+                <div v-if="author.rating == 0">
+                  <h5>Nėra įvertinimų</h5>
+                </div>
+                <div v-else class="text-apart">
+                  <h6>Įvertinimas:</h6>
+                  <h6>{{ author.rating }}/5</h6>
+                </div>
+                <div class="text-apart mb-3">
+                  <h6>Atsiliepimai</h6>
+                  <h6>{{ reviewCount }}</h6>
+                </div>
+                <div class="text-apart">
+                  <h6>Pervežta siuntų:</h6>
+                  <h6>{{ author.tripCount }}</h6>
+                </div>
+                <div class="text-apart">
+                  <h6>Išsiųsta siuntų:</h6>
+                  <h6>{{ author.sentCount }}</h6>
+                </div>
+              </div>
+              <div>
+                <div v-if="isAuthorLoggedNow == false">
+                  <div v-if="isAuth == true" class="buttons">
+                    <button class="input-button" @click="contactAuthor">
+                      Susisiekti
+                    </button>
+                    <button class="input-button" @click="leaveAReview()">
+                      Palikti atsiliepimą
+                    </button>
+                    <button class="input-button" @click="readReviews()">
+                      Peržiūrėti atsiliepimus
                     </button>
                   </div>
                 </div>
-                <div v-if="type == 2">
-                  <div v-if="isEndTimeHasPassed() == true">
-                    <button class="input-button" @click="tripEnded()">
-                      Kelionė baigta
-                    </button>
+                <div v-if="isAuthorLoggedNow == true" class="buttons">
+                  <div v-if="type == 1">
+                    <div v-if="isEndTimeHasPassed() == true">
+                      <button class="input-button" @click="parcelDelivered()">
+                        Siunta nusiųsta
+                      </button>
+                    </div>
                   </div>
+                  <div v-if="type == 2">
+                    <div v-if="isEndTimeHasPassed() == true">
+                      <button class="input-button" @click="tripEnded()">
+                        Kelionė baigta
+                      </button>
+                    </div>
+                  </div>
+                  <button class="input-button" @click="deletePost()">
+                    Pašalinti įrašą
+                  </button>
                 </div>
-                <button class="input-button" @click="deletePost()">
-                  Pašalinti įrašą
-                </button>
               </div>
             </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-6 content">
-            <h3>Laikas</h3>
-            <div>
-              <h5>Pradžia: {{ dayFormated }} {{ timeStartFormated }}</h5>
-              <h5>Pabaiga: {{ dayFormated }} {{ timeEndFormated }}</h5>
-            </div>
-          </div>
-        </div>
-        <div class="row ">
-          <div class="buttons">
-            <div v-if="isAuthorLoggedNow === false">
-              <input
-                type="submit"
-                value="Susisiekti"
-                class="input-button mr-3"
-                @click="contactAuthor"
-              />
-            </div>
-            <router-link
-              to="/home"
-              tag="button"
-              class="input-button input-button-secondary mr-3"
-            >
-              Atgal
-            </router-link>
           </div>
         </div>
       </div>
@@ -263,6 +270,13 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+@import "../assets/styles/global";
+
+.container {
+  width: 75%;
+  margin-top: 40px;
+}
+
 h2 {
   margin-bottom: 30px;
 }
@@ -270,10 +284,11 @@ h2 {
   float: none !important;
 }
 
-.buttons {
-  display: flex;
-  margin: 0 auto;
+.name {
+  font-size: 22px;
+  padding-bottom: 5px;
 }
+
 .btn-box {
   display: flex;
   margin: 0 auto;
@@ -283,32 +298,12 @@ h2 {
   padding-top: 60px;
 }
 
-.content {
-  height: 200px;
-  padding: 0 24px 24px 0;
-}
-
-.input-button {
-  float: left;
-}
-
-.form {
+.buttons {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin: 0 auto;
-}
-
-.time-section {
-  display: flex;
-  flex-direction: column;
-
-  .form-input {
-    margin-bottom: 44px;
-  }
+  margin-top: 40px;
 }
 </style>
-
-function onBeforeMounted(arg0: () => void) { throw new Error('Function not
-implemented.'); }

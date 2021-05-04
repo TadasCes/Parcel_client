@@ -21,6 +21,10 @@ export default {
     ReviewPost
   },
   props: {
+    postId: {
+      type: String,
+      required: true
+    },
     id: {
       type: String,
       required: true
@@ -41,7 +45,16 @@ export default {
       });
     });
 
-    return { isLoading, reviewList };
+    function backToPost() {
+      router.push({
+        name: "Details",
+        params: {
+          id: props.postId
+        }
+      });
+    }
+
+    return { isLoading, reviewList, backToPost };
   }
 };
 </script>
@@ -52,17 +65,30 @@ export default {
       <Navigation></Navigation>
     </div>
     <div class="container" v-if="isLoading == false">
-      <h1>Atsiliepimai apie {{ userName }}</h1>
-      <ReviewPost
-        v-for="review in reviewList"
-        :key="review._id"
-        :review="review"
-      ></ReviewPost>
+      <div class="back-link" @click="backToPost">
+        <i class="fas fa-arrow-left"></i>
+        <span>Grįžti</span>
+      </div>
+      <ul class="post">
+        <h2>Atsiliepimai apie {{ userName }}</h2>
+        <hr class="mb-3" />
+        <ReviewPost
+          v-for="review in reviewList"
+          :key="review._id"
+          :review="review"
+        ></ReviewPost>
+      </ul>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
+@import "../assets/styles/global";
+
+h2 {
+  margin-bottom: 20px;
+}
+
 .container {
   width: 50%;
   padding: 20px 20px 10px 20px;

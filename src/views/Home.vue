@@ -27,6 +27,7 @@ export default {
       store.dispatch("posts/getAllPosts");
       console.log(posts.value[2]);
       localStorage.removeItem("postInMemory");
+      localStorage.removeItem("postAuthorInMemory");
     });
 
     return { posts };

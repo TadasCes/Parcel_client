@@ -4,7 +4,7 @@
       <li
         @click="rate(star)"
         v-for="star in maxStars"
-        :class="{ active: star <= stars }"
+        :class="{ active: star <= stars, smol: smaller == true }"
         :key="star.stars"
         class="star"
       >
@@ -21,7 +21,7 @@
 <script>
 export default {
   name: "Rating",
-  props: ["grade", "maxStars", "hasCounter"],
+  props: ["grade", "maxStars", "hasCounter", "smaller"],
   emits: ["update:rating"],
   data() {
     return {

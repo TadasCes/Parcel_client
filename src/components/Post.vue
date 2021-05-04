@@ -39,6 +39,7 @@ export default {
 
     function goToDetails(): void {
       localStorage.setItem("postInMemory", JSON.stringify(props.post));
+      localStorage.setItem("postAuthorInMemory", JSON.stringify(author));
       router.push({
         name: "Details",
         params: {

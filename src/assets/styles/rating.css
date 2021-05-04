@@ -29,6 +29,9 @@
 .rating .list .star.active {
   color: #ffe100;
 }
+.rating .list .star.smol {
+  font-size: 20px;
+}
 .rating .info {
   margin-top: 15px;
   font-size: 40px;
