@@ -1,6 +1,7 @@
 <script lang="ts">
 import { reactive, ref } from "vue";
 import * as searchFormValidation from "../utility/formValidation";
+import gAuth from "vue3-google-auth";
 
 import { login, googleLogin } from "../services/user.api.service";
 
@@ -13,6 +14,7 @@ export default {
       email: true,
       password: true
     });
+    const $gAuth = gAuth.useGAuth();
 
     const errorPassword = ref("");
     const errorEmail = ref("");
@@ -48,6 +50,11 @@ export default {
       }
     }
 
+    async function loginGoogle() {
+      const googleUser = await $gAuth.signIn();
+      googleLogin(googleUser.ft);
+    }
+
     return {
       email,
       password,
@@ -55,7 +62,8 @@ export default {
       formValidity,
       errorPassword,
       errorEmail,
-      googleLogin
+      googleLogin,
+      loginGoogle
     };
   }
 };
@@ -63,73 +71,79 @@ export default {
 
 <template>
   <div id="login-page" class="container">
-    <div class="row">
-      <div class="col-12">
-        <h1>Prisijungti</h1>
+    <div class="item-padding">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="font-bree">Prisijungti</h1>
+          <hr />
+        </div>
       </div>
+      <form class="login">
+        <div class="form-inputs">
+          <div class="form-input mb-4">
+            <input
+              v-model="email"
+              type="email"
+              placeholder="El. paštas"
+              class="input-field-global input-field"
+              name="email"
+            />
+            <span
+              :class="
+                formValidity.email === false
+                  ? 'focus-border-error'
+                  : 'focus-border'
+              "
+            ></span>
+            <div v-show="formValidity.email == false" class="error-text">
+              * {{ errorEmail }}
+            </div>
+          </div>
+          <div class="form-input">
+            <input
+              v-model="password"
+              type="password"
+              placeholder="Slaptažodis"
+              class="input-field-global input-field"
+            />
+            <span
+              :class="
+                formValidity.password === false
+                  ? 'focus-border-error'
+                  : 'focus-border'
+              "
+            ></span>
+            <div v-show="formValidity.password == false" class="error-text">
+              * {{ errorPassword }}
+            </div>
+          </div>
+        </div>
+        <div class="form-buttons">
+          <input
+            type="submit"
+            value="Prisijungti"
+            class="input-button "
+            @click.prevent="loginUser"
+          />
+          <router-link
+            to="/register"
+            tag="button"
+            class="input-button-secondary"
+            >Registruotis</router-link
+          >
+          <button class="input-button-secondary" @click.prevent="loginGoogle()">
+            Prisijungti su Google
+          </button>
+
+          <router-link
+            to="/forgot-password"
+            tag="button"
+            class="forgot-password font-rubik"
+            >Pamiršote slaptažodį?</router-link
+          >
+        </div>
+      </form>
     </div>
-    <form class="login">
-      <div class="form-inputs">
-        <div class="form-input mb-4">
-          <input
-            v-model="email"
-            type="email"
-            placeholder="El. paštas"
-            class="input-field-global input-field"
-            name="email"
-          />
-          <span
-            :class="
-              formValidity.email === false
-                ? 'focus-border-error'
-                : 'focus-border'
-            "
-          ></span>
-          <div v-show="formValidity.email == false" class="error-text">
-            * {{ errorEmail }}
-          </div>
-        </div>
-        <div class="form-input">
-          <input
-            v-model="password"
-            type="password"
-            placeholder="Slaptažodis"
-            class="input-field-global input-field"
-          />
-          <span
-            :class="
-              formValidity.password === false
-                ? 'focus-border-error'
-                : 'focus-border'
-            "
-          ></span>
-          <div v-show="formValidity.password == false" class="error-text">
-            * {{ errorPassword }}
-          </div>
-        </div>
-      </div>
-      <div class="form-buttons">
-        <input
-          type="submit"
-          value="Prisijungti"
-          class="input-button "
-          @click.prevent="loginUser"
-        />
-        <router-link
-          to="/register"
-          tag="button"
-          class="input-button input-button-secondary"
-          >Registruotis</router-link
-        >
-        <button
-          class="input-button input-button-secondary"
-          @click.prevent="googleLogin()"
-        >
-          Prisijungti su Google
-        </button>
-        <span class="forgot-password">Pamiršote slaptažodį?</span>
-      </div>
-    </form>
   </div>
 </template>
 
@@ -141,10 +155,6 @@ export default {
   padding: 100px;
 }
 
-h1 {
-  margin-bottom: 40px;
-}
-
 .login {
   display: flex;
   flex-direction: column;
@@ -152,6 +162,7 @@ h1 {
   align-items: center;
   width: 25em;
   margin: 0 auto;
+  padding-top: 30px;
 }
 
 .form-inputs {

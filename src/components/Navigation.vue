@@ -21,7 +21,7 @@ export default {
 <template>
   <div id="nav">
     <div class="container">
-      <div class="navbar">
+      <div class="navbar font-rubik">
         <router-link id="logo" to="/" class="float-left">
           <span>Siunt.io</span>
         </router-link>
@@ -56,20 +56,6 @@ export default {
                 </router-link>
               </li>
             </ul>
-            <!-- <router-link to="/home">
-              Naršyti skelbimus
-            </router-link>
-            <router-link to="/create-post">
-              Patalpinti skelbimą
-            </router-link>
-            <div class="profile-section">
-              <router-link to="/user-posts">
-                Jūsų skelbimai
-              </router-link>
-              <router-link to="/login" @click="logoutUser">
-                Atsijungti
-              </router-link>
-            </div> -->
           </div>
         </div>
       </div>
@@ -82,6 +68,7 @@ export default {
 
 #nav {
   background-color: $primary-color;
+  box-shadow: 1px 5px 10px #b9b9b9;
 }
 
 .navbar {

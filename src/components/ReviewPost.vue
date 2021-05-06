@@ -26,6 +26,7 @@ export default {
     const showOptions = ref(false);
     const isLoading = ref(true);
     let author: IUser;
+    const dataFormated = props.review.date.substring(0, 10);
 
     onBeforeMount(async () => {
       await getOneUser(props.review.authorId).then(result => {
@@ -36,6 +37,7 @@ export default {
 
     return {
       isLoading,
+      dataFormated,
       author: computed(() => author)
     };
   }
@@ -52,7 +54,7 @@ export default {
           </h4>
         </div>
         <div class="col-6">
-          <p class="comment-date">{{ review.date }}</p>
+          <p class="comment-date">{{ dataFormated }}</p>
         </div>
       </div>
 
@@ -65,18 +67,6 @@ export default {
           <h5>Atsiliepimas:</h5>
           <h6>{{ review.comment }}</h6>
         </div>
-        <!-- <div v-if="showOptions">
-          <button
-            class="btn btn-sm btn-info"
-            @click="goToEdit"
-          >
-            <span class="material-icons">edit</span>
-          </button>
-          <button
-            class="btn btn-sm btn-danger"
-            @click="deletePost"
-          >
-        </div> -->
       </div>
     </div>
     <div v-else>

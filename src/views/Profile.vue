@@ -44,7 +44,7 @@ export default {
   <div id="edit-post" class="">
     <Navigation />
     <div class="container">
-      <div class="row">
+      <div class="row item-padding">
         <div class="col-6">
           <h2 class="top-header">Jūsų statistika</h2>
           <h4>Pervežta siuntų: {{ user.tripCount }}</h4>
@@ -74,6 +74,9 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+@import "../assets/styles/global.css";
+@import "../assets/styles/input-styles.css";
+
 h2 {
   margin-bottom: 30px;
 }

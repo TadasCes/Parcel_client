@@ -50,102 +50,102 @@ export default {
 <template>
   <div id="edit-post" class="">
     <Navigation />
-    <h2>Redaguoti profilį</h2>
-    <form class="form">
-      <div class="form-inputs container">
-        <div class="row w-50">
-          <div class="col-12">
-            <label for="from">Vardas:</label>
-            <input
-              v-model="firstName"
-              type="text"
-              class="input-field-global input-field"
-              name="firstName"
-            />
-            <span class="focus-border"></span>
-          </div>
-          <div class="col-12">
-            <label for="to">Pavardė:</label>
-            <input
-              v-model="lastName"
-              type="text"
-              class="input-field-global input-field"
-              name="lastName"
-            />
-            <span class="focus-border"></span>
-          </div>
-          <div class="form-input col-12 ">
-            <label for="to">El. paštas:</label>
-            <input
-              v-model="email"
-              type="text"
-              class="input-field-global input-field"
-              name="Email"
-            />
-            <span class="focus-border"></span>
-          </div>
-          <div class="form-input col-12 ">
-            <label for="to">Tel. numeris:</label>
-            <input
-              v-model="phone"
-              type="text"
-              class="input-field-global input-field"
-              name="Phone"
-            />
-            <span class="focus-border"></span>
-          </div>
-          <div class="form-input col-12 ">
-            <label for="to">Senas slaptažodis:</label>
-            <input
-              v-model="password"
-              type="password"
-              class="input-field-global input-field"
-              name="password"
-            />
-            <span class="focus-border"></span>
-          </div>
-          <div class="form-input col-12 ">
-            <label for="to">Naujas slaptažodis:</label>
-            <input
-              v-model="password"
-              type="password"
-              class="input-field-global input-field"
-              name="password"
-            />
-            <span class="focus-border"></span>
-          </div>
-          <div class="d-flex">
-            <input
-              type="submit"
-              value="Atnaujinti"
-              class="input-button mr-3"
-              @click.prevent="updateAUser"
-            />
-            <router-link
-              to="/profile"
-              tag="button"
-              class="input-button input-button-secondary mr-3"
-            >
-              Atgal
-            </router-link>
+    <div class="item-padding">
+      <h2>Redaguoti profilį</h2>
+      <hr />
+      <form class="form">
+        <div class="form-inputs container">
+          <div class="row w-50">
+            <div class="col-12">
+              <label for="from">Vardas:</label>
+              <input
+                v-model="firstName"
+                type="text"
+                class="input-field-global input-field"
+                name="firstName"
+              />
+              <span class="focus-border"></span>
+            </div>
+            <div class="col-12">
+              <label for="to">Pavardė:</label>
+              <input
+                v-model="lastName"
+                type="text"
+                class="input-field-global input-field"
+                name="lastName"
+              />
+              <span class="focus-border"></span>
+            </div>
+            <div class="form-input col-12 ">
+              <label for="to">El. paštas:</label>
+              <input
+                v-model="email"
+                type="text"
+                class="input-field-global input-field"
+                name="Email"
+              />
+              <span class="focus-border"></span>
+            </div>
+            <div class="form-input col-12 ">
+              <label for="to">Tel. numeris:</label>
+              <input
+                v-model="phone"
+                type="text"
+                class="input-field-global input-field"
+                name="Phone"
+              />
+              <span class="focus-border"></span>
+            </div>
+            <div class="form-input col-12 ">
+              <label for="to">Senas slaptažodis:</label>
+              <input
+                v-model="password"
+                type="password"
+                class="input-field-global input-field"
+                name="password"
+              />
+              <span class="focus-border"></span>
+            </div>
+            <div class="form-input col-12 ">
+              <label for="to">Naujas slaptažodis:</label>
+              <input
+                v-model="password"
+                type="password"
+                class="input-field-global input-field"
+                name="password"
+              />
+              <span class="focus-border"></span>
+            </div>
+            <div class="d-flex">
+              <input
+                type="submit"
+                value="Atnaujinti"
+                class="input-button mr-3"
+                @click.prevent="updateAUser"
+              />
+              <router-link
+                to="/profile"
+                tag="button"
+                class="input-button input-button-secondary mr-3"
+              >
+                Atgal
+              </router-link>
+            </div>
           </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 @import "../assets/styles/global.css";
 @import "../assets/styles/input-styles.css";
-
+#edit-post {
+  padding-bottom: 50px;
+}
 .col-12 {
   margin-bottom: 40px;
-}
-
-h2 {
-  padding-bottom: 30px;
-  padding-top: 30px;
 }
 
 label {
@@ -155,6 +155,8 @@ label {
 }
 
 .form {
+  padding-bottom: 30px;
+  padding-top: 30px;
   display: flex;
   flex-direction: column;
   justify-content: center;

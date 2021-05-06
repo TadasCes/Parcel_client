@@ -27,6 +27,7 @@ export default {
     const template = ref("");
     const comment = ref("");
     const type = ref(0);
+    const canChange = ref(false);
     function loadParcel() {
       show.value = false;
       template.value = "parcel";
@@ -57,6 +58,7 @@ export default {
           timeStart: timeStart.value,
           timeEnd: timeEnd.value,
           comment: comment.value,
+          canChange: canChange.value,
           authorId: user.value._id
         };
         createPost(newPost);
@@ -75,6 +77,7 @@ export default {
       timeStart,
       timeEnd,
       comment,
+      canChange,
       loadParcel,
       loadTravel,
       show,
@@ -91,7 +94,10 @@ export default {
   <div id="create-post" class="">
     <Navigation />
 
-    <div :class="show === true ? 'show' : 'hide'">
+    <div
+      :class="show === true ? 'show' : 'hide'"
+      class="item-padding extra-bottom"
+    >
       <h1>Pasirinkite skelbimo tipą</h1>
       <button id="parcel" class="input-button" @click="loadParcel">
         <span class="material-icons align-middle mr-1">
@@ -105,155 +111,161 @@ export default {
       </button>
     </div>
     <div v-if="show === false" class="container form">
-      <div v-if="template === 'travel'">
-        <h2>Keliauju tarp miestų</h2>
-      </div>
-      <div v-else>
-        <h2>Siunčiu siuntą</h2>
-      </div>
+      <div class="item-padding">
+        <div v-if="template === 'travel'">
+          <h2>Keliauju tarp miestų</h2>
+        </div>
+        <div v-else>
+          <h2>Siunčiu siuntą</h2>
+        </div>
 
-      <div class="row w-50">
-        <div class="col-12">
-          <div class="form-input">
-            <div v-if="template === 'travel'">
-              <label for="from">Iš kur keliaujate?</label>
-            </div>
-            <div v-else>
-              <label for="from">Iš kur siunčiate?</label>
-            </div>
-            <City
-              name="from"
-              title="Pasirinkite miestą"
-              @update:city="cityStart = $event"
-            />
-            <span class="focus-border"></span>
-          </div>
-        </div>
-        <div class="col-12">
-          <div class="form-input">
-            <div v-if="template === 'travel'">
-              <label for="from">Į kur keliaujate?</label>
-            </div>
-            <div v-else>
-              <label for="from">Į kur siunčiate?</label>
-            </div>
-            <City
-              name="to"
-              title="Pasirinkie miestą"
-              @update:city="cityEnd = $event"
-            />
-            <span class="focus-border"></span>
-          </div>
-        </div>
-        <div class="time-section col-12">
-          <label for="day">Pasirinkite dieną</label>
-          <div class="form-input ">
-            <input
-              v-model="day"
-              type="date"
-              placeholder="Day"
-              class="input-field-global input-field"
-              name="Day"
-            />
-            <span class="focus-border"></span>
-          </div>
-        </div>
-        <div class="form-input col-12">
-          <div v-if="template === 'travel'">
-            <label for="from">Pasirinkite kelionės pradžios laiką</label>
-          </div>
-          <div v-else>
-            <label for="from">Nuo kada galite perduoti siuntą?</label>
-          </div>
-          <input
-            v-model="timeStart"
-            type="time"
-            placeholder="Time start"
-            class="input-field-global input-field"
-            name="Start"
-          />
-          <span class="focus-border"></span>
-        </div>
-        <div class="form-input col-12">
-          <div v-if="template === 'travel'">
-            <label for="from">Pasirinkite kelionės pabaigos laiką</label>
-          </div>
-          <div v-else>
-            <label for="from">Iki kada galite perduoti siuntą?</label>
-          </div>
-          <input
-            v-model="timeEnd"
-            type="time"
-            placeholder="Time end"
-            class="input-field-global input-field "
-            name="End"
-          />
-          <span class="focus-border"></span>
-        </div>
-        <div class="form-field col-12">
-          <div class="search-field form-field">
-            <div v-if="template === 'travel'">
-              <label for="size">Kokio dydžio siuntą galite gabenti?</label>
-            </div>
-            <div v-else>
-              <label for="size">Kokio dydžio siuntą siunčiate?</label>
-            </div>
-            <!-- <span class="material-icons">aspect_ratio</span> -->
-            <div class="size-select form-input" id="select-size">
-              <select
-                v-model="size"
-                name="size"
-                class="input-field input-select input-size"
-                title="Siuntos dydis"
-              >
-                <option selected disabled :value="0">Dydis</option>
-                <option :value="1">Maža: ~9x38x64cm</option>
-                <option :value="2">Vidutinė: ~19x38x64cm</option>
-                <option :value="3">Didelė: ~39x38x64cm</option>
-              </select>
+        <div class="row main-form">
+          <div class="col-12">
+            <div class="form-input">
+              <div v-if="template === 'travel'">
+                <label for="from">Iš kur keliaujate?</label>
+              </div>
+              <div v-else>
+                <label for="from">Iš kur siunčiate?</label>
+              </div>
+              <City
+                name="from"
+                title="Pasirinkite miestą"
+                @update:city="cityStart = $event"
+              />
               <span class="focus-border"></span>
             </div>
           </div>
-        </div>
-        <div class="form-field col-12">
-          <div class="search-field">
-            <label for="size">Papildomi komentarai</label>
-
-            <!-- <span class="material-icons">aspect_ratio</span> -->
-            <div class="size-select form-input" id="select-size">
-              <textarea
-                v-model="comment"
-                name="komentaras"
-                id="comment"
-                cols="62"
-                rows="3"
-                maxlength="300"
-              ></textarea>
+          <div class="col-12">
+            <div class="form-input">
+              <div v-if="template === 'travel'">
+                <label for="from">Į kur keliaujate?</label>
+              </div>
+              <div v-else>
+                <label for="from">Į kur siunčiate?</label>
+              </div>
+              <City
+                name="to"
+                title="Pasirinkie miestą"
+                @update:city="cityEnd = $event"
+              />
+              <span class="focus-border"></span>
             </div>
           </div>
-        </div>
-      </div>
+          <div class="time-section col-12">
+            <label for="day">Pasirinkite dieną</label>
+            <div class="form-input ">
+              <input
+                v-model="day"
+                type="date"
+                placeholder="Day"
+                class="input-field-global input-field"
+                name="Day"
+              />
+              <span class="focus-border"></span>
+            </div>
+          </div>
+          <div class="form-input col-12">
+            <div v-if="template === 'travel'">
+              <label for="from">Pasirinkite kelionės pradžios laiką</label>
+            </div>
+            <div v-else>
+              <label for="from">Nuo kada galite perduoti siuntą?</label>
+            </div>
+            <input
+              v-model="timeStart"
+              type="time"
+              placeholder="Time start"
+              class="input-field-global input-field"
+              name="Start"
+            />
+            <span class="focus-border"></span>
+          </div>
+          <div class="form-input col-12">
+            <div v-if="template === 'travel'">
+              <label for="from">Pasirinkite kelionės pabaigos laiką</label>
+            </div>
+            <div v-else>
+              <label for="from">Iki kada galite perduoti siuntą?</label>
+            </div>
+            <input
+              v-model="timeEnd"
+              type="time"
+              placeholder="Time end"
+              class="input-field-global input-field "
+              name="End"
+            />
+            <span class="focus-border"></span>
+          </div>
+          <div class="form-field col-12">
+            <div class="search-field form-field">
+              <div v-if="template === 'travel'">
+                <label for="size">Kokio dydžio siuntą galite gabenti?</label>
+              </div>
+              <div v-else>
+                <label for="size">Kokio dydžio siuntą siunčiate?</label>
+              </div>
+              <!-- <span class="material-icons">aspect_ratio</span> -->
+              <div class="size-select form-input" id="select-size">
+                <select
+                  v-model="size"
+                  name="size"
+                  class="input-field input-select input-size"
+                  title="Siuntos dydis"
+                >
+                  <option selected disabled :value="0">Dydis</option>
+                  <option :value="1">Maža: ~9x38x64cm</option>
+                  <option :value="2">Vidutinė: ~19x38x64cm</option>
+                  <option :value="3">Didelė: ~39x38x64cm</option>
+                </select>
+                <span class="focus-border"></span>
+              </div>
+            </div>
+          </div>
+          <div class="form-field col-12">
+            <div class="search-field">
+              <label for="size">Papildomi komentarai</label>
 
-      <div class="d-flex">
-        <input
-          type="submit"
-          value="Paskelbti"
-          class="input-button mr-3"
-          @click="createNewPost"
-        />
-        <router-link
-          to="/home"
-          tag="button"
-          class="input-button input-button-secondary"
-        >
-          Atšaukti
-        </router-link>
+              <!-- <span class="material-icons">aspect_ratio</span> -->
+              <div class="size-select form-input" id="select-size">
+                <textarea
+                  v-model="comment"
+                  name="komentaras"
+                  id="comment"
+                  cols="45"
+                  rows="3"
+                  maxlength="300"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex mx-auto">
+            <input
+              type="submit"
+              value="Paskelbti"
+              class="input-button mr-3"
+              @click="createNewPost"
+            />
+            <router-link
+              to="/home"
+              tag="button"
+              class="input-button input-button-secondary"
+            >
+              Atšaukti
+            </router-link>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
+.extra-bottom {
+  padding-bottom: 200px;
+}
+
 button {
   margin: 10px;
 }
@@ -288,6 +300,12 @@ form {
 .col-12 {
   margin-bottom: 50px;
 }
+
+.main-form {
+  width: 75%;
+  margin: 0 auto;
+}
+
 label {
   float: left;
   font-weight: bold;

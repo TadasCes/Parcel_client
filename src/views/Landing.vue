@@ -11,10 +11,10 @@ export default {
 <template>
   <div>
     <Navigation />
-    <main class="main-content">
+    <div class="main-content">
       <div class="section-header">
         <h1>Persiųskite siuntą lengviau</h1>
-        <h6>Perduokite siuntą keliaujantiems žmonemss</h6>
+        <h6>Perduokite siuntą keliaujantiems žmonėms</h6>
       </div>
       <div class="section-options">
         <router-link to="/home" tag="button" class="input-button">
@@ -26,17 +26,13 @@ export default {
           Patalpinti skelbimą
         </router-link>
       </div>
-    </main>
+    </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-@import "../assets/styles/input-styles.css";
 @import "../assets/styles/variables.scss";
-
-.main-content {
-  height: 100vh;
-}
+@import "../assets/styles/global.scss";
 
 .section-options {
   display: flex;
@@ -50,7 +46,6 @@ export default {
 
 a {
   text-decoration: none;
-  color: black;
 }
 
 .section-header {

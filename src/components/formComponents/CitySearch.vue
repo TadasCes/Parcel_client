@@ -125,7 +125,6 @@ export default {
   width: 175px;
 
   input {
-    font-weight: bold;
     width: 100%;
   }
 

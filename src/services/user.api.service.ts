@@ -2,6 +2,7 @@ import IUser from "@/interfaces/IUser";
 import router from "@/router";
 import store from "@/store";
 import axios from "axios";
+import { googleAuth } from "./passport";
 
 export async function createUser(body: any) {
   return axios
@@ -101,10 +102,39 @@ export async function sendContactData(post: any, email: string) {
       console.log(error);
     });
 }
+export async function forgotPassword(email: string) {
+  return axios
+    .post(`http://localhost:5000/api/users/forgot-password`, {
+      email: email
+    })
+    .then(response => {
+      console.log(response);
+
+      return response.data;
+    })
+    .catch(error => {
+      console.log(error);
+    });
+}
+export async function changePassword(id: string, password: string) {
+  return axios
+    .put(`http://localhost:5000/api/users/change-password/${id}`, {
+      password: password
+    })
+    .then(response => {
+      console.log(response);
+      router.push("/login");
+      alert("Slaptažodis pakeistas. \n Galite prisijungti iš naujo");
+      return "Password changed";
+    })
+    .catch(error => {
+      console.log(error);
+    });
+}
 
 export async function login(body: any) {
   return axios
-    .post("http://localhost:5000/api/login", body)
+    .post("http://localhost:5000/login", body)
     .then(response => {
       setLoggedUser(response);
       localStorage.setItem("jwt", JSON.stringify(response.data.token));
@@ -120,24 +150,26 @@ export async function login(body: any) {
     });
 }
 
-export async function googleLogin() {
-  return axios
-    .get("http://localhost:5000/api/auth/google", {
-      headers: { "Access-Control-Allow-Headers": "*" }
-    })
-    .then(response => {
-      // localStorage.setItem("jwt", JSON.stringify(response.data.token));
-      // store.commit("SET_LOGGED_USER", response.data.user);
-      // localStorage.setItem("user", JSON.stringify(response.data.user));
-      router.push("/home");
-    })
-    .catch(error => {
-      if (error.response.data.message) {
-        return error.response.data.message;
-      } else {
-        console.log(error);
-      }
-    });
+export async function googleLogin(user: any) {
+  console.log(user);
+  const newUser = {
+    email: user.Qt,
+    password: "",
+    firstName: user.eU,
+    lastName: user.$R,
+    registrationTime: Date.now(),
+    phone: "",
+    rating: 0,
+    tripCount: 0,
+    sentCount: 0,
+    posts: [],
+    review: [],
+    isAdmin: false,
+    googleId: ""
+  };
+  localStorage.setItem("user", JSON.stringify(newUser));
+  store.commit("SET_LOGGED_USER", newUser);
+  router.push("/home");
 }
 
 export function isAuthenticated() {

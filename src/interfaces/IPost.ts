@@ -10,4 +10,5 @@ export default interface IPost {
   comment: string;
   size?: number;
   authorId: string
+  canChange: boolean
 }

@@ -58,24 +58,23 @@ export default {
     const timeStartFormated = moment(post.timeStart).format("HH:mm");
     const timeEndFormated = moment(post.timeEnd).format("HH:mm");
 
-    if (author.id === user.value._id) {
+    if (author._id === user.value._id) {
       isAuthorLoggedNow.value = true;
     }
 
-    // console.log(router.currentRoute.value);
     function isEndTimeHasPassed() {
       const myDate = moment(post.day, "YYYY-MM-DD").toDate();
       const isPassed = moment(now).isAfter(myDate);
-      console.log(moment(now).isAfter(myDate));
       return isPassed;
     }
     isEndTimeHasPassed();
 
     function leaveAReview() {
-      const authorId = author.id;
+      const authorId = author._id;
       const firstName = author.firstName;
       const lastName = author.lastName;
       const postId: any = post._id;
+      console.log(authorId);
       router.push({
         name: "Review",
         params: { postId, authorId, firstName, lastName }
@@ -117,6 +116,9 @@ export default {
       alert("Kelionė sėkmingai užbaigta!");
       // deletePost();
     }
+    function editPost() {
+      router.push({ name: "EditPost", params: { id: post._id } });
+    }
 
     function parcelDelivered() {
       increaseSent(user.value._id);
@@ -142,6 +144,7 @@ export default {
       reviewCount,
       timeStartFormated,
       timeEndFormated,
+      editPost,
       isAuth,
       deletePost,
       isAuthorLoggedNow,
@@ -161,78 +164,99 @@ export default {
   <div id="edit-post" class="">
     <Navigation />
     <div class="container">
-      <router-link class="back-link" to="/home">
-        <i class="fas fa-arrow-left"></i>
-        <span>Grįžti</span>
-      </router-link>
+      <div class="row">
+        <router-link class="back-link" to="/home">
+          <i class="fas fa-arrow-left"></i>
+          <span>Grįžti</span>
+        </router-link>
+      </div>
       <div>
-        <div v-if="isAuthorLoggedNow === true">
-          <h2 class="top-header">Jūsų skelbimo detalės</h2>
-        </div>
-        <div v-else>
-          <h2 class="top-header">Skelbimo detalės</h2>
-        </div>
         <div class="row">
-          <div class="col-7 item-padding">
-            <div class="content ">
-              <h3>Planuojamas maršrutas</h3>
-              <div>
-                <h5>
-                  Pradžia: <strong>{{ post.cityStart }}</strong>
-                </h5>
-                <h5>
-                  Pabaiga: <strong>{{ post.cityEnd }}</strong>
-                </h5>
+          <div class="col-xl-7 col-lg-12 item-padding route-details">
+            <div class=" ">
+              <div class="korteles-header">
+                <div v-if="isAuthorLoggedNow === true">
+                  <h2 class="korteles-header">Jūsų skelbimo detalės</h2>
+                  <hr />
+                </div>
+                <div v-else>
+                  <h2 class="korteles-header">Skelbimo detalės</h2>
+                  <hr />
+                </div>
+              </div>
+              <h3 class="mb-3">Planuojamas maršrutas</h3>
+              <div class="route-section font-rubik">
+                <div class="text-apart">
+                  <span>Pradžia:</span>
+                  <span>{{ post.cityStart }}</span>
+                </div>
+                <div class="text-apart">
+                  <span>Pabaiga:</span>
+                  <span>{{ post.cityEnd }}</span>
+                </div>
               </div>
             </div>
-            <div class="content">
-              <h3>Laikas</h3>
-              <div>
-                <h5>Pradžia: {{ dayFormated }} {{ timeStartFormated }}</h5>
-                <h5>Pabaiga: {{ dayFormated }} {{ timeEndFormated }}</h5>
+
+            <div class="time-section">
+              <h3 class="mb-3">Laikas</h3>
+              <div class="font-rubik">
+                <div class="route-section">
+                  <div class="text-apart">
+                    <span>Nuo:</span>
+                    <span>{{ dayFormated }} {{ timeStartFormated }}</span>
+                  </div>
+                  <div class="text-apart">
+                    <span>Iki:</span>
+                    <span>{{ dayFormated }} {{ timeEndFormated }}</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
           <div class="col-1"></div>
-          <div class="col-4 item-padding">
+          <div class="col-xl-4 col-lg-12 item-padding">
             <div class=" content ">
               <div v-if="isAuthorLoggedNow == false">
                 <div v-if="type == 1">
-                  <p class="korteles-header">Siunčia</p>
+                  <span class="korteles-header">Siunčia</span>
+                  <hr />
                 </div>
                 <div v-else>
-                  <p class="korteles-header">Keliauja</p>
+                  <span class="korteles-header">Keliauja</span>
+                  <hr />
                 </div>
-                <h5 class="name">
+                <h3 class="name">
                   {{ author.firstName }}
                   {{ author.lastName }}
-                </h5>
+                </h3>
                 <div v-if="author.rating == 0">
-                  <h5>Nėra įvertinimų</h5>
+                  <span>Nėra įvertinimų</span>
                 </div>
                 <div v-else class="text-apart">
-                  <h6>Įvertinimas:</h6>
-                  <h6>{{ author.rating }}/5</h6>
+                  <span>Įvertinimas:</span>
+                  <span>{{ author.rating }}/5</span>
                 </div>
                 <div class="text-apart mb-3">
-                  <h6>Atsiliepimai</h6>
-                  <h6>{{ reviewCount }}</h6>
+                  <span>Atsiliepimai</span>
+                  <span>{{ reviewCount }}</span>
                 </div>
                 <div class="text-apart">
-                  <h6>Pervežta siuntų:</h6>
-                  <h6>{{ author.tripCount }}</h6>
+                  <span>Pervežta siuntų:</span>
+                  <span>{{ author.tripCount }}</span>
                 </div>
                 <div class="text-apart">
-                  <h6>Išsiųsta siuntų:</h6>
-                  <h6>{{ author.sentCount }}</h6>
+                  <span>Išsiųsta siuntų:</span>
+                  <span>{{ author.sentCount }}</span>
                 </div>
               </div>
               <div>
                 <div v-if="isAuthorLoggedNow == false">
                   <div v-if="isAuth == true" class="buttons">
-                    <button class="input-button" @click="contactAuthor">
-                      Susisiekti
-                    </button>
+                    <div v-if="isEndTimeHasPassed == false">
+                      <button class="input-button" @click="contactAuthor">
+                        Susisiekti
+                      </button>
+                    </div>
                     <button class="input-button" @click="leaveAReview()">
                       Palikti atsiliepimą
                     </button>
@@ -241,7 +265,7 @@ export default {
                     </button>
                   </div>
                 </div>
-                <div v-if="isAuthorLoggedNow == true" class="buttons">
+                <div v-if="isAuthorLoggedNow == true" class="buttons btns-auth">
                   <div v-if="type == 1">
                     <div v-if="isEndTimeHasPassed() == true">
                       <button class="input-button" @click="parcelDelivered()">
@@ -256,6 +280,9 @@ export default {
                       </button>
                     </div>
                   </div>
+                  <button class="input-button" @click="editPost()">
+                    Redaguoti įrašą
+                  </button>
                   <button class="input-button" @click="deletePost()">
                     Pašalinti įrašą
                   </button>
@@ -272,21 +299,41 @@ export default {
 <style lang="scss" scoped>
 @import "../assets/styles/global";
 
+.route-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.btns-auth {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.back-link {
+  padding-top: 8px;
+}
+
+.route-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 60%;
+  margin: 0 auto;
+}
+
 .container {
   width: 75%;
   margin-top: 40px;
 }
 
-h2 {
-  margin-bottom: 30px;
-}
-.input-button {
-  float: none !important;
+.time-section {
+  margin-top: 50px;
+  padding-bottom: 100px;
 }
 
-.name {
-  font-size: 22px;
-  padding-bottom: 5px;
+.input-button {
+  float: none !important;
 }
 
 .btn-box {

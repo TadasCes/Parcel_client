@@ -6,3 +6,5 @@ declare module '*.vue' {
 }
 
 declare module 'vue-star-rating' 
+
+declare module 'vue-google-login' 

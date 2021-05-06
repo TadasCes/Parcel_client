@@ -43,12 +43,11 @@ export default {
     const firstNameValue = props.firstName;
     const lastNameValue = props.lastName;
     const comment = ref("");
-    const rating = ref(0);
+    const rating = ref(5);
     let author: IUser;
     const now = moment().toDate();
 
     function leaveAReview() {
-      console.log(rating.value);
       const review = {
         targetId: props.authorId,
         authorId: user.value._id,
@@ -56,6 +55,7 @@ export default {
         rating: rating.value,
         date: now
       };
+      console.log(review);
       leaveReview(review, props.authorId);
       alert("Įvertinimas išsaugotas!");
       router.push("/home");
@@ -86,48 +86,55 @@ export default {
 <template>
   <div id="edit-post" class="">
     <Navigation />
-    <div class="top-header">
-      <h3>
-        Paliktie atsiliepimą apie {{ firstNameValue }} {{ lastNameValue }}
-      </h3>
-    </div>
-    <div class="container review-box">
-      <div>
-        <h4 class="ivertinimas">Įvertinimas:</h4>
-        <Rating
-          :grade="5"
-          :maxStars="5"
-          :hasCounter="true"
-          @update="onRatingUpdate($event)"
-        />
-        <h4 class="komentaras">Komentaras:</h4>
-        <textarea
-          name=""
-          id=""
-          cols="55"
-          rows="10"
-          v-model="comment"
-        ></textarea>
+    <div class="item-padding">
+      <div class="top-header">
+        <h2>
+          Palikite atsiliepimą apie {{ firstNameValue }} {{ lastNameValue }}
+        </h2>
+        <hr />
       </div>
-      <div class="d-flex mt-4">
-        <input
-          type="submit"
-          value="Palikti atsiliepimą"
-          class="input-button mr-3"
-          @click.prevent="leaveAReview"
-        />
-        <button
-          class="input-button input-button-secondary mr-3"
-          @click="goBackToPost"
-        >
-          Atgal
-        </button>
+      <div class="container review-box font-rubik">
+        <div>
+          <h4 class="ivertinimas">Įvertinimas:</h4>
+          <Rating
+            :grade="5"
+            :maxStars="5"
+            :hasCounter="true"
+            @update="onRatingUpdate($event)"
+          />
+          <h4 class="komentaras mt-4">Komentaras:</h4>
+          <textarea
+            name=""
+            id=""
+            cols="55"
+            rows="10"
+            v-model="comment"
+          ></textarea>
+        </div>
+        <div class="d-flex mt-4">
+          <input
+            type="submit"
+            value="Palikti atsiliepimą"
+            class="input-button mr-3"
+            @click.prevent="leaveAReview"
+          />
+          <button
+            class="input-button input-button-secondary mr-3"
+            @click="goBackToPost"
+          >
+            Atgal
+          </button>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
+.item-padding {
+  margin-top: 60px;
+}
+
 .input-button {
   float: none !important;
 }
@@ -141,11 +148,6 @@ export default {
 
   h4 {
     text-align: left;
-    margin-top: 30px;
-  }
-
-  .ivertinimas {
-    margin-bottom: 20px;
   }
 }
 

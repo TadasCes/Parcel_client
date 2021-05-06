@@ -242,7 +242,6 @@ export default {
   display: flex;
   align-items: flex-start;
   input {
-    font-weight: bold;
     border: 0;
     width: 100%;
   }
@@ -257,14 +256,10 @@ export default {
 }
 
 .size-select {
-  width: 450px;
+  width: 470px;
 }
 .select-size {
   margin-top: 25px;
-}
-
-.input-size {
-  font-weight: bold;
 }
 
 .form-field {

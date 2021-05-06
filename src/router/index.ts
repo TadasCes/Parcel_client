@@ -12,6 +12,8 @@ import Review from "../views/Review.vue";
 import Profile from "../views/Profile.vue";
 import EditProfile from "../views/EditProfile.vue";
 import UserReviews from "../views/UserReviews.vue";
+import ChangePassword from "../views/ChangePassword.vue";
+import ForgotPassword from "../views/ForgotPassword.vue";
 import store from "../store/index";
 import Vue from "vue";
 
@@ -97,6 +99,16 @@ const routes: Array<RouteRecordRaw> = [
     name: "Review",
     component: Review,
     props: true
+  },
+  {
+    path: "/change-password/:id",
+    name: "ChangePassword",
+    component: ChangePassword
+  },
+  {
+    path: "/forgot-password/",
+    name: "ForgotPassword",
+    component: ForgotPassword
   }
 ];
 

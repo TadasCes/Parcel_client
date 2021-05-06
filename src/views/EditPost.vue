@@ -90,93 +90,96 @@ export default {
 <template>
   <div id="edit-post" class="">
     <Navigation />
-    <h2>Koreguoti įrašą</h2>
-    <form class="form">
-      <div class="form-inputs container">
-        <div class="row w-50">
-          <div class="col-12">
-            <label for="from">Keliauju iš:</label>
-            <City
-              :title="start"
-              name="from"
-              @update:city="cityStart = $event"
-            />
-          </div>
-          <div class="col-12">
-            <label for="to">Keliauju į:</label>
-            <City :title="end" name="to" @update:city="cityEnd = $event" />
-          </div>
-          <div class="form-input col-12 ">
-            <label for="to">Kelionės diena:</label>
-            <input
-              v-model="day"
-              type="date"
-              placeholder="Day"
-              class="input-field-global input-field"
-              name="Day"
-            />
-            <span class="focus-border"></span>
-          </div>
-          <div class="form-input col-12 ">
-            <label for="to">Planuoju išvykti:</label>
-            <input
-              v-model="timeStart"
-              type="time"
-              placeholder="Time start"
-              class="input-field-global input-field"
-              name="Start"
-            />
-            <span class="focus-border"></span>
-          </div>
-          <div class="form-input col-12">
-            <label for="to">Planuoju atvykti:</label>
-            <input
-              v-model="timeEnd"
-              type="time"
-              placeholder="Time end"
-              class="input-field-global input-field "
-              name="End"
-            />
-            <span class="focus-border"></span>
-          </div>
-          <div v-if="size > 0" class="col-12">
-            <div class="search-field">
-              <label for="size">Galiu gabenti tokio dydžio siuntą:</label>
+    <div class="item-padding">
+      <h2>Koreguoti įrašą</h2>
+      <hr />
+      <form class="form">
+        <div class="form-inputs container">
+          <div class="row w-50">
+            <div class="col-12">
+              <label for="from">Keliauju iš:</label>
+              <City
+                :title="start"
+                name="from"
+                @update:city="cityStart = $event"
+              />
+            </div>
+            <div class="col-12">
+              <label for="to">Keliauju į:</label>
+              <City :title="end" name="to" @update:city="cityEnd = $event" />
+            </div>
+            <div class="form-input col-12 ">
+              <label for="to">Kelionės diena:</label>
+              <input
+                v-model="day"
+                type="date"
+                placeholder="Day"
+                class="input-field-global input-field"
+                name="Day"
+              />
+              <span class="focus-border"></span>
+            </div>
+            <div class="form-input col-12 ">
+              <label for="to">Planuoju išvykti:</label>
+              <input
+                v-model="timeStart"
+                type="time"
+                placeholder="Time start"
+                class="input-field-global input-field"
+                name="Start"
+              />
+              <span class="focus-border"></span>
+            </div>
+            <div class="form-input col-12">
+              <label for="to">Planuoju atvykti:</label>
+              <input
+                v-model="timeEnd"
+                type="time"
+                placeholder="Time end"
+                class="input-field-global input-field "
+                name="End"
+              />
+              <span class="focus-border"></span>
+            </div>
+            <div v-if="size > 0" class="col-12">
+              <div class="search-field">
+                <label for="size">Galiu gabenti tokio dydžio siuntą:</label>
 
-              <!-- <span class="material-icons">aspect_ratio</span> -->
-              <div class="form-input " id="select-size">
-                <select
-                  v-model="size"
-                  name="size"
-                  class="input-field input-select input-size"
-                  title="Siuntos dydis"
-                >
-                  <option selected disabled :value="0">Dydis</option>
-                  <option :value="1">Maža</option>
-                  <option :value="2">Vidutinė</option>
-                  <option :value="3">Didelė</option>
-                </select>
+                <!-- <span class="material-icons">aspect_ratio</span> -->
+                <div class="form-input " id="select-size">
+                  <select
+                    v-model="size"
+                    name="size"
+                    class="input-field input-select input-size"
+                    title="Siuntos dydis"
+                  >
+                    <option selected disabled :value="0">Dydis</option>
+                    <option :value="1">Maža</option>
+                    <option :value="2">Vidutinė</option>
+                    <option :value="3">Didelė</option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
+          <div class="d-flex">
+            <input
+              type="submit"
+              value="Paskelbti"
+              class="input-button mr-3"
+              @click="updateAPost"
+            />
+            <router-link
+              to="/home"
+              tag="button"
+              class="input-button input-button-secondary mr-3"
+            >
+              Atgal
+            </router-link>
+          </div>
         </div>
-        <div class="d-flex">
-          <input
-            type="submit"
-            value="Paskelbti"
-            class="input-button mr-3"
-            @click="updateAPost"
-          />
-          <router-link
-            to="/home"
-            tag="button"
-            class="input-button input-button-secondary mr-3"
-          >
-            Atgal
-          </router-link>
-        </div>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -186,11 +189,6 @@ export default {
 
 .col-12 {
   margin-bottom: 40px;
-}
-
-h2 {
-  padding-bottom: 60px;
-  padding-top: 30px;
 }
 
 label {
@@ -205,5 +203,7 @@ label {
   justify-content: center;
   align-items: center;
   margin: 0 auto;
+  margin-top: 50px;
+  margin-bottom: 50px;
 }
 </style>

@@ -36,7 +36,6 @@ export default {
         router.push({ name: "EditPost", params: { id: props.post._id } });
       }
     }
-
     function goToDetails(): void {
       localStorage.setItem("postInMemory", JSON.stringify(props.post));
       localStorage.setItem("postAuthorInMemory", JSON.stringify(author));
@@ -58,7 +57,7 @@ export default {
       moment(moment(props.post.timeStart).format()).format("MMMM")
     );
     const diena = moment(moment(props.post.timeStart).format()).format("DD");
-    const day = menuo + " " + diena;
+    const day = menuo + " " + diena + "      ";
 
     onBeforeMount(async () => {
       await getPostAuthor(props.post.authorId).then(result => {
@@ -86,34 +85,34 @@ export default {
   <div class="post">
     <div v-if="doneLoading == true" class="row">
       <div class="col-12">
-        <h6 class="post-type " v-if="post.type == 1">Siunčiu</h6>
-        <h6 class="post-type " v-else>Keliauju</h6>
+        <span class="post-type" v-if="post.type == 1">Siunčiu</span>
+        <span class="post-type" v-else>Keliauju</span>
       </div>
       <div class="col-11 main" @click="goToDetails">
         <div class="ride-info">
-          <h5 class="grow">{{ post.cityStart }} - {{ post.cityEnd }}</h5>
-          <div class="d-flex">
-            <h6 class="grow">{{ day }}</h6>
-            <h6 class="grow">{{ timeStart }} - {{ timeEnd }}</h6>
+          <span class="grow">{{ post.cityStart }} - {{ post.cityEnd }}</span>
+          <div class="date">
+            <span class="grow">{{ day }}</span>
+            <span class="grow laikas">{{ timeStart }} - {{ timeEnd }}</span>
           </div>
         </div>
         <div class="author-info">
-          <h6>{{ author.firstName }} {{ author.lastName }}</h6>
-          <h6>Įvertinimas: {{ author.rating }}</h6>
+          <span>{{ author.firstName }} {{ author.lastName }}</span>
+          <span>Įvertinimas: {{ author.rating }}/5</span>
         </div>
       </div>
       <div class="col-1">
         <div class="options ">
           <button
             v-if="showOptions"
-            class="btn btn-sm btn-info"
+            class="btn btn-sm btn-info "
             @click="goToEdit"
           >
             <span class="material-icons">edit</span>
           </button>
           <button
             v-if="showOptions"
-            class="btn btn-sm btn-danger"
+            class="btn btn-sm btn-outline-danger"
             @click="deletePost"
           >
             <span class="material-icons">delete</span>
@@ -129,6 +128,19 @@ export default {
 
 <style lang="scss" scoped>
 @import "../assets/styles/variables";
+
+.col-12,
+.col-11 {
+  padding-left: 60px;
+}
+
+.col-11 {
+  padding-right: 20px !important;
+}
+
+.btn-info {
+  background-color: $primary-color;
+}
 
 .post {
   height: 150px;
@@ -147,9 +159,19 @@ export default {
     z-index: 1;
   }
 
+  .date {
+    display: flex;
+    justify-content: space-between;
+
+    .laikas {
+      padding-right: 50px;
+    }
+  }
+
   .post-type {
     font-size: 20px;
     float: left;
+    border-bottom: 1px solid rgb(117, 117, 117);
   }
 
   span {
@@ -157,13 +179,8 @@ export default {
   }
 
   &:hover {
-    // box-shadow: inset 1px 1px 10px 1px $secondary-color;
     box-shadow: 0px 0px 5px rgb(109, 109, 109);
-
-    // box-shadow: 3px 5px 5px $secondary-color;
     transition: box-shadow 0.3s ease-in-out;
-    // border: 2px solid $secondary-color;
-    // background-color: $secondary-color;
     cursor: pointer;
   }
 }
@@ -182,6 +199,7 @@ export default {
   flex-direction: column;
   align-self: center;
   text-align: start;
+  padding-bottom: 10px;
 
   h5,
   h6 {
@@ -208,6 +226,7 @@ export default {
   flex-direction: column;
   align-items: center;
   margin-right: 12px;
+  padding-top: 5px;
   z-index: 10;
 
   span {
@@ -217,6 +236,8 @@ export default {
   }
 
   button:nth-child(1) {
+    outline: none;
+    border: none;
     margin-top: 4px;
     margin-bottom: 4px;
   }

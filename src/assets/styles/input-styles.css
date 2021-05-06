@@ -45,6 +45,7 @@
   border-bottom: 1px solid #ccc !important;
   background-color: transparent;
   width: 100%;
+  font-family: "Rubik", sans-serif;
 }
 
 .input-field::placeholder {

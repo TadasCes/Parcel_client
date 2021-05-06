@@ -38,6 +38,7 @@ export default {
   setup(props: any) {
     const reviewList = ref([]);
     const isLoading = ref(true);
+
     onBeforeMount(async () => {
       await getAllUserReviews(props.id).then(result => {
         reviewList.value = result.data.result;
@@ -84,6 +85,10 @@ export default {
 
 <style lang="scss" scoped>
 @import "../assets/styles/global";
+
+.post {
+  margin-top: 45px;
+}
 
 h2 {
   margin-bottom: 20px;
