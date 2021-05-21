@@ -27,7 +27,12 @@ export default {
     const template = ref("");
     const comment = ref("");
     const type = ref(0);
+    const extraInfo = ref([]);
     const canChange = ref(false);
+    const urgent = ref("");
+    const fragile = ref("");
+    const animal = ref("");
+
     function loadParcel() {
       show.value = false;
       template.value = "parcel";
@@ -40,7 +45,18 @@ export default {
       type.value = 2;
     }
 
+    function convertBool(value) {
+      if (value == true) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
     function createNewPost(): void {
+      console.log(urgent.value);
+      console.log(fragile.value);
+      console.log(animal.value);
       if (
         cityStart.value != "" &&
         cityEnd.value != "" &&
@@ -49,8 +65,7 @@ export default {
         timeEnd.value != "" &&
         size.value != 0
       ) {
-        console.log(user.value);
-        const newPost: IPost = {
+        const newPost: any = {
           type: type.value,
           cityStart: cityStart.value,
           cityEnd: cityEnd.value,
@@ -59,7 +74,11 @@ export default {
           timeEnd: timeEnd.value,
           comment: comment.value,
           canChange: canChange.value,
-          authorId: user.value._id
+          authorId: user.value._id,
+          animal: convertBool(animal.value),
+          urgent: convertBool(urgent.value),
+          fragile: convertBool(fragile.value),
+          seenCount: 0
         };
         createPost(newPost);
         console.log(newPost);
@@ -82,8 +101,12 @@ export default {
       loadTravel,
       show,
       size,
+      urgent,
+      fragile,
+      animal,
       template,
-      createNewPost
+      createNewPost,
+      extraInfo
     };
   },
   methods: {}
@@ -222,6 +245,43 @@ export default {
               </div>
             </div>
           </div>
+          <div class="col-12">
+            <label for="size" class="radio-main">Papildoma info</label>
+            <div id="v-model-multiple-checkboxes" class="radio-btns">
+              <div class="choices">
+                <div class="radio-box ">
+                  <label class="radio-label" for="urgent">Skubus</label>
+                  <input
+                    class="radio-btn"
+                    type="checkbox"
+                    id="urgent"
+                    value="true"
+                    v-model="urgent"
+                  />
+                </div>
+                <div class="radio-box ">
+                  <label class="radio-label" for="fragile">Dūžtantis</label>
+                  <input
+                    class="radio-btn"
+                    type="checkbox"
+                    id="fragile"
+                    value="true"
+                    v-model="fragile"
+                  />
+                </div>
+                <div class="radio-box ">
+                  <label class="radio-label" for="Gyvūnas">Gyvūnas</label>
+                  <input
+                    class="radio-btn"
+                    type="checkbox"
+                    id="Gyvūnas"
+                    value="true"
+                    v-model="animal"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="form-field col-12">
             <div class="search-field">
               <label for="size">Papildomi komentarai</label>
@@ -304,6 +364,28 @@ form {
 .main-form {
   width: 75%;
   margin: 0 auto;
+}
+
+.radio-btns {
+  padding-top: 10px;
+  float: left;
+
+  .radio-label {
+    float: none !important;
+    font-weight: normal !important;
+    font-size: 15px !important;
+    margin-right: 5px;
+  }
+
+  .radio-box {
+    margin: 10px;
+    display: inline;
+  }
+
+  .radio-main {
+    width: 100%;
+    text-align: left;
+  }
 }
 
 label {

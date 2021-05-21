@@ -7,10 +7,17 @@ import {
   onBeforeMount,
   onDeactivated,
   onMounted,
-  onUnmounted
+  onRenderTracked,
+  onRenderTriggered,
+  onUnmounted,
+  ref,
+  watch,
+  Ref
 } from "vue";
 import { useStore } from "vuex";
 import router from "@/router";
+import { fetchAllPosts } from "@/services/post.api.service";
+import moment from "moment";
 
 export default {
   components: {
@@ -22,15 +29,32 @@ export default {
   setup() {
     const store = useStore();
     const posts = computed(() => store.state.posts.posts);
+    const pageList = computed(() => store.state.posts.pageList);
+    const currentPage = computed(() => store.state.posts.page);
+
+    function nextPage() {
+      store.dispatch("posts/nextPage");
+      store.dispatch("posts/getCurrentPage");
+    }
+
+    function previousPage() {
+      store.dispatch("posts/previousPage");
+      store.dispatch("posts/getCurrentPage");
+    }
 
     onBeforeMount(() => {
-      store.dispatch("posts/getAllPosts");
-      console.log(posts.value[2]);
+      store.dispatch("posts/resetPage");
+      store.dispatch("posts/firstPage");
+
       localStorage.removeItem("postInMemory");
       localStorage.removeItem("postAuthorInMemory");
     });
 
-    return { posts };
+    onUnmounted(() => {
+      store.dispatch("posts/resetPage");
+    });
+
+    return { posts, previousPage, nextPage, pageList, currentPage };
   }
 };
 </script>
@@ -44,6 +68,14 @@ export default {
     <div class="container">
       <div v-if="posts.length > 0">
         <Post v-for="post in posts" :key="post._id" :post="post"></Post>
+        <i class="fas fa-arrow-left" @click="previousPage()"></i>
+        <span
+          v-for="page in pageList"
+          :key="page"
+          :class="page == currentPage ? 'current-page' : 'page-number'"
+          >{{ page }}</span
+        >
+        <i class="fas fa-arrow-right" @click="nextPage()"></i>
       </div>
       <div v-else>
         <h3>Įrašų nėra</h3>
@@ -53,6 +85,23 @@ export default {
 </template>
 
 <style lang="scss" scoped>
+@import "../assets/styles/variables";
+
+.page-number {
+  margin: 0 5px 0 5px;
+  font-size: 20px;
+}
+.current-page {
+  margin: 0 5px 0 5px;
+  font-size: 25px;
+  font-weight: bold;
+  color: $primary-color;
+}
+
+i {
+  margin: 10px;
+}
+
 .container {
   width: 50%;
   padding: 20px 20px 10px 20px;

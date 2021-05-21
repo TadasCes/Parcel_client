@@ -38,6 +38,7 @@ export default {
     function loginUser() {
       if (validateForm()) {
         login({ email: email.value, password: password.value }).then(error => {
+          console.log(error);
           if (error == "Incorrect password.") {
             formValidity.password = false;
             errorPassword.value = error;

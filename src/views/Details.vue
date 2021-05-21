@@ -63,8 +63,8 @@ export default {
     }
 
     function isEndTimeHasPassed() {
-      const myDate = moment(post.day, "YYYY-MM-DD").toDate();
-      const isPassed = moment(now).isAfter(myDate);
+      const myDate = moment(post.timeStart).format("YYYY-MM-DD");
+      const isPassed = moment(now, "YYYY-MM-DD").isAfter(myDate);
       return isPassed;
     }
     isEndTimeHasPassed();
@@ -184,32 +184,73 @@ export default {
                   <hr />
                 </div>
               </div>
-              <h3 class="mb-3">Planuojamas maršrutas</h3>
-              <div class="route-section font-rubik">
-                <div class="text-apart">
-                  <span>Pradžia:</span>
-                  <span>{{ post.cityStart }}</span>
+              <div class="row">
+                <div class="col-lg-7">
+                  <div v-if="post.type == 1">
+                    <h4 class="mb-3">Siunčiama</h4>
+                  </div>
+                  <div v-else>
+                    <h4 class="mb-3">Keliaujama</h4>
+                  </div>
+                  <div class="route-section font-rubik">
+                    <div class="text-apart">
+                      <span>Iš:</span>
+                      <span>{{ post.cityStart }}</span>
+                    </div>
+                    <div class="text-apart">
+                      <span>Į:</span>
+                      <span>{{ post.cityEnd }}</span>
+                    </div>
+                  </div>
                 </div>
-                <div class="text-apart">
-                  <span>Pabaiga:</span>
-                  <span>{{ post.cityEnd }}</span>
+                <div class="col-lg-5">
+                  <h4>Papiloma info:</h4>
+                  <div v-if="post.type == 1">
+                    <div v-if="post.urgent == true">
+                      <span>Skubi siunta</span>
+                    </div>
+                    <div v-if="post.fragile == true">
+                      <span>Dūžtanti siunta</span>
+                    </div>
+                    <div v-if="post.animal == true">
+                      <span>Gyvūnas</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-
-            <div class="time-section">
-              <h3 class="mb-3">Laikas</h3>
-              <div class="font-rubik">
-                <div class="route-section">
-                  <div class="text-apart">
-                    <span>Nuo:</span>
-                    <span>{{ dayFormated }} {{ timeStartFormated }}</span>
-                  </div>
-                  <div class="text-apart">
-                    <span>Iki:</span>
-                    <span>{{ dayFormated }} {{ timeEndFormated }}</span>
+            <div class="row pb-5"></div>
+            <div class="row">
+              <div class="col-lg-7">
+                <h4 class="">Laikas</h4>
+                <div class="font-rubik">
+                  <div class="route-section">
+                    <div class="text-apart">
+                      <span>Nuo:</span>
+                      <span>{{ dayFormated }} {{ timeStartFormated }}</span>
+                    </div>
+                    <div class="text-apart">
+                      <span>Iki:</span>
+                      <span>{{ dayFormated }} {{ timeEndFormated }}</span>
+                    </div>
                   </div>
                 </div>
+              </div>
+              <div class="col-lg-5">
+                <h4 class="">Komentaras</h4>
+                <div class="font-rubik">
+                  <div v-if="post.comment != ''">
+                    <span>{{ post.comment }}</span>
+                  </div>
+                  <div v-else>
+                    <span>Nėra</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12 mx-auto perziuros">
+                Peržiūrų skaičius: {{ post.seenCount }}
               </div>
             </div>
           </div>
@@ -217,7 +258,7 @@ export default {
           <div class="col-xl-4 col-lg-12 item-padding">
             <div class=" content ">
               <div v-if="isAuthorLoggedNow == false">
-                <div v-if="type == 1">
+                <div v-if="post.type == 1">
                   <span class="korteles-header">Siunčia</span>
                   <hr />
                 </div>
@@ -252,7 +293,7 @@ export default {
               <div>
                 <div v-if="isAuthorLoggedNow == false">
                   <div v-if="isAuth == true" class="buttons">
-                    <div v-if="isEndTimeHasPassed == false">
+                    <div v-if="isEndTimeHasPassed() === false">
                       <button class="input-button" @click="contactAuthor">
                         Susisiekti
                       </button>
@@ -260,21 +301,19 @@ export default {
                     <button class="input-button" @click="leaveAReview()">
                       Palikti atsiliepimą
                     </button>
-                    <button class="input-button" @click="readReviews()">
-                      Peržiūrėti atsiliepimus
-                    </button>
                   </div>
+                  <button class="input-button" @click="readReviews()">
+                    Peržiūrėti atsiliepimus
+                  </button>
                 </div>
                 <div v-if="isAuthorLoggedNow == true" class="buttons btns-auth">
-                  <div v-if="type == 1">
-                    <div v-if="isEndTimeHasPassed() == true">
+                  <div v-if="isEndTimeHasPassed() === true">
+                    <div v-if="post.type == 1">
                       <button class="input-button" @click="parcelDelivered()">
                         Siunta nusiųsta
                       </button>
                     </div>
-                  </div>
-                  <div v-if="type == 2">
-                    <div v-if="isEndTimeHasPassed() == true">
+                    <div v-if="post.type == 2">
                       <button class="input-button" @click="tripEnded()">
                         Kelionė baigta
                       </button>
@@ -325,6 +364,10 @@ export default {
 .container {
   width: 75%;
   margin-top: 40px;
+}
+
+.perziuros {
+  margin-top: 15px;
 }
 
 .time-section {

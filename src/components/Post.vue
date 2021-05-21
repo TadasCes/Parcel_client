@@ -5,7 +5,7 @@ import { computed, onBeforeMount, ref } from "vue";
 import { monthToLT } from "../utility/utils";
 import router from "@/router";
 import IUser from "@/interfaces/IUser";
-import { getPostAuthor } from "@/services/post.api.service";
+import { addView, getPostAuthor } from "@/services/post.api.service";
 
 export default {
   props: {
@@ -36,16 +36,18 @@ export default {
         router.push({ name: "EditPost", params: { id: props.post._id } });
       }
     }
-    function goToDetails(): void {
-      localStorage.setItem("postInMemory", JSON.stringify(props.post));
-      localStorage.setItem("postAuthorInMemory", JSON.stringify(author));
-      router.push({
-        name: "Details",
-        params: {
-          id: props.post._id,
-          postProp: JSON.stringify(props.post),
-          authorProp: JSON.stringify(author)
-        }
+    async function goToDetails() {
+      await addView(props.post._id).then(() => {
+        localStorage.setItem("postInMemory", JSON.stringify(props.post));
+        localStorage.setItem("postAuthorInMemory", JSON.stringify(author));
+        router.push({
+          name: "Details",
+          params: {
+            id: props.post._id,
+            postProp: JSON.stringify(props.post),
+            authorProp: JSON.stringify(author)
+          }
+        });
       });
     }
 

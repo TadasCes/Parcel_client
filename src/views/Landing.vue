@@ -11,7 +11,7 @@ export default {
 <template>
   <div>
     <Navigation />
-    <div class="main-content">
+    <div class="main-content item-padding">
       <div class="section-header">
         <h1>Persiųskite siuntą lengviau</h1>
         <h6>Perduokite siuntą keliaujantiems žmonėms</h6>
@@ -33,6 +33,10 @@ export default {
 <style lang="scss" scoped>
 @import "../assets/styles/variables.scss";
 @import "../assets/styles/global.scss";
+
+.item-padding {
+  padding-bottom: 120px;
+}
 
 .section-options {
   display: flex;

@@ -84,7 +84,7 @@
                   placeholder="Telefono nr. +370..."
                   class="input-field "
                   name="phone"
-                  pattern="[0-9]{11}"
+                  pattern="[+]{1}[0-9]{11}"
                 />
                 <span
                   :class="
@@ -93,7 +93,7 @@
                       : 'focus-border'
                   "
                 ></span>
-                <div v-show="formValidity.email == false" class="error-text">
+                <div v-show="formValidity.phone == false" class="error-text">
                   * {{ errorPhone }}
                 </div>
               </div>
@@ -200,6 +200,7 @@ export default {
     const firstName = ref("");
     const lastName = ref("");
     const phone = ref("");
+    const day = ref("2000-01-01");
 
     const formValidity = reactive({
       email: true,
@@ -263,7 +264,7 @@ export default {
       errorPassword,
       submitNewUser,
       formValidity,
-      validateForm
+      day
     };
   }
 };
