@@ -17,33 +17,39 @@ export default {
   setup() {
     const store = useStore();
     const posts = computed(() => store.state.posts.posts);
-    const activePosts: Ref<IPost[]> = ref([]);
-    const archivedPosts: Ref<IPost[]> = ref([]);
+    const activePosts = computed(() => store.state.posts.activePosts);
+    const archivedPosts = computed(() => store.state.posts.archivedPosts);
     const user = computed(() => store.state.loggedUser);
 
     function goToDetails(id: string): void {
       router.push({ name: "Details", params: { id } });
     }
 
-    function filterUserPosts() {
-      posts.value.forEach((post: IPost) => {
-        if (post.authorId == user.value._id) {
-          const postDate = post.timeEnd.substring(0, 10);
-          const nowDate = moment().format("YYYY-MM-DD");
-          if (postDate > nowDate) {
-            activePosts.value.push(post);
-          } else {
-            archivedPosts.value.push(post);
-          }
-        }
-      });
-    }
+    // function filterUserPosts() {
+    //   console.log(posts.value);
+    //   posts.value.forEach((post: IPost) => {
+    //     if (post.authorId == user.value._id) {
+    //       const postDate = post.timeEnd.substring(0, 10);
+    //       const nowDate = moment().format("YYYY-MM-DD");
+    //       console.log(post);
+    //       if (postDate >= nowDate) {
+    //         if (post.isActive == true) {
+    //           activePosts.value.push(post);
+    //         } else {
+    //           archivedPosts.value.push(post);
+    //         }
+    //       } else {
+    //         archivedPosts.value.push(post);
+    //       }
+    //     }
+    //   });
+    // }
 
-    onBeforeMount(() => {
-      store.dispatch("posts/getAllPosts").then(() => {
-        filterUserPosts();
-      });
-    });
+    // onBeforeMount(() => {
+    //   store.dispatch("posts/getAllPosts").then(() => {
+    //     filterUserPosts();
+    //   });
+    // });
 
     return { activePosts, archivedPosts, goToDetails };
   }
@@ -60,7 +66,7 @@ export default {
       </div>
     </div>
     <div>
-      <h1>Archyvuoti skelbimai</h1>
+      <h1>Archyvuoti ir neaktyvūs skelbimai</h1>
       <div class="container">
         <Post v-for="post in archivedPosts" :key="post._id" :post="post"></Post>
       </div>
@@ -86,39 +92,6 @@ h1 {
   width: 50%;
   padding: 20px 20px 10px 20px;
   position: relative;
-}
-
-.post {
-  height: 150px;
-  background: #fff;
-  margin: 20px auto;
-  box-shadow: 0px 0px 10px rgb(206, 206, 206);
-  // box-shadow: 3px 5px 5px rgb(206, 206, 206);
-  transition: box-shadow 0.3s ease-in-out;
-
-  border-radius: 12px;
-  padding: 16px 20px;
-
-  .row {
-    padding: 16px, 20px;
-    height: 100%;
-    z-index: 1;
-  }
-
-  span {
-    display: block;
-  }
-
-  &:hover {
-    // box-shadow: inset 1px 1px 10px 1px $secondary-color;
-    box-shadow: 0px 0px 5px rgb(109, 109, 109);
-
-    // box-shadow: 3px 5px 5px $secondary-color;
-    transition: box-shadow 0.3s ease-in-out;
-    // border: 2px solid $secondary-color;
-    // background-color: $secondary-color;
-    cursor: pointer;
-  }
 }
 
 .main {

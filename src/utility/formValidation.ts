@@ -1,8 +1,8 @@
 import moment from "moment";
 
-export function validateText(text: string): boolean {
+export function validateText(text: string): any {
   if (text.length < 3) {
-    return false;
+    return "Turi būti daugiau nei 3 simboliai";
   } else {
     return true;
   }

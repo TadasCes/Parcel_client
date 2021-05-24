@@ -7,16 +7,21 @@ import {
   fetchFilteredPosts,
   fetchFilteredParcels,
   fetchLimitedPosts,
-  fetchAllValidPosts
+  fetchAllValidPosts,
+  activatePost,
+  deactivatePost
 } from "../services/post.api.service";
 import IUser from "@/interfaces/IUser";
 import IPost from "@/interfaces/IPost";
 import IParcel from "@/interfaces/IParcel";
+import moment from "moment";
 
 const posts = {
   namespaced: true,
   state: {
     posts: [] as IPost[],
+    activePosts: [] as IPost[],
+    archivedPosts: [] as IPost[],
     parcels: [] as IPost[],
     postInMemory: {} as IPost,
     pageList: [] as number[],
@@ -26,14 +31,32 @@ const posts = {
 
   mutations: {
     async SET_POSTS(state: any, posts: IPost[]) {
-      await fetchAllValidPosts().then(result => {
+      await fetchAllPosts().then(result => {
         const pages = Math.ceil(result.length / 5);
-        console.log(result.length / 5);
         state.pageList.length = 0;
         for (let i = 1; i <= pages; i++) {
           state.pageList.push(i);
         }
+        const activePosts: Array<any> = [];
+        const archivedPosts: Array<any> = [];
+        result.forEach((post: any) => {
+          const postDate = post.timeEnd.substring(0, 10);
+          const nowDate = moment().format("YYYY-MM-DD");
+          if (postDate >= nowDate) {
+            if (post.isActive == true) {
+              console.log(post);
+              activePosts.push(post);
+            } else {
+              archivedPosts.push(post);
+            }
+          } else {
+            console.log(post);
+            archivedPosts.push(post);
+          }
+        });
         state.posts = posts;
+        state.activePosts = activePosts;
+        state.archivedPosts = archivedPosts;
       });
     },
     SAVE_POST(state: any, post: IPost) {
@@ -74,7 +97,6 @@ const posts = {
       });
     },
     async getAllPosts(state) {
-      console.log(state.getters.getAllPosts);
       const pages = Math.ceil(state.getters.getAllPosts / 5);
       state.commit("SET_PAGE_COUNT", pages);
     },
@@ -101,6 +123,14 @@ const posts = {
     },
     async deleteAPost({ dispatch }: any, id: string) {
       await deletePost(id);
+      dispatch("getAllPosts");
+    },
+    async deactivateAPost({ dispatch }: any, id: string) {
+      await deactivatePost(id);
+      dispatch("getAllPosts");
+    },
+    async activateAPost({ dispatch }: any, id: string) {
+      await activatePost(id);
       dispatch("getAllPosts");
     }
   },

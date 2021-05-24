@@ -22,6 +22,7 @@ export default {
     const doneLoading = ref(false);
     let author: IUser;
     if (props.post.authorId === user.value._id) showOptions.value = true;
+    const dueToday = ref(false);
 
     function deletePost() {
       console.log(props.post._id);
@@ -61,11 +62,20 @@ export default {
     const diena = moment(moment(props.post.timeStart).format()).format("DD");
     const day = menuo + " " + diena + "      ";
 
+    function veryUrgent() {
+      const postDate = moment(props.post.timeStart).format("YYYY-MM-DD");
+      const nowDate = moment().format("YYYY-MM-DD");
+      if (postDate == nowDate) {
+        dueToday.value = true;
+      }
+    }
+
     onBeforeMount(async () => {
       await getPostAuthor(props.post.authorId).then(result => {
         author = result.result;
         doneLoading.value = true;
       });
+      veryUrgent();
     });
 
     return {
@@ -77,18 +87,53 @@ export default {
       goToEdit,
       goToDetails,
       author: computed(() => author),
-      doneLoading
+      doneLoading,
+      dueToday
     };
   }
 };
 </script>
 
 <template>
-  <div class="post">
+  <div
+    class="post"
+    :class="[
+      dueToday == true ? 'urgent' : '',
+      post.isActive == false ? 'not-active' : ''
+    ]"
+  >
     <div v-if="doneLoading == true" class="row">
       <div class="col-12">
-        <span class="post-type" v-if="post.type == 1">Siunčiu</span>
-        <span class="post-type" v-else>Keliauju</span>
+        <div class="top-post-header">
+          <div>
+            <span class="post-type" v-if="post.type == 1">Siunčiu</span>
+            <span class="post-type" v-else>Keliauju</span>
+          </div>
+          <div>
+            <div v-if="dueToday == true">
+              <span class="post-type-urgent">Šiandien</span>
+            </div>
+
+            <div v-if="post.isActive == false">
+              <span class="post-type-not-active">Neaktyvus</span>
+            </div>
+
+            <div
+              class="icons"
+              :class="dueToday == true || post.isActive == false ? 'iSona' : ''"
+            >
+              <div v-if="post.urgent == true">
+                <i class="fas fa-fire"></i>
+              </div>
+              <div v-if="post.fragile == true">
+                <i class="fas fa-wine-glass"></i>
+              </div>
+              <div v-if="post.animal == true">
+                <i class="fas fa-paw"></i>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="col-11 main" @click="goToDetails">
         <div class="ride-info">
@@ -144,6 +189,11 @@ export default {
   background-color: $primary-color;
 }
 
+.urgent {
+  // border: 5px solid rgb(255, 189, 189) !important;
+  box-shadow: 0px 0px 10px rgb(255, 61, 61) !important;
+}
+
 .post {
   height: 150px;
   background: #fff;
@@ -176,6 +226,20 @@ export default {
     border-bottom: 1px solid rgb(117, 117, 117);
   }
 
+  .post-type-urgent {
+    font-size: 20px;
+    float: right;
+    margin-right: 60px;
+    border-bottom: 1px solid rgb(255, 61, 61);
+  }
+
+  .post-type-not-active {
+    font-size: 20px;
+    float: right;
+    margin-right: 60px;
+    border-bottom: 1px solid rgb(117, 117, 117);
+  }
+
   span {
     display: block;
   }
@@ -187,11 +251,45 @@ export default {
   }
 }
 
+.top-post-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.icons {
+  margin-right: 80px;
+  display: flex;
+
+  i {
+    padding-left: 10px;
+    font-size: 20px;
+  }
+
+  .fa-fire {
+    color: rgb(255, 107, 61);
+  }
+  .fa-wine-glass {
+    color: rgb(134, 134, 134);
+  }
+  .fa-paw {
+    color: rgb(122, 85, 3);
+  }
+}
+
+.iSona {
+  padding-top: 5px;
+  margin-right: 180px;
+}
+
 .main {
   display: flex;
   align-items: center;
   text-align: start;
   padding-right: 0px;
+}
+
+.not-active {
+  background-color: rgb(212, 212, 212);
 }
 
 .ride-info {

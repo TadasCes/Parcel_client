@@ -28,7 +28,7 @@ export default {
     const comment = ref("");
     const type = ref(0);
     const extraInfo = ref([]);
-    const canChange = ref(false);
+    const canChange = ref("");
     const urgent = ref("");
     const fragile = ref("");
     const animal = ref("");
@@ -54,9 +54,6 @@ export default {
     }
 
     function createNewPost(): void {
-      console.log(urgent.value);
-      console.log(fragile.value);
-      console.log(animal.value);
       if (
         cityStart.value != "" &&
         cityEnd.value != "" &&
@@ -73,11 +70,12 @@ export default {
           timeStart: timeStart.value,
           timeEnd: timeEnd.value,
           comment: comment.value,
-          canChange: canChange.value,
+          canChange: convertBool(canChange.value),
           authorId: user.value._id,
           animal: convertBool(animal.value),
           urgent: convertBool(urgent.value),
           fragile: convertBool(fragile.value),
+          isActive: true,
           seenCount: 0
         };
         createPost(newPost);
@@ -249,35 +247,51 @@ export default {
             <label for="size" class="radio-main">Papildoma info</label>
             <div id="v-model-multiple-checkboxes" class="radio-btns">
               <div class="choices">
-                <div class="radio-box ">
-                  <label class="radio-label" for="urgent">Skubus</label>
-                  <input
-                    class="radio-btn"
-                    type="checkbox"
-                    id="urgent"
-                    value="true"
-                    v-model="urgent"
-                  />
+                <div v-if="template === 'parcel'">
+                  <div class="radio-box ">
+                    <label class="radio-label" for="urgent">Skubus</label>
+                    <input
+                      class="radio-btn"
+                      type="checkbox"
+                      id="urgent"
+                      value="true"
+                      v-model="urgent"
+                    />
+                  </div>
+                  <div class="radio-box ">
+                    <label class="radio-label" for="fragile">Dūžtantis</label>
+                    <input
+                      class="radio-btn"
+                      type="checkbox"
+                      id="fragile"
+                      value="true"
+                      v-model="fragile"
+                    />
+                  </div>
+                  <div class="radio-box ">
+                    <label class="radio-label" for="Gyvūnas">Gyvūnas</label>
+                    <input
+                      class="radio-btn"
+                      type="checkbox"
+                      id="Gyvūnas"
+                      value="true"
+                      v-model="animal"
+                    />
+                  </div>
                 </div>
-                <div class="radio-box ">
-                  <label class="radio-label" for="fragile">Dūžtantis</label>
-                  <input
-                    class="radio-btn"
-                    type="checkbox"
-                    id="fragile"
-                    value="true"
-                    v-model="fragile"
-                  />
-                </div>
-                <div class="radio-box ">
-                  <label class="radio-label" for="Gyvūnas">Gyvūnas</label>
-                  <input
-                    class="radio-btn"
-                    type="checkbox"
-                    id="Gyvūnas"
-                    value="true"
-                    v-model="animal"
-                  />
+                <div v-if="template === 'travel'" class="pt-1 ml-3">
+                  <div class="radio-box ">
+                    <label class="radio-label" for="fragile"
+                      >Galima koreguoti maršrutą</label
+                    >
+                    <input
+                      class="radio-btn "
+                      type="checkbox"
+                      id="fragile"
+                      value="true"
+                      v-model="canChange"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -367,7 +381,7 @@ form {
 }
 
 .radio-btns {
-  padding-top: 10px;
+  //padding-top: 10px;
   float: left;
 
   .radio-label {

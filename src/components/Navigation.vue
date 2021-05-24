@@ -1,6 +1,13 @@
 <script lang="ts">
 import { ref } from "vue";
-import { isAuthenticated, logout } from "../services/user.api.service";
+import {
+  getOneUser,
+  isAuthenticated,
+  logout,
+  setLoggedUser
+} from "../services/user.api.service";
+import store from "@/store";
+import router from "@/router";
 export default {
   setup() {
     const collapsed = ref(false);
@@ -13,7 +20,19 @@ export default {
       console.log(collapsed.value);
     }
 
-    return { logoutUser, isAuthenticated, openMenu, collapsed };
+    async function goToProfile() {
+      let user: any = localStorage.getItem("user");
+      user = JSON.parse(user);
+      console.log(user);
+      await getOneUser(user._id).then(response => {
+        localStorage.setItem("user", JSON.stringify(response));
+        store.commit("SET_LOGGED_USER", response);
+
+        router.push("/profile");
+      });
+    }
+
+    return { logoutUser, goToProfile, isAuthenticated, openMenu, collapsed };
   }
 };
 </script>
@@ -48,7 +67,7 @@ export default {
                 <router-link to="/create-post">Patalpinti skelbimą</router-link>
               </li>
               <li>
-                <router-link to="/profile">Profilis</router-link>
+                <span @click="goToProfile()">Profilis</span>
               </li>
               <li>
                 <router-link to="/login" @click="logoutUser">

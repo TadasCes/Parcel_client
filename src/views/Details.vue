@@ -47,7 +47,7 @@ export default {
       post = JSON.parse(postInMemory);
       author = JSON.parse(postAuthorInMemory);
     }
-
+    console.log(post);
     const reviewCount = author.reviews.length;
 
     const isAuth = isAuthenticated();
@@ -126,6 +126,24 @@ export default {
       // deletePost();
     }
 
+    function allUserPosts() {
+      router.push("");
+    }
+
+    function deactivatePost() {
+      store.dispatch("posts/deactivateAPost", post._id);
+      console.log(post);
+      alert("Įrašas deaktyvuotas");
+      router.push("/home");
+    }
+
+    function activatePost() {
+      store.dispatch("posts/activateAPost", post._id);
+      console.log(post);
+      alert("Įrašas aktyvuotas iš naujo");
+      router.push("/home");
+    }
+
     function readReviews() {
       router.push({
         name: "UserReviews",
@@ -142,14 +160,17 @@ export default {
       leaveAReview,
       dayFormated,
       reviewCount,
+      activatePost,
       timeStartFormated,
       timeEndFormated,
       editPost,
+      allUserPosts,
       isAuth,
       deletePost,
       isAuthorLoggedNow,
       isEndTimeHasPassed,
       tripEnded,
+      deactivatePost,
       parcelDelivered,
       type,
       post,
@@ -214,6 +235,14 @@ export default {
                     </div>
                     <div v-if="post.animal == true">
                       <span>Gyvūnas</span>
+                    </div>
+                    <div v-else>
+                      <span>Paprastas siuntinys</span>
+                    </div>
+                  </div>
+                  <div v-if="post.type == 2">
+                    <div v-if="post.canChange == true">
+                      <span>Galima koreguoti maršrutą</span>
                     </div>
                   </div>
                 </div>
@@ -290,7 +319,7 @@ export default {
                   <span>{{ author.sentCount }}</span>
                 </div>
               </div>
-              <div>
+              <div class="mt-3">
                 <div v-if="isAuthorLoggedNow == false">
                   <div v-if="isAuth == true" class="buttons">
                     <div v-if="isEndTimeHasPassed() === false">
@@ -307,6 +336,16 @@ export default {
                   </button>
                 </div>
                 <div v-if="isAuthorLoggedNow == true" class="buttons btns-auth">
+                  <div v-if="post.isActive == true">
+                    <button class="input-button" @click="deactivatePost()">
+                      Deaktyvuoti įrašą
+                    </button>
+                  </div>
+                  <div v-else>
+                    <button class="input-button" @click="activatePost()">
+                      Aktyvuoti įrašą
+                    </button>
+                  </div>
                   <div v-if="isEndTimeHasPassed() === true">
                     <div v-if="post.type == 1">
                       <button class="input-button" @click="parcelDelivered()">
@@ -326,6 +365,11 @@ export default {
                     Pašalinti įrašą
                   </button>
                 </div>
+                <!-- <div>
+                  <button class="input-button" @click="allUserPosts()">
+                    Peržiūrėti visus vartotojo įrašus
+                  </button>
+                </div> -->
               </div>
             </div>
           </div>
@@ -357,7 +401,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  width: 60%;
+  width: 90%;
   margin: 0 auto;
 }
 
@@ -367,7 +411,7 @@ export default {
 }
 
 .perziuros {
-  margin-top: 15px;
+  margin-top: 30px;
 }
 
 .time-section {

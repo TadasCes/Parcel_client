@@ -28,9 +28,10 @@ export default {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   setup() {
     const store = useStore();
-    const posts = computed(() => store.state.posts.posts);
+    const posts = computed(() => store.state.posts.activePosts);
     const pageList = computed(() => store.state.posts.pageList);
     const currentPage = computed(() => store.state.posts.page);
+    const page = ref(0);
 
     function nextPage() {
       store.dispatch("posts/nextPage");
@@ -54,7 +55,7 @@ export default {
       store.dispatch("posts/resetPage");
     });
 
-    return { posts, previousPage, nextPage, pageList, currentPage };
+    return { posts, previousPage, page, nextPage, pageList, currentPage };
   }
 };
 </script>

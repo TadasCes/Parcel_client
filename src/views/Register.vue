@@ -188,7 +188,7 @@
 
 <script lang="ts">
 import { reactive, ref } from "vue";
-import { createUser } from "../services/user.api.service";
+import { createUser, login } from "../services/user.api.service";
 import { validatePassword } from "../utility/authValidation";
 import * as searchFormValidation from "../utility/formValidation";
 import router from "@/router";
@@ -248,6 +248,7 @@ export default {
           phone: phone.value
         });
         alert("Vartotojas sekmingai sukurtas!");
+        router.push("/login");
       }
     }
 

@@ -16,7 +16,7 @@ export async function createUser(body: any) {
     });
 }
 
-export async function getOneUser(id: string) {
+export async function getOneUser(id: any) {
   return axios
     .get(`http://localhost:5000/api/users/${id}`)
     .then(response => {
@@ -43,7 +43,7 @@ export async function getAllUserReviews(id: string) {
     });
 }
 
-function setLoggedUser(response: any) {
+export async function setLoggedUser(response: any) {
   console.log(response);
   localStorage.setItem("user", JSON.stringify(response.data.user));
   store.commit("SET_LOGGED_USER", response.data.user);

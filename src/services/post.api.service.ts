@@ -22,7 +22,7 @@ export async function fetchLimitedPosts(page, limit) {
 
 export async function fetchAllValidPosts() {
   return axios
-    .get(`http://localhost:5000/api/posts//all-valid-posts`)
+    .get(`http://localhost:5000/api/posts/all-valid-posts`)
     .then(response => {
       return response.data.result;
     });
@@ -95,6 +95,20 @@ export async function addView(id: string) {
 export async function deletePost(id: string) {
   return axios
     .delete(`http://localhost:5000/api/posts/${id}`)
+    .then(response => {
+      return response.data.result;
+    });
+}
+export async function deactivatePost(id: string) {
+  return axios
+    .put(`http://localhost:5000/api/posts/${id}/deactivate`)
+    .then(response => {
+      return response.data.result;
+    });
+}
+export async function activatePost(id: string) {
+  return axios
+    .put(`http://localhost:5000/api/posts/${id}/activate`)
     .then(response => {
       return response.data.result;
     });

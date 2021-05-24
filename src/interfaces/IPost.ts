@@ -9,6 +9,10 @@ export default interface IPost {
   timeEnd: string;
   comment: string;
   size?: number;
-  authorId: string
-  canChange: boolean
+  authorId: string;
+  canChange: boolean;
+  urget?: boolean;
+  fragile?: boolean;
+  animal?: boolean;
+  isActive: boolean;
 }
