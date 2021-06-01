@@ -66,11 +66,13 @@ export default {
         type: type.value,
         size: size.value
       };
-      console.log(validateForm(formData));
-      if (validateForm(formData)) {
-        store.dispatch("posts/getFilteredPosts", formData);
-        router.push("/home");
-      }
+      store.dispatch("posts/getFilteredPosts", formData);
+      router.push("/home");
+      // console.log(validateForm(formData));
+      // if (validateForm(formData)) {
+      //   store.dispatch("posts/getFilteredPosts", formData);
+      //   router.push("/home");
+      // }
     }
 
     return {

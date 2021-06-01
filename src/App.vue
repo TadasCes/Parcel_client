@@ -10,7 +10,8 @@ export default {
   name: "App",
   setup() {
     const store = useStore();
-    store.dispatch("posts/getAllPosts");
+    store.dispatch("posts/getPosts");
+    store.dispatch("posts/setPages");
     const user = localStorage.getItem("user");
     if (user) {
       store.commit("SET_LOGGED_USER", JSON.parse(user));

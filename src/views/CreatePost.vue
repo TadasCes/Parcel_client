@@ -70,13 +70,14 @@ export default {
           timeStart: timeStart.value,
           timeEnd: timeEnd.value,
           comment: comment.value,
+          size: size.value,
           canChange: convertBool(canChange.value),
           authorId: user.value._id,
           animal: convertBool(animal.value),
           urgent: convertBool(urgent.value),
           fragile: convertBool(fragile.value),
           isActive: true,
-          seenCount: 0
+          seenCount: 1
         };
         createPost(newPost);
         console.log(newPost);

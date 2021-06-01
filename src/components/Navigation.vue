@@ -67,7 +67,7 @@ export default {
                 <router-link to="/create-post">Patalpinti skelbimą</router-link>
               </li>
               <li>
-                <span @click="goToProfile()">Profilis</span>
+                <span @click="goToProfile()" class="mr-3">Profilis</span>
               </li>
               <li>
                 <router-link to="/login" @click="logoutUser">

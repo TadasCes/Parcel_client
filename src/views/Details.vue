@@ -12,6 +12,7 @@ import {
   increaseSent
 } from "../services/user.api.service";
 import router from "@/router";
+import { deactivatePost } from "@/services/post.api.service";
 
 export default {
   props: {
@@ -114,7 +115,10 @@ export default {
       console.log(user.value._id);
       increaseTrip(user.value._id);
       alert("Kelionė sėkmingai užbaigta!");
-      // deletePost();
+      deactivatePost(props.id);
+      store.dispatch("posts/getPosts");
+      store.dispatch("posts/setPages");
+      router.push("/home");
     }
     function editPost() {
       router.push({ name: "EditPost", params: { id: post._id } });
@@ -123,14 +127,16 @@ export default {
     function parcelDelivered() {
       increaseSent(user.value._id);
       alert("Siunta sėkmingai nusiųsta!");
-      // deletePost();
+      deactivatePost(props.id);
+
+      router.push("/home");
     }
 
     function allUserPosts() {
       router.push("");
     }
 
-    function deactivatePost() {
+    function deactivateAPost() {
       store.dispatch("posts/deactivateAPost", post._id);
       console.log(post);
       alert("Įrašas deaktyvuotas");
@@ -170,7 +176,7 @@ export default {
       isAuthorLoggedNow,
       isEndTimeHasPassed,
       tripEnded,
-      deactivatePost,
+      deactivateAPost,
       parcelDelivered,
       type,
       post,
@@ -227,6 +233,17 @@ export default {
                 <div class="col-lg-5">
                   <h4>Papiloma info:</h4>
                   <div v-if="post.type == 1">
+                    <div>
+                      <div v-if="post.size == 1">
+                        <span>Maža siunta</span>
+                      </div>
+                      <div v-if="post.size == 2">
+                        <span>Vidutinė siunta</span>
+                      </div>
+                      <div v-if="post.size == 3">
+                        <span>Didelė siunta</span>
+                      </div>
+                    </div>
                     <div v-if="post.urgent == true">
                       <span>Skubi siunta</span>
                     </div>
@@ -243,6 +260,17 @@ export default {
                   <div v-if="post.type == 2">
                     <div v-if="post.canChange == true">
                       <span>Galima koreguoti maršrutą</span>
+                    </div>
+                    <div>
+                      <div v-if="post.size == 1">
+                        <span>Mažai vietos siuntoms</span>
+                      </div>
+                      <div v-if="post.size == 2">
+                        <span>Vidutinškai vietos siuntoms</span>
+                      </div>
+                      <div v-if="post.size == 3">
+                        <span>Daug vietos siuntoms</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -321,12 +349,14 @@ export default {
               </div>
               <div class="mt-3">
                 <div v-if="isAuthorLoggedNow == false">
+                  <div v-if="isEndTimeHasPassed() === false">
+                    <button class="input-button" @click="contactAuthor">
+                      Susisiekti
+                    </button>
+                  </div>
+                </div>
+                <div v-if="isAuthorLoggedNow == false">
                   <div v-if="isAuth == true" class="buttons">
-                    <div v-if="isEndTimeHasPassed() === false">
-                      <button class="input-button" @click="contactAuthor">
-                        Susisiekti
-                      </button>
-                    </div>
                     <button class="input-button" @click="leaveAReview()">
                       Palikti atsiliepimą
                     </button>
@@ -337,7 +367,7 @@ export default {
                 </div>
                 <div v-if="isAuthorLoggedNow == true" class="buttons btns-auth">
                   <div v-if="post.isActive == true">
-                    <button class="input-button" @click="deactivatePost()">
+                    <button class="input-button" @click="deactivateAPost()">
                       Deaktyvuoti įrašą
                     </button>
                   </div>

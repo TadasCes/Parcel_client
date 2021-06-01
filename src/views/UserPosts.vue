@@ -2,11 +2,12 @@
 import Navigation from "@/components/Navigation.vue";
 import Post from "@/components/Post.vue";
 import SearchBar from "@/components/SearchBar.vue";
-import { computed, onBeforeMount, Ref, ref } from "vue";
+import { computed, onBeforeMount, onMounted, Ref, ref } from "vue";
 import { useStore } from "vuex";
 import router from "@/router";
 import IPost from "@/interfaces/IPost";
 import moment from "moment";
+import { fetchAllUserPosts } from "@/services/post.api.service";
 
 export default {
   components: {
@@ -16,39 +17,55 @@ export default {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   setup() {
     const store = useStore();
-    const posts = computed(() => store.state.posts.posts);
-    const activePosts = computed(() => store.state.posts.activePosts);
-    const archivedPosts = computed(() => store.state.posts.archivedPosts);
+    const activePosts: Ref<Array<any>> = ref([]);
+    const archivedPosts: Ref<Array<any>> = ref([]);
     const user = computed(() => store.state.loggedUser);
 
     function goToDetails(id: string): void {
       router.push({ name: "Details", params: { id } });
     }
 
-    // function filterUserPosts() {
-    //   console.log(posts.value);
-    //   posts.value.forEach((post: IPost) => {
+    // function filterActive() {
+    //   activePosts.value.forEach((post: IPost) => {
     //     if (post.authorId == user.value._id) {
-    //       const postDate = post.timeEnd.substring(0, 10);
-    //       const nowDate = moment().format("YYYY-MM-DD");
-    //       console.log(post);
-    //       if (postDate >= nowDate) {
-    //         if (post.isActive == true) {
-    //           activePosts.value.push(post);
-    //         } else {
-    //           archivedPosts.value.push(post);
-    //         }
-    //       } else {
-    //         archivedPosts.value.push(post);
-    //       }
+    //       activePosts.value.push(post);
+    //     }
+    //   });
+    // }
+    // function filterArchived() {
+    //   console.log(archivedPosts.value);
+    //   archivedPosts.value.forEach((post: IPost) => {
+    //     if (post.authorId == user.value._id) {
+    //       archivedPosts.value.push(post);
     //     }
     //   });
     // }
 
+    // filterActive();
+    // filterArchived();
+
+    onBeforeMount(async () => {
+      await fetchAllUserPosts(user.value._id).then(posts => {
+        posts.forEach((post: any) => {
+          const postDate = post.day;
+          const nowDate = moment().format("YYYY-MM-DD");
+          if (postDate >= nowDate) {
+            if (post.isActive == true) {
+              activePosts.value.push(post);
+            } else {
+              archivedPosts.value.push(post);
+            }
+          } else {
+            console.log(post);
+            archivedPosts.value.push(post);
+          }
+        });
+      });
+    });
+
     // onBeforeMount(() => {
-    //   store.dispatch("posts/getAllPosts").then(() => {
-    //     filterUserPosts();
-    //   });
+    //   store.dispatch("posts/activePosts");
+    //   store.dispatch("posts/archivedPosts");
     // });
 
     return { activePosts, archivedPosts, goToDetails };

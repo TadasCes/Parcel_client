@@ -36,6 +36,15 @@ export async function fetchAllPosts() {
     });
 }
 
+export async function fetchAllUserPosts(authorId) {
+  console.log(authorId);
+  return axios
+    .get(`http://localhost:5000/api/posts/all-user-posts/${authorId}`)
+    .then(response => {
+      return response.data.result;
+    });
+}
+
 export async function getPostAuthor(authorId: string) {
   return axios
     .get(`http://localhost:5000/api/users/${authorId}`)
@@ -67,7 +76,7 @@ export async function createPost(post: any) {
   return axios
     .post("http://localhost:5000/api/posts", formatAPost(post))
     .then(response => {
-      store.dispatch("posts/getAllPosts");
+      store.dispatch("posts/getPosts");
       console.log(response.data.message);
       return response.data;
     })
@@ -78,9 +87,10 @@ export async function createPost(post: any) {
 
 export async function updatePost(update: any, id: string) {
   return axios
-    .put(`http://localhost:5000/api/posts/${id}`, formatAPost(update))
+    .put(`http://localhost:5000/api/posts/update/${id}`, formatAPost(update))
     .then(response => {
-      store.dispatch("posts/getAllPosts");
+      console.log("response");
+      store.dispatch("posts/getPosts");
 
       return response.data.result;
     });

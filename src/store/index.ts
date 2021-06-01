@@ -24,40 +24,19 @@ const posts = {
     archivedPosts: [] as IPost[],
     parcels: [] as IPost[],
     postInMemory: {} as IPost,
-    pageList: [] as number[],
-    pageCount: 0,
+    pageCount: 1,
     page: 1
   },
 
   mutations: {
-    async SET_POSTS(state: any, posts: IPost[]) {
-      await fetchAllPosts().then(result => {
-        const pages = Math.ceil(result.length / 5);
-        state.pageList.length = 0;
-        for (let i = 1; i <= pages; i++) {
-          state.pageList.push(i);
-        }
-        const activePosts: Array<any> = [];
-        const archivedPosts: Array<any> = [];
-        result.forEach((post: any) => {
-          const postDate = post.timeEnd.substring(0, 10);
-          const nowDate = moment().format("YYYY-MM-DD");
-          if (postDate >= nowDate) {
-            if (post.isActive == true) {
-              console.log(post);
-              activePosts.push(post);
-            } else {
-              archivedPosts.push(post);
-            }
-          } else {
-            console.log(post);
-            archivedPosts.push(post);
-          }
-        });
-        state.posts = posts;
-        state.activePosts = activePosts;
-        state.archivedPosts = archivedPosts;
-      });
+    SET_FRONT_POSTS(state: any, posts: IPost[]) {
+      state.posts = posts;
+    },
+    SET_ACTIVE_POSTS(state: any, posts: IPost[]) {
+      state.activePosts = posts;
+    },
+    SET_ARCHIVED_POSTS(state: any, posts: IPost[]) {
+      state.archivedPosts = posts;
     },
     SAVE_POST(state: any, post: IPost) {
       state.postInMemory = post;
@@ -79,33 +58,71 @@ const posts = {
     }
   },
   actions: {
-    async firstPage(state) {
-      await fetchLimitedPosts(state.getters.getPage, 5).then(result => {
-        state.commit("SET_POSTS", result);
+    async getPosts(state) {
+      await fetchLimitedPosts(1, 5).then(result => {
+        const activePosts: Array<any> = [];
+        const archivedPosts: Array<any> = [];
+        result.forEach((post: any) => {
+          const postDate = post.day;
+          const nowDate = moment().format("YYYY-MM-DD");
+          if (postDate >= nowDate) {
+            if (post.isActive == true) {
+              activePosts.push(post);
+            } else {
+              archivedPosts.push(post);
+            }
+          } else {
+            archivedPosts.push(post);
+          }
+        });
+        state.commit("SET_FRONT_POSTS", activePosts);
       });
     },
     async nextPage(state) {
       await fetchLimitedPosts(state.getters.getPage + 1, 5).then(result => {
-        state.commit("SET_POSTS", result);
+        const activePosts: Array<any> = [];
+        result.forEach((post: any) => {
+          const postDate = post.day;
+          const nowDate = moment().format("YYYY-MM-DD");
+          if (postDate >= nowDate) {
+            if (post.isActive == true) {
+              activePosts.push(post);
+            }
+          }
+        });
+        state.commit("SET_FRONT_POSTS", activePosts);
         state.commit("INCREASE_PAGE");
       });
     },
     async previousPage(state: any) {
       await fetchLimitedPosts(state.getters.getPage - 1, 5).then(result => {
-        state.commit("SET_POSTS", result);
+        const activePosts: Array<any> = [];
+        result.forEach((post: any) => {
+          const postDate = post.day;
+          const nowDate = moment().format("YYYY-MM-DD");
+          if (postDate >= nowDate) {
+            if (post.isActive == true) {
+              activePosts.push(post);
+            }
+          }
+        });
+        state.commit("SET_FRONT_POSTS", activePosts);
         state.commit("DECREASE_PAGE");
       });
     },
-    async getAllPosts(state) {
-      const pages = Math.ceil(state.getters.getAllPosts / 5);
-      state.commit("SET_PAGE_COUNT", pages);
+    async setPages(state) {
+      await fetchAllValidPosts().then(result => {
+        const pages = Math.ceil(result.length / 5);
+        console.log(result.length);
+        state.commit("SET_PAGE_COUNT", pages);
+      });
     },
     async getFilteredPosts(state: any, query: any) {
       await fetchFilteredPosts(query).then(result => {
-        state.commit("SET_POSTS", result);
+        state.commit("SET_FRONT_POSTS", result);
       });
     },
-    async getCurrentPage(state: any, query: any) {
+    async getCurrentPage(state: any) {
       return state.getters.getPage;
     },
     async savePostInMemory(state: any, query: any) {
@@ -123,15 +140,15 @@ const posts = {
     },
     async deleteAPost({ dispatch }: any, id: string) {
       await deletePost(id);
-      dispatch("getAllPosts");
+      dispatch("getPosts");
     },
     async deactivateAPost({ dispatch }: any, id: string) {
       await deactivatePost(id);
-      dispatch("getAllPosts");
+      dispatch("getPosts");
     },
     async activateAPost({ dispatch }: any, id: string) {
       await activatePost(id);
-      dispatch("getAllPosts");
+      dispatch("getPosts");
     }
   },
   getters: {

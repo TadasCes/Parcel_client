@@ -88,6 +88,7 @@ export async function deleteUser(id: string) {
 }
 
 export async function sendContactData(post: any, email: string) {
+  console.log(post);
   return axios
     .post(`http://localhost:5000/api/posts/send-contact`, {
       post: post,

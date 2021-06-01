@@ -78,6 +78,9 @@ export default {
           :key="review._id"
           :review="review"
         ></ReviewPost>
+        <div v-if="reviewList.length == 0">
+          <span>Atsiliepimų nėra</span>
+        </div>
       </ul>
     </div>
   </div>

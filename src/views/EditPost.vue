@@ -31,38 +31,51 @@ export default {
     const size = ref(0);
     const start = ref("");
     const end = ref("");
+    const comment = ref("");
+    const authorId = ref("");
+    const canChange = ref(false);
+    const urgent = ref(false);
+    const fragile = ref(false);
+    const animal = ref(false);
+    const isActive = ref(true);
 
     function getAPost(): void {
       const post = store.getters["posts/getAPost"](props.id);
-      console.log(post);
       const dayFormated = moment(post.timeStart).format("YYYY-MM-DD");
       const timeStartFormated = moment(post.timeStart).format("HH:mm");
       const timeEndFormated = moment(post.timeEnd).format("HH:mm");
-      console.log(timeEndFormated);
       cityStart.value = post.cityStart;
       cityEnd.value = post.cityEnd;
       day.value = dayFormated;
       timeStart.value = timeStartFormated;
       timeEnd.value = timeEndFormated;
       size.value = post.size;
-      start.value = post.cityStart;
-      end.value = post.cityEnd;
+      authorId.value = post.authorId;
+      canChange.value = post.canChange;
+      urgent.value = post.urgent;
+      fragile.value = post.fragile;
+      animal.value = post.animal;
+      isActive.value = post.isActive;
     }
 
     function updateAPost(): void {
-      const editedPost = {
-        cityStart: cityStart.value,
-        cityEnd: cityEnd.value,
+      const editedPost: any = {
+        cityStart: start.value,
+        cityEnd: end.value,
         day: day.value,
         timeStart: timeStart.value,
         timeEnd: timeEnd.value,
-        author: {
-          id: user.value._id,
-          firstName: user.value.firstName,
-          lastName: user.value.lastName,
-          rating: user.value.rating
-        }
+        comment: comment.value,
+        size: size.value,
+        authorId: user.value._id,
+        isActive: true,
+        seenCount: 0,
+        canChange: canChange.value,
+        urgent: urgent.value,
+        fragile: fragile.value,
+        animal: animal.value
       };
+      console.log(editedPost);
       updatePost(editedPost, props.id);
       alert("Įrašas atnaujintas!");
       router.push("/home");
@@ -79,6 +92,7 @@ export default {
       end,
       day,
       timeStart,
+      comment,
       timeEnd,
       size,
       updateAPost
@@ -99,14 +113,14 @@ export default {
             <div class="col-12">
               <label for="from">Keliauju iš:</label>
               <City
-                :title="start"
+                :title="cityStart"
                 name="from"
-                @update:city="cityStart = $event"
+                @update:city="start = $event"
               />
             </div>
             <div class="col-12">
               <label for="to">Keliauju į:</label>
-              <City :title="end" name="to" @update:city="cityEnd = $event" />
+              <City :title="cityEnd" name="to" @update:city="end = $event" />
             </div>
             <div class="form-input col-12 ">
               <label for="to">Kelionės diena:</label>
@@ -161,14 +175,32 @@ export default {
                 </div>
               </div>
             </div>
+            <div class="form-field col-12">
+              <div class="search-field">
+                <label for="size">Papildomi komentarai</label>
+
+                <!-- <span class="material-icons">aspect_ratio</span> -->
+                <div class="size-select form-input" id="select-size">
+                  <textarea
+                    v-model="comment"
+                    name="komentaras"
+                    id="comment"
+                    cols="45"
+                    rows="3"
+                    maxlength="300"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="d-flex">
-            <input
-              type="submit"
-              value="Paskelbti"
+            <button
+              type="button"
               class="input-button mr-3"
               @click="updateAPost"
-            />
+            >
+              Paskelbti
+            </button>
             <router-link
               to="/home"
               tag="button"

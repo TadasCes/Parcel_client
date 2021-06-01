@@ -28,10 +28,11 @@ export default {
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   setup() {
     const store = useStore();
-    const posts = computed(() => store.state.posts.activePosts);
-    const pageList = computed(() => store.state.posts.pageList);
+    const posts = computed(() => store.state.posts.posts);
+    const pageCount = computed(() => store.state.posts.pageCount);
     const currentPage = computed(() => store.state.posts.page);
-    const page = ref(0);
+    const page = ref(1);
+    const pageList: Array<any> = [];
 
     function nextPage() {
       store.dispatch("posts/nextPage");
@@ -42,10 +43,15 @@ export default {
       store.dispatch("posts/previousPage");
       store.dispatch("posts/getCurrentPage");
     }
+    console.log(pageCount.value);
 
     onBeforeMount(() => {
       store.dispatch("posts/resetPage");
-      store.dispatch("posts/firstPage");
+      store.dispatch("posts/getPosts");
+
+      for (let i = 1; i <= pageCount.value; i++) {
+        pageList.push(i);
+      }
 
       localStorage.removeItem("postInMemory");
       localStorage.removeItem("postAuthorInMemory");

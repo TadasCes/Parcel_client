@@ -52,8 +52,10 @@ export default {
     }
 
     async function loginGoogle() {
-      const googleUser = await $gAuth.signIn();
-      googleLogin(googleUser.ft);
+      const googleUser = await $gAuth.signIn().then(result => {
+        console.log(result.At);
+        googleLogin(result.At);
+      });
     }
 
     return {

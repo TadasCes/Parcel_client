@@ -12,7 +12,10 @@ import {
 } from "../services/user.api.service";
 import router from "@/router";
 import { logout } from "../services/user.api.service";
-import { fetchAllValidPosts } from "@/services/post.api.service";
+import {
+  fetchAllUserPosts,
+  fetchAllValidPosts
+} from "@/services/post.api.service";
 
 export default {
   props: {
@@ -27,9 +30,10 @@ export default {
   setup(props: any) {
     const store = useStore();
     const user = computed(() => store.state.loggedUser);
-    const userPostCount = user.value.posts.length;
     const activePostsArray: Ref<Array<any>> = ref([]);
+    const userPostCount = activePostsArray.value.length;
     const activeLength = activePostsArray.value.length;
+    const allLength = ref(0);
 
     function deleteProfile() {
       if (confirm("Ar tikrai norite pašalinti šią paskyrą?")) {
@@ -44,12 +48,15 @@ export default {
     }
 
     onBeforeMount(async () => {
-      await fetchAllValidPosts().then(posts => {
+      await fetchAllUserPosts(user.value._id).then(posts => {
         const nowDate = moment().format("YYYY-MM-DD");
+        allLength.value = posts.length;
         posts.forEach(post => {
           const postDate = moment(post.timeStart).format("YYYY-MM-DD");
           if (postDate > nowDate) {
-            activePostsArray.value.push(post);
+            if (post.isActive) {
+              activePostsArray.value.push(post);
+            }
           }
         });
         console.log(activePostsArray.value.length);
@@ -61,7 +68,8 @@ export default {
       activePostsArray,
       deleteProfile,
       user,
-      userPostCount
+      userPostCount,
+      allLength
     };
   }
 };
@@ -74,9 +82,9 @@ export default {
       <div class="row item-padding">
         <div class="col-6">
           <h2 class="top-header">Jūsų statistika</h2>
-          <h4>Iš viso patalpinta skelbimų: {{ userPostCount }}</h4>
+          <h4>Iš viso patalpinta skelbimų: {{ allLength }}</h4>
           <h4>Aktyvūs skelbimai: {{ activePostsArray.length }}</h4>
-          <h4>Išsiųsta siuntų: {{ user.sentCount }}</h4>
+          <h4>Pervežta siuntų: {{ user.tripCount }}</h4>
           <h4>Išsiųsta siuntų: {{ user.sentCount }}</h4>
         </div>
         <div class="col-6">
